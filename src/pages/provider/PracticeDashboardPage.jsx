@@ -1,5 +1,6 @@
-import { Row, Col, Button } from 'react-bootstrap';
-import { Users, CheckCircle, Star, UserPlus, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { Row, Col, Button, Tabs, Tab, Accordion, OverlayTrigger, Tooltip, Badge } from 'react-bootstrap';
+import { Users, CheckCircle, Star, UserPlus, Info } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatsCard from '../../components/ui/StatsCard';
 import StatusBadge from '../../components/ui/StatusBadge';
@@ -9,6 +10,17 @@ import { mockDashboardStats, mockRecentLogs } from '../../data/providerData';
  * PracticeDashboardPage — Analytics overview for clinics.
  */
 function PracticeDashboardPage() {
+  const [activeTab, setActiveTab] = useState('all');
+
+  const filteredLogs = mockRecentLogs.filter(log => {
+    if (activeTab === 'all') return true;
+    return log.claimStatus.toLowerCase() === activeTab;
+  });
+
+  const renderTooltip = (text) => (
+    <Tooltip id="button-tooltip">{text}</Tooltip>
+  );
+
   return (
     <PageWrapper
       title="Practice Dashboard"
@@ -16,26 +28,36 @@ function PracticeDashboardPage() {
     >
       <Row className="g-4 mb-5 stagger-children">
         <Col md={6} lg={3}>
-          <StatsCard
-            title="Total Clinic Visits"
-            value={mockDashboardStats.totalVisits}
-            subtitle={mockDashboardStats.visitsTrend}
-            icon={Users}
-            trend="+12%"
-            trendDirection="up"
-            variant="primary"
-          />
+          <OverlayTrigger placement="top" overlay={renderTooltip("Compared to previous 30 days")}>
+            <div style={{ cursor: 'pointer' }}>
+              <StatsCard
+                title="Total Clinic Visits"
+                value={mockDashboardStats.totalVisits}
+                subtitle={mockDashboardStats.visitsTrend}
+                icon={Users}
+                trend="+12%"
+                trendDirection="up"
+                variant="primary"
+                chartData={mockDashboardStats.visitsHistory}
+              />
+            </div>
+          </OverlayTrigger>
         </Col>
         <Col md={6} lg={3}>
-          <StatsCard
-            title="Claims Approval Rate"
-            value={`${mockDashboardStats.claimsSuccessRate}%`}
-            subtitle={mockDashboardStats.claimsTrend}
-            icon={CheckCircle}
-            trend="+2.1%"
-            trendDirection="up"
-            variant="success"
-          />
+          <OverlayTrigger placement="top" overlay={renderTooltip("Percentage of first-pass approvals")}>
+            <div style={{ cursor: 'pointer' }}>
+              <StatsCard
+                title="Claims Approval Rate"
+                value={`${mockDashboardStats.claimsSuccessRate}%`}
+                subtitle={mockDashboardStats.claimsTrend}
+                icon={CheckCircle}
+                trend="+2.1%"
+                trendDirection="up"
+                variant="success"
+                chartData={mockDashboardStats.claimsHistory}
+              />
+            </div>
+          </OverlayTrigger>
         </Col>
         <Col md={6} lg={3}>
           <StatsCard
@@ -46,6 +68,7 @@ function PracticeDashboardPage() {
             trend="Stable"
             trendDirection="neutral"
             variant="warning"
+            chartData={mockDashboardStats.ratingHistory}
           />
         </Col>
         <Col md={6} lg={3}>
@@ -57,6 +80,7 @@ function PracticeDashboardPage() {
             trend="-3"
             trendDirection="down"
             variant="danger"
+            chartData={mockDashboardStats.pendingHistory}
           />
         </Col>
       </Row>
@@ -68,19 +92,38 @@ function PracticeDashboardPage() {
               <h6 className="fw-bold mb-0">Recent Clinical Logs</h6>
               <Button variant="link" size="sm" className="text-decoration-none fw-bold" href="/provider/clinical-logging">View All</Button>
             </div>
+            
+            <div className="px-4 pt-3">
+              <Tabs
+                id="clinical-logs-tabs"
+                activeKey={activeTab}
+                onSelect={(k) => setActiveTab(k)}
+                className="mb-3 border-bottom-0 custom-tabs"
+              >
+                <Tab eventKey="all" title="All Logs" />
+                <Tab eventKey="paid" title="Paid Claims" />
+                <Tab eventKey="pending" title="Pending Claims" />
+              </Tabs>
+            </div>
+
             <div className="card-body p-0">
               <div className="table-responsive">
                 <table className="table table-hover align-middle mb-0">
                   <thead className="bg-light">
                     <tr>
-                      <th className="px-4 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date</th>
-                      <th className="text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Patient</th>
-                      <th className="text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Diagnosis</th>
-                      <th className="text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Claim Status</th>
+                      <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date</th>
+                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Patient</th>
+                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>
+                        Diagnosis 
+                        <OverlayTrigger placement="right" overlay={renderTooltip("ICD-10 and Billing Codes")}>
+                          <Info size={12} className="ms-1 d-inline text-primary" style={{ cursor: 'help' }} />
+                        </OverlayTrigger>
+                      </th>
+                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Claim Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {mockRecentLogs.map((log) => (
+                    {filteredLogs.map((log) => (
                       <tr key={log.id}>
                         <td className="px-4" style={{ fontSize: '0.8rem' }}>{log.date}</td>
                         <td className="fw-bold" style={{ fontSize: '0.85rem' }}>{log.patientName}</td>
@@ -91,6 +134,13 @@ function PracticeDashboardPage() {
                         <td><StatusBadge status={log.claimStatus} size="sm" /></td>
                       </tr>
                     ))}
+                    {filteredLogs.length === 0 && (
+                      <tr>
+                        <td colSpan="4" className="text-center py-5 text-muted">
+                          No logs found in this category.
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -103,18 +153,31 @@ function PracticeDashboardPage() {
             <div className="card-header bg-transparent border-bottom px-4 py-3">
               <h6 className="fw-bold mb-0">Platform Announcements</h6>
             </div>
-            <div className="card-body p-4">
-              <div className="mb-4">
-                <span className="badge bg-danger rounded-pill mb-2">Urgent Update</span>
-                <h6 className="fw-bold mb-1" style={{ fontSize: '0.9rem' }}>MOH API Maintenance</h6>
-                <p className="text-muted" style={{ fontSize: '0.8rem' }}>The central registry will undergo scheduled maintenance on Friday at 02:00 AM AST. Claims submitted during this window will be queued.</p>
-              </div>
-              <hr className="text-muted opacity-25" />
-              <div>
-                <span className="badge bg-primary rounded-pill mb-2">New Feature</span>
-                <h6 className="fw-bold mb-1" style={{ fontSize: '0.9rem' }}>ICD-11 Transition Plan</h6>
-                <p className="text-muted mb-0" style={{ fontSize: '0.8rem' }}>NexusCare is preparing for the ICD-11 coding update. A sandbox environment will be available next month for staff training.</p>
-              </div>
+            <div className="card-body p-0">
+              <Accordion defaultActiveKey="0" flush>
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>
+                    <div>
+                      <Badge bg="danger" className="rounded-pill mb-1">Urgent Update</Badge>
+                      <div className="fw-bold" style={{ fontSize: '0.85rem' }}>MOH API Maintenance</div>
+                    </div>
+                  </Accordion.Header>
+                  <Accordion.Body className="text-muted" style={{ fontSize: '0.8rem' }}>
+                    The central registry will undergo scheduled maintenance on Friday at 02:00 AM AST. Claims submitted during this window will be queued.
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header>
+                    <div>
+                      <Badge bg="primary" className="rounded-pill mb-1">New Feature</Badge>
+                      <div className="fw-bold" style={{ fontSize: '0.85rem' }}>ICD-11 Transition Plan</div>
+                    </div>
+                  </Accordion.Header>
+                  <Accordion.Body className="text-muted" style={{ fontSize: '0.8rem' }}>
+                    NexusCare is preparing for the ICD-11 coding update. A sandbox environment will be available next month for staff training. Detailed documentation will be provided via email.
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
             </div>
           </div>
         </Col>

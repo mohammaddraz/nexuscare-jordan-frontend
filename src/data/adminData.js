@@ -6,12 +6,28 @@
 export const mockComplianceStats = {
   activeInsured: 452100,
   insuredTrend: '+12.4% from last year',
+  insuredHistory: [
+    { name: 'Jan', value: 400 }, { name: 'Feb', value: 410 }, { name: 'Mar', value: 415 },
+    { name: 'Apr', value: 430 }, { name: 'May', value: 440 }, { name: 'Jun', value: 452 }
+  ],
   totalPhysicians: 3421,
   physiciansTrend: '+45 new this month',
+  physiciansHistory: [
+    { name: 'Jan', value: 3300 }, { name: 'Feb', value: 3320 }, { name: 'Mar', value: 3350 },
+    { name: 'Apr', value: 3380 }, { name: 'May', value: 3400 }, { name: 'Jun', value: 3421 }
+  ],
   claimsProcessingTime: '4.2 hours',
   processingTrend: '-1.1 hours from last month',
-  totalClaims: 1245000,
+  processingHistory: [
+    { name: 'Jan', value: 6.0 }, { name: 'Feb', value: 5.8 }, { name: 'Mar', value: 5.2 },
+    { name: 'Apr', value: 4.8 }, { name: 'May', value: 4.5 }, { name: 'Jun', value: 4.2 }
+  ],
+  totalClaims: 1250000,
   claimsTrend: 'YTD 2024',
+  claimsHistory: [
+    { name: 'Jan', value: 200 }, { name: 'Feb', value: 250 }, { name: 'Mar', value: 280 },
+    { name: 'Apr', value: 320 }, { name: 'May', value: 360 }, { name: 'Jun', value: 400 }
+  ],
 };
 
 export const mockRegionalData = [

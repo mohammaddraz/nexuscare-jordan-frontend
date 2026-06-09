@@ -6,12 +6,28 @@
 export const mockDashboardStats = {
   totalVisits: 1248,
   visitsTrend: '+12% from last month',
+  visitsHistory: [
+    { name: 'Mon', value: 30 }, { name: 'Tue', value: 45 }, { name: 'Wed', value: 38 },
+    { name: 'Thu', value: 50 }, { name: 'Fri', value: 65 }, { name: 'Sat', value: 40 }
+  ],
   claimsSuccessRate: 94.2,
   claimsTrend: '+2.1% from last month',
+  claimsHistory: [
+    { name: 'Jan', value: 90.0 }, { name: 'Feb', value: 91.5 }, { name: 'Mar', value: 91.0 },
+    { name: 'Apr', value: 93.5 }, { name: 'May', value: 92.1 }, { name: 'Jun', value: 94.2 }
+  ],
   averageRating: 4.8,
   ratingTrend: 'Based on 432 reviews',
+  ratingHistory: [
+    { name: 'Q1', value: 4.5 }, { name: 'Q2', value: 4.6 }, { name: 'Q3', value: 4.8 },
+    { name: 'Q4', value: 4.7 }, { name: 'Q1', value: 4.9 }, { name: 'Q2', value: 4.8 }
+  ],
   pendingEnrollments: 14,
   pendingTrend: '5 require immediate attention',
+  pendingHistory: [
+    { name: 'W1', value: 8 }, { name: 'W2', value: 10 }, { name: 'W3', value: 12 },
+    { name: 'W4', value: 15 }, { name: 'W5', value: 13 }, { name: 'W6', value: 14 }
+  ],
 };
 
 export const mockPendingEnrollments = [
