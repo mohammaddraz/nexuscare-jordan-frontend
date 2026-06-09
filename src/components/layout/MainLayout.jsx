@@ -10,12 +10,14 @@ import Footer from './Footer';
  */
 function MainLayout() {
   return (
-    <div className="d-flex flex-column min-vh-100" style={{ backgroundColor: 'var(--color-bg-body)' }}>
+    <div className="d-flex flex-column flex-lg-row min-vh-100" style={{ backgroundColor: 'var(--color-bg-body)' }}>
       <Navbar />
-      <main className="flex-grow-1">
-        <Outlet />
-      </main>
-      <Footer />
+      <div className="d-flex flex-column flex-grow-1" style={{ minWidth: 0 }}>
+        <main className="flex-grow-1">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }

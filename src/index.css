@@ -122,6 +122,72 @@ code,
 code {
   font-size: 15px;
   line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  padding: 1.5rem;
+  background-color: var(--color-bg-body);
+}
+
+/* =========================================
+   RESPONSIVE SIDEBAR NAVIGATION
+   ========================================= */
+@media (min-width: 992px) {
+  .sidebar-navbar {
+    width: 260px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    border-right: 1px solid var(--color-border-default);
+    border-bottom: none !important;
+    overflow-y: auto;
+    padding-top: 1.5rem !important;
+  }
+  
+  .sidebar-navbar .navbar-brand {
+    margin-bottom: 2rem;
+    padding-left: 0.5rem;
+  }
+  
+  .sidebar-navbar .navbar-collapse {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    width: 100%;
+    flex-grow: 1;
+  }
+  
+  .sidebar-navbar .navbar-nav {
+    flex-direction: column !important;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  
+  .sidebar-navbar .nav-link {
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem !important;
+  }
+  
+  .sidebar-user-container {
+    margin-top: auto; /* Pushes profile to the bottom */
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 1px solid var(--color-border-default);
+  }
+  
+  .sidebar-user-container .dropdown {
+    width: 100%;
+  }
+  
+  .sidebar-user-container .dropdown-toggle {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .sidebar-user-container .dropdown-menu {
+    width: 100%;
+    bottom: 100%;
+    top: auto !important; /* Opens upwards instead of downwards */
+    margin-bottom: 0.5rem;
+  }
 }

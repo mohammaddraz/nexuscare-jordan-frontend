@@ -65,10 +65,10 @@ function Navbar() {
   return (
     <BsNavbar
       expand="lg"
-      className="glass-header sticky-top px-3 py-2"
-      style={{ zIndex: 50, borderBottom: '1px solid var(--color-border-default)' }}
+      className="glass-header sidebar-navbar px-3 py-2"
+      style={{ zIndex: 50 }}
     >
-      <Container fluid>
+      <Container fluid className="d-flex flex-lg-column h-100 p-0">
         {/* Brand Logo */}
         <BsNavbar.Brand
           onClick={() => navigate(links[0]?.path || '/')}
@@ -134,9 +134,9 @@ function Navbar() {
 
         <BsNavbar.Toggle aria-controls="main-nav" />
 
-        <BsNavbar.Collapse id="main-nav">
+        <BsNavbar.Collapse id="main-nav" className="w-100 d-lg-flex flex-lg-column align-items-lg-start flex-grow-1">
           {/* Navigation Links */}
-          <Nav className="me-auto">
+          <Nav className="me-auto w-100 mt-lg-4 flex-lg-column">
             {links.map((link) => {
               const isActive = location.pathname === link.path;
               return (
@@ -161,7 +161,7 @@ function Navbar() {
           </Nav>
 
           {/* User Menu */}
-          <div className="d-flex align-items-center gap-2">
+          <div className="sidebar-user-container">
             <Dropdown align="end">
               <Dropdown.Toggle
                 variant="light"
