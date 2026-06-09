@@ -50,3 +50,30 @@ export const mockPendingCertifications = [
     status: 'Flagged',
   }
 ];
+
+export const mockAdmins = [
+  {
+    id: 'ADM-001',
+    name: 'Faisal Al-Rifai',
+    email: 'faisal.rifai@moh.gov.jo',
+    role: 'SUPER_ADMIN',
+    status: 'Active',
+    lastLogin: '2023-12-04T08:30:00Z'
+  },
+  {
+    id: 'ADM-002',
+    name: 'Layla Mahmoud',
+    email: 'layla.mahmoud@moh.gov.jo',
+    role: 'COMPLIANCE_OFFICER',
+    status: 'Active',
+    lastLogin: '2023-12-04T09:15:00Z'
+  },
+  {
+    id: 'ADM-003',
+    name: 'Omar Tariq',
+    email: 'omar.tariq@moh.gov.jo',
+    role: 'NETWORK_MANAGER',
+    status: 'Inactive',
+    lastLogin: '2023-11-20T14:22:00Z'
+  }
+];
