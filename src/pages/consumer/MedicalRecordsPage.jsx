@@ -1,0 +1,105 @@
+import { useState } from 'react';
+import { Row, Col, Form, Button, Table } from 'react-bootstrap';
+import { FileText, Download, Calendar, Activity, Pill } from 'lucide-react';
+import PageWrapper from '../../components/layout/PageWrapper';
+import { mockDependents, mockMedicalRecords } from '../../data/consumerData';
+
+/**
+ * MedicalRecordsPage — Review historical diagnoses and prescriptions.
+ */
+function MedicalRecordsPage() {
+  const [selectedDependent, setSelectedDependent] = useState('All');
+  
+  const filteredRecords = selectedDependent === 'All' 
+    ? mockMedicalRecords 
+    : mockMedicalRecords.filter(r => r.dependentId === selectedDependent);
+
+  const getDependentName = (id) => mockDependents.find(d => d.id === id)?.name || 'Unknown';
+
+  return (
+    <PageWrapper
+      title="Medical Records"
+      subtitle="Review historical diagnoses, check active electronic prescriptions, and download clinic treatment checklists."
+    >
+      <div className="card glass-panel mb-4">
+        <div className="card-body p-4 d-flex flex-column flex-md-row gap-3">
+          <Form.Group className="flex-grow-1">
+            <Form.Label>Filter by Family Member</Form.Label>
+            <Form.Select value={selectedDependent} onChange={e => setSelectedDependent(e.target.value)}>
+              <option value="All">All Family Members</option>
+              {mockDependents.map(dep => (
+                <option key={dep.id} value={dep.id}>{dep.name}</option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="flex-grow-1">
+            <Form.Label>Date Range</Form.Label>
+            <Form.Select>
+              <option value="6">Last 6 Months</option>
+              <option value="12">Last 12 Months</option>
+              <option value="all">All Time</option>
+            </Form.Select>
+          </Form.Group>
+          <div className="d-flex align-items-end">
+            <Button variant="outline-secondary" className="d-flex align-items-center gap-2">
+              <Download size={16} /> Export All (PDF)
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <Row className="g-4">
+        {filteredRecords.map(record => (
+          <Col md={6} key={record.id}>
+            <div className="card glass-panel-hover h-100 animate-fadeInUp">
+              <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center gap-2">
+                  <Calendar size={16} color="var(--color-text-muted)" />
+                  <span className="fw-bold text-muted" style={{ fontSize: '0.8rem' }}>{record.date}</span>
+                </div>
+                <span className="badge bg-light text-dark border">{record.id}</span>
+              </div>
+              <div className="card-body p-4">
+                <p className="mb-1 text-muted" style={{ fontSize: '0.75rem' }}>Patient</p>
+                <h6 className="fw-bold mb-3">{getDependentName(record.dependentId)}</h6>
+                
+                <div className="p-3 bg-light rounded-3 mb-3 border d-flex gap-3">
+                  <div className="pt-1"><Activity size={18} color="var(--color-brand-secondary)" /></div>
+                  <div>
+                    <p className="mb-0 fw-bold" style={{ fontSize: '0.85rem' }}>{record.diagnosis}</p>
+                    <p className="mb-0 text-muted font-mono" style={{ fontSize: '0.75rem' }}>ICD-10: {record.icdCode}</p>
+                    <p className="mt-2 mb-0" style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>{record.notes}</p>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-3 border d-flex gap-3" style={{ backgroundColor: '#f0fdf4', borderColor: '#bbf7d0' }}>
+                  <div className="pt-1"><Pill size={18} color="var(--color-success)" /></div>
+                  <div>
+                    <p className="mb-0 fw-bold" style={{ fontSize: '0.85rem', color: '#166534' }}>Electronic Prescription</p>
+                    <p className="mb-0 text-success" style={{ fontSize: '0.8rem' }}>{record.prescription}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="card-footer bg-transparent border-top px-4 py-3 d-flex justify-content-between align-items-center">
+                <p className="mb-0 text-muted" style={{ fontSize: '0.75rem' }}>Provider: <strong>{record.providerName}</strong></p>
+                <Button variant="link" className="p-0 text-decoration-none" style={{ fontSize: '0.8rem', fontWeight: 600 }}>
+                  Download Full Report
+                </Button>
+              </div>
+            </div>
+          </Col>
+        ))}
+        {filteredRecords.length === 0 && (
+          <Col xs={12}>
+            <div className="text-center py-5 text-muted">
+              <FileText size={48} className="mx-auto mb-3 opacity-50" />
+              <p>No medical records found for the selected criteria.</p>
+            </div>
+          </Col>
+        )}
+      </Row>
+    </PageWrapper>
+  );
+}
+
+export default MedicalRecordsPage;
