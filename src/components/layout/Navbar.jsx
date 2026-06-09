@@ -35,6 +35,7 @@ const navLinks = {
     { path: '/admin/dashboard', label: 'Dashboard', icon: Activity },
     { path: '/admin/verification-gateway', label: 'Verify Doctors' },
     { path: '/admin/network-directory', label: 'Provider Directory' },
+    { path: '/admin/manage-admins', label: 'Manage Admins' },
   ],
 };
 
@@ -200,6 +201,13 @@ function Navbar() {
                   {config.label} Portal
                 </Dropdown.Header>
                 <Dropdown.Item style={{ fontSize: '0.8rem' }}>{currentUser.email}</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item 
+                  onClick={() => navigate('/profile')} 
+                  style={{ fontSize: '0.8rem', fontWeight: 600 }}
+                >
+                  My Profile
+                </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={handleLogout}

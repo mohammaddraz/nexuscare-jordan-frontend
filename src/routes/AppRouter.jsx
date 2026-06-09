@@ -10,6 +10,7 @@ import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import UnauthorizedPage from '../pages/auth/UnauthorizedPage';
 import TermsPage from '../pages/auth/TermsPage';
+import ProfilePage from '../pages/auth/ProfilePage';
 
 // Consumer Portal pages
 import FamilyHubPage from '../pages/consumer/FamilyHubPage';
@@ -28,6 +29,7 @@ import CoverageVerificationPage from '../pages/provider/CoverageVerificationPage
 import ComplianceDashboardPage from '../pages/admin/ComplianceDashboardPage';
 import VerificationGatewayPage from '../pages/admin/VerificationGatewayPage';
 import NetworkDirectoryPage from '../pages/admin/NetworkDirectoryPage';
+import ManageAdminsPage from '../pages/admin/ManageAdminsPage';
 
 /**
  * AppRouter — Central route definitions
@@ -69,6 +71,9 @@ function AppRouter() {
           <MainLayout />
         </ProtectedRoute>
       }>
+        {/* Global Protected Routes */}
+        <Route path="/profile" element={<ProfilePage />} />
+
         {/* Consumer Portal Routes */}
         <Route path="/consumer/family-hub" element={
           <ProtectedRoute allowedRoles={['CONSUMER']}>
@@ -132,6 +137,11 @@ function AppRouter() {
         <Route path="/admin/network-directory" element={
           <ProtectedRoute allowedRoles={['ADMIN']}>
             <NetworkDirectoryPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/manage-admins" element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <ManageAdminsPage />
           </ProtectedRoute>
         } />
       </Route>
