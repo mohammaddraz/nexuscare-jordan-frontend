@@ -57,6 +57,8 @@ export const mockProviders = [
     city: 'Amman',
     rating: 4.8,
     acceptingNew: true,
+    lat: 31.9539,
+    lng: 35.9106,
   },
   {
     id: 'PROV-002',
@@ -66,6 +68,8 @@ export const mockProviders = [
     city: 'Amman',
     rating: 4.5,
     acceptingNew: true,
+    lat: 31.9680,
+    lng: 35.9180,
   },
   {
     id: 'PROV-003',
@@ -75,6 +79,8 @@ export const mockProviders = [
     city: 'Irbid',
     rating: 4.9,
     acceptingNew: false,
+    lat: 32.5568,
+    lng: 35.8469,
   }
 ];
 
