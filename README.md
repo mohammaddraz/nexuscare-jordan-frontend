@@ -28,6 +28,10 @@ The application is divided into three distinct portals based on user roles:
 *   **Verification Gateway:** Review and verify incoming licensure certifications from doctors requesting to join the network.
 *   **Provider Network Directory:** Searchable directory of all active physicians in the network.
 *   **Provider Management:** Admins can Edit provider details (name, specialty, clinic, capacity) and Remove providers from the network entirely.
+*   **Administrator Management:** Dedicated table to add, modify, and revoke access for system administrators.
+
+### 4. Global Features
+*   **Universal Profile Management:** All roles (Consumer, Provider, Admin) can manage their personal details and security preferences, with instant UI syncing via Context API.
 
 ---
 
