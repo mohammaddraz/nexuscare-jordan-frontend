@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import { Search, MapPin, Star, UserPlus } from 'lucide-react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
@@ -24,11 +24,43 @@ const defaultCenter = {
  */
 function ProviderAssignmentPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCity, setSelectedCity] = useState('All');
+  const [selectedSpecialty, setSelectedSpecialty] = useState('All');
   const [filteredProviders, setFilteredProviders] = useState(mockProviders);
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState(null);
   const [activeMarker, setActiveMarker] = useState(null);
   const [mapCenter, setMapCenter] = useState(defaultCenter);
+
+  // Filter effect
+  useEffect(() => {
+    let results = mockProviders;
+    
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      results = results.filter(p => 
+        p.name.toLowerCase().includes(term) || 
+        p.specialty.toLowerCase().includes(term) ||
+        p.city.toLowerCase().includes(term)
+      );
+    }
+    
+    if (selectedCity !== 'All') {
+      results = results.filter(p => p.city === selectedCity);
+    }
+    
+    if (selectedSpecialty !== 'All') {
+      results = results.filter(p => p.specialty.includes(selectedSpecialty));
+    }
+    
+    setFilteredProviders(results);
+
+    // Auto-center map if only 1 result
+    if (results.length === 1 && results[0].lat && results[0].lng) {
+      setMapCenter({ lat: results[0].lat, lng: results[0].lng });
+      setActiveMarker(results[0].id);
+    }
+  }, [searchTerm, selectedCity, selectedSpecialty]);
 
   // Load Google Maps script
   const { isLoaded, loadError } = useJsApiLoader({
@@ -37,22 +69,7 @@ function ProviderAssignmentPage() {
   });
 
   const handleSearch = (e) => {
-    const term = e.target.value.toLowerCase();
-    setSearchTerm(term);
-    
-    const results = mockProviders.filter(p => 
-      p.name.toLowerCase().includes(term) || 
-      p.specialty.toLowerCase().includes(term) ||
-      p.city.toLowerCase().includes(term)
-    );
-    
-    setFilteredProviders(results);
-
-    // If there's exactly one result, center map on it
-    if (results.length === 1 && results[0].lat && results[0].lng) {
-      setMapCenter({ lat: results[0].lat, lng: results[0].lng });
-      setActiveMarker(results[0].id);
-    }
+    setSearchTerm(e.target.value);
   };
 
   const handleRequestAssignment = (provider) => {
@@ -132,10 +149,15 @@ function ProviderAssignmentPage() {
               
               <Form.Group className="mb-3">
                 <Form.Label>City</Form.Label>
-                <Form.Select onChange={(e) => {
-                  if (e.target.value === 'Amman') setMapCenter({ lat: 31.9522, lng: 35.9333 });
-                  if (e.target.value === 'Irbid') setMapCenter({ lat: 32.5568, lng: 35.8469 });
-                }}>
+                <Form.Select 
+                  value={selectedCity}
+                  onChange={(e) => {
+                    setSelectedCity(e.target.value);
+                    if (e.target.value === 'Amman') setMapCenter({ lat: 31.9522, lng: 35.9333 });
+                    if (e.target.value === 'Irbid') setMapCenter({ lat: 32.5568, lng: 35.8469 });
+                    if (e.target.value === 'Zarqa') setMapCenter({ lat: 32.0653, lng: 36.0895 });
+                  }}
+                >
                   <option value="All">All Cities</option>
                   <option value="Amman">Amman</option>
                   <option value="Irbid">Irbid</option>
@@ -145,7 +167,10 @@ function ProviderAssignmentPage() {
 
               <Form.Group className="mb-3">
                 <Form.Label>Specialty</Form.Label>
-                <Form.Select>
+                <Form.Select
+                  value={selectedSpecialty}
+                  onChange={(e) => setSelectedSpecialty(e.target.value)}
+                >
                   <option value="All">All Specialties</option>
                   <option value="General">General Practice</option>
                   <option value="Cardiology">Cardiology</option>
