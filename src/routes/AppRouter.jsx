@@ -9,6 +9,7 @@ import MainLayout from '../components/layout/MainLayout';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import UnauthorizedPage from '../pages/auth/UnauthorizedPage';
+import TermsPage from '../pages/auth/TermsPage';
 
 // Consumer Portal pages
 import FamilyHubPage from '../pages/consumer/FamilyHubPage';
@@ -59,6 +60,7 @@ function AppRouter() {
       <Route path="/register" element={
         isAuthenticated ? <Navigate to={getDefaultPath()} replace /> : <RegisterPage />
       } />
+      <Route path="/terms" element={<TermsPage />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
       {/* ---- Protected Routes (wrapped in MainLayout) ---- */}
