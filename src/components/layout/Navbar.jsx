@@ -35,6 +35,7 @@ const navLinks = {
     { path: '/admin/dashboard', label: 'Dashboard', icon: Activity },
     { path: '/admin/verification-gateway', label: 'Verify Doctors' },
     { path: '/admin/network-directory', label: 'Provider Directory' },
+    { path: '/admin/consumer-approvals', label: 'Consumer Approvals' },
     { path: '/admin/manage-admins', label: 'Manage Admins' },
   ],
 };

@@ -93,3 +93,33 @@ export const mockAdmins = [
     lastLogin: '2023-11-20T14:22:00Z'
   }
 ];
+
+export const mockPendingConsumers = [
+  {
+    id: 'REG-1044',
+    accountName: 'Salim Al-Fayed',
+    nationalId: '1099238844',
+    dateSignedUp: '2023-12-05',
+    familySize: 3,
+    planType: 'Gold Shield JOR',
+    status: 'Pending Verification',
+  },
+  {
+    id: 'REG-1045',
+    accountName: 'Nadia Qasim',
+    nationalId: '2093881122',
+    dateSignedUp: '2023-12-05',
+    familySize: 1,
+    planType: 'MOH Basic',
+    status: 'Pending Verification',
+  },
+  {
+    id: 'REG-1046',
+    accountName: 'Tariq Mansour',
+    nationalId: '9882001155',
+    dateSignedUp: '2023-12-06',
+    familySize: 5,
+    planType: 'Platinum Care JOR',
+    status: 'Flagged (ID Mismatch)',
+  }
+];
