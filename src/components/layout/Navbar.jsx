@@ -36,6 +36,7 @@ const navLinks = {
     { path: '/admin/verification-gateway', label: 'Verify Doctors' },
     { path: '/admin/network-directory', label: 'Provider Directory' },
     { path: '/admin/consumer-approvals', label: 'Consumer Approvals' },
+    { path: '/admin/coverage-requests', label: 'Coverage Requests' },
     { path: '/admin/manage-admins', label: 'Manage Admins' },
   ],
 };

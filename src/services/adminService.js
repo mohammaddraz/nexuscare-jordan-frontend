@@ -57,5 +57,24 @@ export const adminService = {
    */
   getProviderDirectory: async () => {
     return await api.get('/admin/providers');
+  },
+
+  /**
+   * Get all coverage modification requests
+   * @returns {Promise<Array>}
+   */
+  getCoverageRequests: async () => {
+    return await api.get('/admin/coverage-requests');
+  },
+
+  /**
+   * Approve or reject a coverage request
+   * @param {string} id 
+   * @param {string} status 'Approved' | 'Rejected'
+   * @param {string} adminNotes optional notes
+   * @returns {Promise<Object>}
+   */
+  updateCoverageRequest: async (id, status, adminNotes) => {
+    return await api.put(`/admin/coverage-requests/${id}`, { status, admin_notes: adminNotes });
   }
 };

@@ -31,6 +31,7 @@ import VerificationGatewayPage from '../pages/admin/VerificationGatewayPage';
 import NetworkDirectoryPage from '../pages/admin/NetworkDirectoryPage';
 import ManageAdminsPage from '../pages/admin/ManageAdminsPage';
 import ConsumerApprovalPage from '../pages/admin/ConsumerApprovalPage';
+import CoverageRequestsPage from '../pages/admin/CoverageRequestsPage';
 
 /**
  * AppRouter — Central route definitions
@@ -148,6 +149,11 @@ function AppRouter() {
         <Route path="/admin/consumer-approvals" element={
           <ProtectedRoute allowedRoles={['ADMIN']}>
             <ConsumerApprovalPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/coverage-requests" element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <CoverageRequestsPage />
           </ProtectedRoute>
         } />
       </Route>
