@@ -1,0 +1,80 @@
+import api from './api';
+
+export const adminService = {
+  /**
+   * Get dashboard stats
+   * @returns {Promise<Object>}
+   */
+  getDashboardStats: async () => {
+    return await api.get('/admin/dashboard');
+  },
+
+  /**
+   * Get pending consumers
+   * @returns {Promise<Array>}
+   */
+  getPendingConsumers: async () => {
+    return await api.get('/admin/pending-consumers');
+  },
+
+  /**
+   * Update consumer status
+   * @param {string} patientId 
+   * @param {string} status 'Approved' | 'Rejected'
+   */
+  updateConsumerStatus: async (patientId, status) => {
+    return await api.put(`/admin/approve-consumer/${patientId}`, { status });
+  },
+
+  /**
+   * Get pending certifications
+   */
+  getPendingCertifications: async () => {
+    return await api.get('/admin/certifications');
+  },
+
+  /**
+   * Update provider certification status
+   * @param {string} id 
+   * @param {string} status 'Approved' | 'Flagged'
+   * @returns {Promise<Object>}
+   */
+  updateCertificationStatus: async (id, status) => {
+    return await api.put(`/admin/certifications/${id}`, { status });
+  },
+
+  /**
+   * Get system administrators
+   * @returns {Promise<Array>}
+   */
+  getAdmins: async () => {
+    return await api.get('/admin/admins');
+  },
+
+  /**
+   * Get provider directory
+   * @returns {Promise<Array>}
+   */
+  getProviderDirectory: async () => {
+    return await api.get('/admin/providers');
+  },
+
+  /**
+   * Get all coverage modification requests
+   * @returns {Promise<Array>}
+   */
+  getCoverageRequests: async () => {
+    return await api.get('/admin/coverage-requests');
+  },
+
+  /**
+   * Approve or reject a coverage request
+   * @param {string} id 
+   * @param {string} status 'Approved' | 'Rejected'
+   * @param {string} adminNotes optional notes
+   * @returns {Promise<Object>}
+   */
+  updateCoverageRequest: async (id, status, adminNotes) => {
+    return await api.put(`/admin/coverage-requests/${id}`, { status, admin_notes: adminNotes });
+  }
+};
