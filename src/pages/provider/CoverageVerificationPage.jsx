@@ -27,8 +27,9 @@ function CoverageVerificationPage() {
           name: data.name,
           plan: data.plan_type,
           status: data.approval_status === 'Approved' ? 'Active' : data.approval_status,
-          network: 'In-Network (Tier 1)',
-          copay: '10.00 JOD'
+          network: data.network_status,
+          company: data.insurance_company_name,
+          copay: data.network_status === 'In-Network' ? '10.00 JOD' : '100% Patient Responsibility'
         }
       });
     } catch (err) {
@@ -122,8 +123,10 @@ function CoverageVerificationPage() {
                   <div className="col-sm-6">
                     <div className="p-3 bg-light rounded-3 border">
                       <p className="text-muted text-uppercase mb-1" style={{ fontSize: '0.65rem', fontWeight: 700 }}>Network & Copay</p>
-                      <h6 className="fw-bold mb-1 text-success">{result.data.network}</h6>
-                      <p className="mb-0 fw-bold" style={{ fontSize: '0.8rem' }}>Patient Copay: {result.data.copay}</p>
+                      <h6 className={`fw-bold mb-1 ${result.data.network === 'In-Network' ? 'text-success' : 'text-danger'}`}>
+                        {result.data.company} - {result.data.network}
+                      </h6>
+                      <p className="mb-0 fw-bold" style={{ fontSize: '0.8rem' }}>Copay: {result.data.copay}</p>
                     </div>
                   </div>
                 </div>

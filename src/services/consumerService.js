@@ -60,5 +60,22 @@ export const consumerService = {
    */
   getClaims: async (patientId) => {
     return await api.get(`/consumers/claims/${patientId}`);
+  },
+
+  /**
+   * Submit a coverage modification request
+   * @param {Object} data { patient_id, current_plan, requested_plan, deductible_preference, rider_dental, rider_vision, rider_maternity }
+   * @returns {Promise<Object>}
+   */
+  submitCoverageRequest: async (data) => {
+    return await api.post('/consumers/coverage-request', data);
+  },
+
+  /**
+   * Get coverage requests for consumer's family
+   * @returns {Promise<Array>}
+   */
+  getCoverageRequests: async () => {
+    return await api.get('/consumers/coverage-requests');
   }
 };
