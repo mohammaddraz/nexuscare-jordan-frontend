@@ -3,8 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Nav } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import {
-  HeartHandshake, Users, Stethoscope, Camera, FileText, Sparkles, ArrowLeft,
+  HeartHandshake, Users, Stethoscope, Camera, FileText, Sparkles, ArrowLeft, AlertCircle
 } from 'lucide-react';
+import { authService } from '../../services/authService';
 
 /**
  * RegisterPage — Multi-tab registration form
@@ -15,11 +16,14 @@ import {
 function RegisterPage() {
   const [activeTab, setActiveTab] = useState('CONSUMER');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   // Consumer form state
   const [consName, setConsName] = useState('');
   const [consEmail, setConsEmail] = useState('');
+  const [consPassword, setConsPassword] = useState('');
   const [consPhone, setConsPhone] = useState('');
   const [consPlan, setConsPlan] = useState('Platinum Care JOR');
   const [consRelation, setConsRelation] = useState('Primary');
@@ -31,17 +35,51 @@ function RegisterPage() {
   const [provClinic, setProvClinic] = useState('');
   const [provCity, setProvCity] = useState('Amman');
   const [provEmail, setProvEmail] = useState('');
+  const [provPassword, setProvPassword] = useState('');
   const [provPhone, setProvPhone] = useState('');
 
-  const handleConsumerSubmit = (e) => {
+  const handleConsumerSubmit = async (e) => {
     e.preventDefault();
-    // Mock — in real app, call authService.register()
-    setSubmitted(true);
+    try {
+      setLoading(true);
+      setError(null);
+      await authService.registerConsumer({
+        name: consName,
+        email: consEmail,
+        password: consPassword,
+        phone: consPhone,
+        plan_type: consPlan,
+        relation: consRelation
+      });
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to register consumer');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleProviderSubmit = (e) => {
+  const handleProviderSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    try {
+      setLoading(true);
+      setError(null);
+      await authService.registerProvider({
+        name: provName,
+        email: provEmail,
+        password: provPassword,
+        phone: provPhone,
+        specialty: provSpecialty,
+        license_number: provLicense,
+        clinic: provClinic,
+        city: provCity
+      });
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to register provider');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -130,6 +168,16 @@ function RegisterPage() {
               </Form.Group>
 
               <Row className="mb-3">
+                <Col md={12}>
+                  {error && (
+                    <div className="alert alert-danger d-flex align-items-center gap-2 py-2" style={{ fontSize: '0.85rem' }}>
+                      <AlertCircle size={16} /> {error}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
                 <Col md={6}>
                   <Form.Group>
                     <Form.Label>Email Address</Form.Label>
@@ -137,6 +185,15 @@ function RegisterPage() {
                   </Form.Group>
                 </Col>
                 <Col md={6}>
+                  <Form.Group>
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" required placeholder="••••••••" value={consPassword} onChange={(e) => setConsPassword(e.target.value)} />
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col md={12}>
                   <Form.Group>
                     <Form.Label>Phone Contact</Form.Label>
                     <Form.Control type="tel" required placeholder="+962 7 8554 9901" value={consPhone} onChange={(e) => setConsPhone(e.target.value)} />
@@ -182,8 +239,8 @@ function RegisterPage() {
                 </div>
               </div>
 
-              <Button type="submit" variant="primary" className="w-100 d-flex align-items-center justify-content-center gap-2">
-                <FileText size={16} color="#34d399" /> Submit Family Coverage Request
+              <Button type="submit" variant="primary" disabled={loading} className="w-100 d-flex align-items-center justify-content-center gap-2">
+                <FileText size={16} color="#34d399" /> {loading ? 'Submitting...' : 'Submit Family Coverage Request'}
               </Button>
             </motion.form>
           )}
@@ -242,13 +299,29 @@ function RegisterPage() {
               </Row>
 
               <Row className="mb-3">
-                <Col md={6}>
+                <Col md={12}>
+                  {error && (
+                    <div className="alert alert-danger d-flex align-items-center gap-2 py-2" style={{ fontSize: '0.85rem' }}>
+                      <AlertCircle size={16} /> {error}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col md={4}>
                   <Form.Group>
                     <Form.Label>Professional Email</Form.Label>
                     <Form.Control type="email" required placeholder="dr.tariq@clinic.jo" value={provEmail} onChange={(e) => setProvEmail(e.target.value)} />
                   </Form.Group>
                 </Col>
-                <Col md={6}>
+                <Col md={4}>
+                  <Form.Group>
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" required placeholder="••••••••" value={provPassword} onChange={(e) => setProvPassword(e.target.value)} />
+                  </Form.Group>
+                </Col>
+                <Col md={4}>
                   <Form.Group>
                     <Form.Label>Practice Telephone</Form.Label>
                     <Form.Control type="tel" required placeholder="+962 7 9882 1104" value={provPhone} onChange={(e) => setProvPhone(e.target.value)} />
@@ -256,8 +329,8 @@ function RegisterPage() {
                 </Col>
               </Row>
 
-              <Button type="submit" variant="primary" className="w-100 d-flex align-items-center justify-content-center gap-2">
-                <Stethoscope size={16} color="#34d399" /> Submit Physician Credentials
+              <Button type="submit" variant="primary" disabled={loading} className="w-100 d-flex align-items-center justify-content-center gap-2">
+                <Stethoscope size={16} color="#34d399" /> {loading ? 'Submitting...' : 'Submit Physician Credentials'}
               </Button>
             </motion.form>
           )}

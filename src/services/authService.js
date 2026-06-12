@@ -2,6 +2,24 @@ import api from './api';
 
 export const authService = {
   /**
+   * Register a new Consumer
+   * @param {Object} data 
+   * @returns {Promise<Object>}
+   */
+  registerConsumer: async (data) => {
+    return await api.post('/auth/register/consumer', data);
+  },
+
+  /**
+   * Register a new Provider
+   * @param {Object} data 
+   * @returns {Promise<Object>}
+   */
+  registerProvider: async (data) => {
+    return await api.post('/auth/register/provider', data);
+  },
+
+  /**
    * Log in user
    * @param {string} email
    * @param {string} password
