@@ -298,7 +298,7 @@ function ProviderAssignmentPage() {
                         <span className="d-flex align-items-center gap-1 text-warning fw-bold">
                           <Star size={14} className="fill-warning" /> {provider.rating}
                         </span>
-                        {provider.acceptingNew ? (
+                        {provider.accepting_new ? (
                           <span className="text-success fw-bold d-flex align-items-center gap-1">
                             <span className="rounded-circle bg-success" style={{width: 6, height: 6}}></span> Accepting New Patients
                           </span>
@@ -307,6 +307,23 @@ function ProviderAssignmentPage() {
                             <span className="rounded-circle bg-danger" style={{width: 6, height: 6}}></span> Full Capacity
                           </span>
                         )}
+                      </div>
+                      
+                      {/* Provider Networks */}
+                      <div className="d-flex align-items-center flex-wrap gap-2 mt-2">
+                        {provider.networks && provider.networks.filter(n => n && n.tier).map((net, idx) => {
+                          const companyMap = {
+                            '11111111-1111-1111-1111-111111111111': 'NatHealth',
+                            '22222222-2222-2222-2222-222222222222': 'GIG Jordan',
+                            '33333333-3333-3333-3333-333333333333': 'MedNet'
+                          };
+                          const companyName = companyMap[net.company_id] || 'Insurance';
+                          return (
+                            <Badge key={idx} bg={net.tier === 'Premium' ? 'primary' : net.tier === 'Standard' ? 'success' : 'secondary'} className="fw-normal" style={{ fontSize: '0.7rem' }}>
+                              {companyName} {net.tier}
+                            </Badge>
+                          );
+                        })}
                       </div>
                     </div>
                     <div>
