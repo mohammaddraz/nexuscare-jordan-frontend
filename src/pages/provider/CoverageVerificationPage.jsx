@@ -3,7 +3,7 @@ import { Form, Button, InputGroup } from 'react-bootstrap';
 import { Search, ShieldCheck, ShieldAlert, User } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
-import { mockNationalDb } from '../../data/providerData';
+import { providerService } from '../../services/providerService';
 
 /**
  * CoverageVerificationPage — Instantly check national ID listings and verify real-time insurance.
@@ -13,22 +13,34 @@ function CoverageVerificationPage() {
   const [result, setResult] = useState(null); // { status: 'success' | 'not-found', data: {...} }
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
     if (!nationalId) return;
 
     setIsLoading(true);
     
-    // Simulate API call delay
-    setTimeout(() => {
-      const data = mockNationalDb[nationalId];
-      if (data) {
-        setResult({ status: 'success', data });
+    try {
+      const data = await providerService.verifyCoverage(nationalId);
+      setResult({ 
+        status: 'success', 
+        data: {
+          name: data.name,
+          plan: data.plan_type,
+          status: data.approval_status === 'Approved' ? 'Active' : data.approval_status,
+          network: 'In-Network (Tier 1)',
+          copay: '10.00 JOD'
+        }
+      });
+    } catch (err) {
+      if (err.response && err.response.status === 404) {
+        setResult({ status: 'not-found' });
       } else {
+        console.error('Verification error:', err);
         setResult({ status: 'not-found' });
       }
+    } finally {
       setIsLoading(false);
-    }, 600);
+    }
   };
 
   return (

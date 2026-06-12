@@ -1,20 +1,61 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, Form, Button, Table } from 'react-bootstrap';
 import { FileText, Download, Calendar, Activity, Pill } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
-import { mockDependents, mockMedicalRecords } from '../../data/consumerData';
-
+import { consumerService } from '../../services/consumerService';
 /**
  * MedicalRecordsPage — Review historical diagnoses and prescriptions.
  */
 function MedicalRecordsPage() {
   const [selectedDependent, setSelectedDependent] = useState('All');
-  
-  const filteredRecords = selectedDependent === 'All' 
-    ? mockMedicalRecords 
-    : mockMedicalRecords.filter(r => r.dependentId === selectedDependent);
+  const [dependents, setDependents] = useState([]);
+  const [records, setRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const getDependentName = (id) => mockDependents.find(d => d.id === id)?.name || 'Unknown';
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const family = await consumerService.getFamily();
+      setDependents(family);
+
+      // Fetch records for all family members initially
+      let allRecords = [];
+      for (const member of family) {
+        try {
+          const res = await consumerService.getMedicalRecords(member.id);
+          const mapped = res.map(r => ({
+            id: r.id,
+            dependentId: member.id,
+            date: new Date(r.record_date).toLocaleDateString(),
+            diagnosis: r.diagnosis,
+            icdCode: r.icd_code,
+            notes: r.notes || '',
+            prescription: r.prescription || 'None',
+            providerName: r.provider_name
+          }));
+          allRecords = [...allRecords, ...mapped];
+        } catch (e) {
+          console.error(`Failed to fetch records for ${member.name}`);
+        }
+      }
+      setRecords(allRecords);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredRecords = selectedDependent === 'All' 
+    ? records 
+    : records.filter(r => String(r.dependentId) === String(selectedDependent));
+
+  const getDependentName = (id) => dependents.find(d => String(d.id) === String(id))?.name || 'Unknown';
 
   return (
     <PageWrapper
@@ -27,7 +68,7 @@ function MedicalRecordsPage() {
             <Form.Label>Filter by Family Member</Form.Label>
             <Form.Select value={selectedDependent} onChange={e => setSelectedDependent(e.target.value)}>
               <option value="All">All Family Members</option>
-              {mockDependents.map(dep => (
+              {dependents.map(dep => (
                 <option key={dep.id} value={dep.id}>{dep.name}</option>
               ))}
             </Form.Select>
@@ -49,7 +90,14 @@ function MedicalRecordsPage() {
       </div>
 
       <Row className="g-4">
-        {filteredRecords.map(record => (
+        {loading && (
+          <Col xs={12}>
+            <div className="text-center py-5 text-muted">
+              Loading...
+            </div>
+          </Col>
+        )}
+        {!loading && filteredRecords.map(record => (
           <Col md={6} key={record.id}>
             <div className="card glass-panel-hover h-100 animate-fadeInUp">
               <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
@@ -89,7 +137,7 @@ function MedicalRecordsPage() {
             </div>
           </Col>
         ))}
-        {filteredRecords.length === 0 && (
+        {!loading && filteredRecords.length === 0 && (
           <Col xs={12}>
             <div className="text-center py-5 text-muted">
               <FileText size={48} className="mx-auto mb-3 opacity-50" />

@@ -1,39 +1,73 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, Form, Button, Table, Modal } from 'react-bootstrap';
 import { Activity, Plus, FileText, UploadCloud } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
-import { mockRecentLogs } from '../../data/providerData';
+import { providerService } from '../../services/providerService';
 
 /**
  * ClinicalLoggingPage — Log real-time visits, record clinical ICD diagnostics.
  */
 function ClinicalLoggingPage() {
-  const [logs, setLogs] = useState(mockRecentLogs);
+  const [logs, setLogs] = useState([]);
+  const [patients, setPatients] = useState([]);
   const [showLogModal, setShowLogModal] = useState(false);
 
   // Form state
-  const [patient, setPatient] = useState('');
+  const [patientId, setPatientId] = useState('');
   const [diagnosis, setDiagnosis] = useState('');
   const [icd, setIcd] = useState('');
   const [billing, setBilling] = useState('99213');
+  const [notes, setNotes] = useState('');
 
-  const handleLogSubmit = (e) => {
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+
+  const fetchPatients = async () => {
+    try {
+      const data = await providerService.getMyPatients();
+      setPatients(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleLogSubmit = async (e) => {
     e.preventDefault();
-    const newLog = {
-      id: `LOG-${Math.floor(Math.random() * 9000) + 1000}`,
-      patientName: patient,
-      date: new Date().toISOString().split('T')[0],
-      diagnosis,
-      icdCode: icd,
-      billingCode: billing === '99213' ? '99213 (Level 3)' : '99214 (Level 4)',
-      claimStatus: 'Pending',
-    };
-    
-    setLogs([newLog, ...logs]);
-    setShowLogModal(false);
-    // Reset
-    setPatient(''); setDiagnosis(''); setIcd('');
+    if (!patientId) return alert('Select a patient');
+
+    try {
+      const reqData = {
+        patient_id: patientId,
+        diagnosis,
+        icd_code: icd,
+        prescription: billing,
+        notes
+      };
+      await providerService.addMedicalRecord(reqData);
+
+      const patientObj = patients.find(p => p.id === patientId);
+      
+      const newLog = {
+        id: `LOG-NEW`,
+        patientName: patientObj ? patientObj.name : 'Unknown',
+        date: new Date().toISOString().split('T')[0],
+        diagnosis,
+        icdCode: icd,
+        billingCode: billing,
+        claimStatus: 'Pending',
+      };
+      
+      setLogs([newLog, ...logs]);
+      setShowLogModal(false);
+      // Reset
+      setPatientId(''); setDiagnosis(''); setIcd(''); setNotes('');
+      alert('Medical record logged successfully');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save record');
+    }
   };
 
   return (
@@ -97,7 +131,12 @@ function ClinicalLoggingPage() {
               <Col md={6}>
                 <Form.Group>
                   <Form.Label>Patient Name</Form.Label>
-                  <Form.Control required placeholder="Select or type patient name" value={patient} onChange={e => setPatient(e.target.value)} />
+                  <Form.Select required value={patientId} onChange={e => setPatientId(e.target.value)}>
+                    <option value="">Select a patient...</option>
+                    {patients.map(p => (
+                      <option key={p.id} value={p.id}>{p.name} - {p.national_id}</option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -130,7 +169,7 @@ function ClinicalLoggingPage() {
               </Row>
               <Form.Group>
                 <Form.Label>Clinical Notes & Treatment Plan</Form.Label>
-                <Form.Control as="textarea" rows={3} placeholder="Enter treatment notes..." />
+                <Form.Control as="textarea" rows={3} placeholder="Enter treatment notes..." value={notes} onChange={e => setNotes(e.target.value)} />
               </Form.Group>
             </div>
 

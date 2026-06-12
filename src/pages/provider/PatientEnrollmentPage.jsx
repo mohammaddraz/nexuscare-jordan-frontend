@@ -1,15 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Button, Badge } from 'react-bootstrap';
 import { Check, X, FileText } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
-import { mockPendingEnrollments } from '../../data/providerData';
+import { providerService } from '../../services/providerService';
 
 /**
  * PatientEnrollmentPage — Audit, approve, or reject consumer PCP requests.
  */
 function PatientEnrollmentPage() {
-  const [enrollments, setEnrollments] = useState(mockPendingEnrollments);
+  const [enrollments, setEnrollments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchEnrollments();
+  }, []);
+
+  const fetchEnrollments = async () => {
+    try {
+      setLoading(true);
+      const data = await providerService.getPendingAssignments();
+      
+      // Map backend fields to what component expects
+      const mapped = data.map(e => ({
+        id: e.id,
+        dateRequested: new Date(e.date_requested).toLocaleDateString(),
+        patientName: e.patient_name,
+        nationalId: e.national_id,
+        planType: e.plan_type,
+      }));
+      setEnrollments(mapped);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const [selectedAction, setSelectedAction] = useState(null); // { type: 'Approve' | 'Reject', enrollment }
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -18,15 +45,20 @@ function PatientEnrollmentPage() {
     setShowConfirm(true);
   };
 
-  const confirmAction = () => {
+  const confirmAction = async () => {
     if (!selectedAction) return;
     
-    // Remove from pending list
-    setEnrollments(enrollments.filter(e => e.id !== selectedAction.enrollment.id));
-    
-    // In real app, make API call here
-    const actionText = selectedAction.type === 'Approve' ? 'approved' : 'rejected';
-    alert(`Enrollment for ${selectedAction.enrollment.patientName} has been ${actionText}.`);
+    try {
+      await providerService.updateAssignmentStatus(selectedAction.enrollment.id, selectedAction.type);
+      
+      // Remove from list
+      setEnrollments(enrollments.filter(e => e.id !== selectedAction.enrollment.id));
+      setShowConfirm(false);
+      setSelectedAction(null);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to process action');
+    }
   };
 
   return (
@@ -71,7 +103,7 @@ function PatientEnrollmentPage() {
                           size="sm" 
                           className="d-flex align-items-center justify-content-center p-1"
                           style={{ width: 28, height: 28 }}
-                          onClick={() => handleActionClick('Reject', enr)}
+                          onClick={() => handleActionClick('Rejected', enr)}
                           title="Reject"
                         >
                           <X size={16} />
@@ -81,7 +113,7 @@ function PatientEnrollmentPage() {
                           size="sm" 
                           className="d-flex align-items-center justify-content-center p-1"
                           style={{ width: 28, height: 28 }}
-                          onClick={() => handleActionClick('Approve', enr)}
+                          onClick={() => handleActionClick('Approved', enr)}
                           title="Approve"
                         >
                           <Check size={16} />
@@ -90,7 +122,14 @@ function PatientEnrollmentPage() {
                     </td>
                   </tr>
                 ))}
-                {enrollments.length === 0 && (
+                {loading && (
+                  <tr>
+                    <td colSpan="6" className="text-center py-5 text-muted">
+                      Loading...
+                    </td>
+                  </tr>
+                )}
+                {!loading && enrollments.length === 0 && (
                   <tr>
                     <td colSpan="6" className="text-center py-5 text-muted">
                       <FileText size={48} className="mx-auto mb-3 opacity-50" />
@@ -111,7 +150,7 @@ function PatientEnrollmentPage() {
         title={`${selectedAction?.type} Enrollment`}
         message={`Are you sure you want to ${selectedAction?.type.toLowerCase()} the PCP assignment request for ${selectedAction?.enrollment.patientName}?`}
         confirmLabel={selectedAction?.type}
-        variant={selectedAction?.type === 'Reject' ? 'danger' : 'success'}
+        variant={selectedAction?.type === 'Rejected' ? 'danger' : 'success'}
       />
     </PageWrapper>
   );

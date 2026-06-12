@@ -1,20 +1,58 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Button, Form, Modal, Row, Col } from 'react-bootstrap';
 import { UploadCloud, FileText, CheckCircle } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
-import { mockClaims, mockDependents } from '../../data/consumerData';
+import { consumerService } from '../../services/consumerService';
 
 /**
  * ClaimsPage — Self-Service Claims Processing
  */
 function ClaimsPage() {
-  const [claims, setClaims] = useState(mockClaims);
+  const [claims, setClaims] = useState([]);
+  const [dependents, setDependents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [newClaimSubmitted, setNewClaimSubmitted] = useState(false);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const family = await consumerService.getFamily();
+      setDependents(family);
+      if (family.length > 0) setClaimDep(family[0].name);
+
+      let allClaims = [];
+      for (const member of family) {
+        try {
+          const res = await consumerService.getClaims(member.id);
+          const mapped = res.map(c => ({
+            id: c.id,
+            dependentName: member.name,
+            date: new Date(c.claim_date).toLocaleDateString(),
+            providerName: c.provider_name || 'Network Provider',
+            amount: c.amount,
+            status: c.status
+          }));
+          allClaims = [...allClaims, ...mapped];
+        } catch (e) {
+          console.error(`Failed to fetch claims for ${member.name}`);
+        }
+      }
+      setClaims(allClaims);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // New claim form state
-  const [claimDep, setClaimDep] = useState(mockDependents[0].name);
+  const [claimDep, setClaimDep] = useState('');
   const [claimDate, setClaimDate] = useState('');
   const [claimProvider, setClaimProvider] = useState('');
   const [claimAmount, setClaimAmount] = useState('');
@@ -69,7 +107,12 @@ function ClaimsPage() {
                 </tr>
               </thead>
               <tbody>
-                {claims.map(claim => (
+                {loading && (
+                  <tr>
+                    <td colSpan="6" className="text-center py-5 text-muted">Loading...</td>
+                  </tr>
+                )}
+                {!loading && claims.map(claim => (
                   <tr key={claim.id}>
                     <td className="px-4 fw-bold font-mono" style={{ fontSize: '0.8rem' }}>{claim.id}</td>
                     <td style={{ fontSize: '0.8rem' }}>{claim.date}</td>
@@ -79,6 +122,11 @@ function ClaimsPage() {
                     <td><StatusBadge status={claim.status} size="sm" /></td>
                   </tr>
                 ))}
+                {!loading && claims.length === 0 && (
+                  <tr>
+                    <td colSpan="6" className="text-center py-5 text-muted">No claims found.</td>
+                  </tr>
+                )}
               </tbody>
             </Table>
           </div>
@@ -98,7 +146,7 @@ function ClaimsPage() {
                     <Form.Group>
                       <Form.Label>Patient (Dependent)</Form.Label>
                       <Form.Select value={claimDep} onChange={e => setClaimDep(e.target.value)}>
-                        {mockDependents.map(dep => <option key={dep.id} value={dep.name}>{dep.name}</option>)}
+                        {dependents.map(dep => <option key={dep.id} value={dep.name}>{dep.name}</option>)}
                       </Form.Select>
                     </Form.Group>
                   </Col>

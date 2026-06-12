@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Form, InputGroup, Button, Modal, Row, Col } from 'react-bootstrap';
 import { Search, MapPin, Building, Star, Download, Edit3, Save } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
-import { mockProviders } from '../../data/consumerData';
+import { adminService } from '../../services/adminService';
 
 /**
  * NetworkDirectoryPage — Admin view of all active providers in the network.
@@ -11,7 +11,32 @@ import { mockProviders } from '../../data/consumerData';
  */
 function NetworkDirectoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [providers, setProviders] = useState(mockProviders);
+  const [providers, setProviders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch providers from backend
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        setLoading(true);
+        const data = await adminService.getProviderDirectory();
+        
+        // Map backend response fields to frontend component expectations
+        const mappedData = data.map(p => ({
+          ...p,
+          id: p.user_id, // Important for mapping
+          acceptingNew: p.accepting_new,
+        }));
+
+        setProviders(mappedData);
+      } catch (err) {
+        console.error("Failed to fetch provider directory:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProviders();
+  }, []);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingProvider, setEditingProvider] = useState(null);
 
@@ -72,7 +97,15 @@ function NetworkDirectoryPage() {
         </div>
         
         <div className="card-body p-0">
-          <div className="table-responsive">
+          {loading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p className="mt-2 text-muted">Loading network directory...</p>
+            </div>
+          ) : (
+            <div className="table-responsive">
             <Table hover className="mb-0 align-middle">
               <thead className="bg-light border-bottom border-top">
                 <tr>
@@ -147,6 +180,7 @@ function NetworkDirectoryPage() {
               </tbody>
             </Table>
           </div>
+          )}
         </div>
       </div>
 

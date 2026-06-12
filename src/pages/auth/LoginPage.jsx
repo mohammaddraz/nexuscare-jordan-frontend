@@ -26,6 +26,8 @@ const demoProfiles = [
   {
     role: 'CONSUMER',
     id: 'MEM-001',
+    email: 'ahmed.alamiri@gmail.com',
+    password: 'password123',
     name: 'Ahmed Al-Amiri',
     subtitle: 'Primary Holder • Platinum Care',
     avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150',
@@ -34,6 +36,8 @@ const demoProfiles = [
   {
     role: 'PROVIDER',
     id: 'PROV-001',
+    email: 'reem.khalidi@alkhalidi.jo',
+    password: 'password123',
     name: 'Dr. Reem Al-Khalidi',
     subtitle: 'Cardiology Specialist • Jordan',
     avatarUrl: null,
@@ -42,10 +46,12 @@ const demoProfiles = [
   {
     role: 'ADMIN',
     id: 'ADM-001',
-    name: 'Faisal Al-Rifai',
+    email: 'layla.mahmoud@moh.gov.jo',
+    password: 'password123',
+    name: 'Layla Mahmoud',
     subtitle: 'MOH Administrator Portal',
     avatarUrl: null,
-    initials: 'FR',
+    initials: 'LM',
   },
 ];
 
@@ -55,22 +61,24 @@ function LoginPage() {
   const { login, error, clearError } = useAuth();
   const navigate = useNavigate();
 
-  const handleDemoLogin = (role, id) => {
-    login(role, id);
+  const handleDemoLogin = async (email, password) => {
+    try {
+      await login(email, password);
+    } catch (err) {
+      // Error is handled in context
+    }
   };
 
-  const handleManualLogin = (e) => {
+  const handleManualLogin = async (e) => {
     e.preventDefault();
-    if (!email) {
+    if (!email || !password) {
       return;
     }
-    // Route based on email pattern (demo behavior)
-    if (email.includes('dr.') || email.includes('clinic')) {
-      login('PROVIDER', 'PROV-001');
-    } else if (email.includes('admin') || email.includes('faisal')) {
-      login('ADMIN', 'ADM-001');
-    } else {
-      login('CONSUMER', 'MEM-001');
+    
+    try {
+      await login(email, password);
+    } catch (err) {
+      // Error is handled in context
     }
   };
 
@@ -217,7 +225,7 @@ function LoginPage() {
                     <button
                       key={profile.role}
                       type="button"
-                      onClick={() => handleDemoLogin(profile.role, profile.id)}
+                      onClick={() => handleDemoLogin(profile.email, profile.password)}
                       className="w-100 p-3 rounded-4 border bg-white text-start d-flex align-items-center justify-content-between"
                       style={{
                         cursor: 'pointer', transition: 'all var(--transition-default)',

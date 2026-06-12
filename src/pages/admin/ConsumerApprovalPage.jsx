@@ -1,22 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Table, Button, Badge } from 'react-bootstrap';
-import { mockPendingConsumers } from '../../data/adminData';
+import { adminService } from '../../services/adminService';
 import { CheckCircle, XCircle, Clock, AlertTriangle } from 'lucide-react';
-const ConsumerApprovalPage = () => {
-  const [consumers, setConsumers] = useState(mockPendingConsumers);
 
-  const handleApprove = (id) => {
-    setConsumers(consumers.filter(c => c.id !== id));
-    // In real app, call API to update status
-    alert(`Registration ${id} approved successfully.`);
+const ConsumerApprovalPage = () => {
+  const [consumers, setConsumers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchConsumers();
+  }, []);
+
+  const fetchConsumers = async () => {
+    try {
+      setLoading(true);
+      const data = await adminService.getPendingConsumers();
+      
+      const mapped = data.map(c => ({
+        id: c.id,
+        accountName: c.name,
+        nationalId: c.national_id,
+        familySize: c.family_size,
+        planType: c.plan_type,
+        dateSignedUp: c.date_signed_up,
+        status: c.approval_status
+      }));
+      setConsumers(mapped);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleReject = (id) => {
+  const handleApprove = async (id) => {
+    try {
+      await adminService.updateConsumerStatus(id, 'Approved');
+      setConsumers(consumers.filter(c => c.id !== id));
+      alert(`Registration ${id} approved successfully.`);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to approve registration');
+    }
+  };
+
+  const handleReject = async (id) => {
     const reason = prompt('Please provide a reason for rejection (e.g., ID Mismatch):');
     if (reason) {
-      setConsumers(consumers.filter(c => c.id !== id));
-      // In real app, call API to reject status and notify user
-      alert(`Registration ${id} rejected. Reason: ${reason}`);
+      try {
+        await adminService.updateConsumerStatus(id, 'Rejected');
+        setConsumers(consumers.filter(c => c.id !== id));
+        alert(`Registration ${id} rejected. Reason: ${reason}`);
+      } catch (err) {
+        console.error(err);
+        alert('Failed to reject registration');
+      }
     }
   };
 
@@ -45,7 +83,14 @@ const ConsumerApprovalPage = () => {
               <h5 className="fw-bold mb-0">Pending Registrations ({consumers.length})</h5>
             </Card.Header>
             <Card.Body className="p-4">
-              {consumers.length === 0 ? (
+              {loading ? (
+                <div className="text-center py-5">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <p className="mt-2 text-muted">Loading pending consumers...</p>
+                </div>
+              ) : consumers.length === 0 ? (
                 <div className="text-center py-5">
                   <CheckCircle size={48} className="text-success mb-3" />
                   <h5 className="text-muted">All caught up!</h5>

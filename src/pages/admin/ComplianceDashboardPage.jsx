@@ -1,16 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Row, Col, ProgressBar, Tabs, Tab, Accordion, OverlayTrigger, Tooltip, Badge } from 'react-bootstrap';
 import { Users, Building, Activity, Clock, AlertTriangle, Info, Map } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatsCard from '../../components/ui/StatsCard';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { mockComplianceStats, mockRegionalData } from '../../data/adminData';
+import { adminService } from '../../services/adminService';
 
 /**
  * ComplianceDashboardPage — System-wide analytics for MOH admins.
  */
 function ComplianceDashboardPage() {
   const [activeTab, setActiveTab] = useState('data');
+  const [stats, setStats] = useState({
+    total_consumers: 0,
+    pending_approvals: 0,
+    total_claims: 0
+  });
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const data = await adminService.getDashboardStats();
+      setStats(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const renderTooltip = (text) => (
     <Tooltip id="stat-tooltip">{text}</Tooltip>
@@ -27,8 +46,8 @@ function ComplianceDashboardPage() {
             <div style={{ cursor: 'pointer' }}>
               <StatsCard
                 title="Active Insured Citizens"
-                value={(mockComplianceStats.activeInsured / 1000).toFixed(1) + 'k'}
-                subtitle={mockComplianceStats.insuredTrend}
+                value={stats.total_consumers}
+                subtitle="Total Verified"
                 icon={Users}
                 trend="+12%"
                 trendDirection="up"
@@ -42,9 +61,9 @@ function ComplianceDashboardPage() {
           <OverlayTrigger placement="top" overlay={renderTooltip("Newly verified facilities this month")}>
             <div style={{ cursor: 'pointer' }}>
               <StatsCard
-                title="Registered Network Physicians"
-                value={mockComplianceStats.totalPhysicians}
-                subtitle={mockComplianceStats.physiciansTrend}
+                title="Pending Consumer Approvals"
+                value={stats.pending_approvals}
+                subtitle="Pending Requests"
                 icon={Building}
                 trend="+45"
                 trendDirection="up"
@@ -58,9 +77,9 @@ function ComplianceDashboardPage() {
           <OverlayTrigger placement="top" overlay={renderTooltip("Improvement from last quarter")}>
             <div style={{ cursor: 'pointer' }}>
               <StatsCard
-                title="Avg Claims Processing Time"
-                value={mockComplianceStats.claimsProcessingTime}
-                subtitle={mockComplianceStats.processingTrend}
+                title="Total Claims Submitted"
+                value={stats.total_claims}
+                subtitle="All Claim Types"
                 icon={Clock}
                 trend="-1.1h"
                 trendDirection="up"

@@ -1,33 +1,66 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Button, Badge } from 'react-bootstrap';
 import { Check, X, Shield, FileText, ExternalLink } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import StatusBadge from '../../components/ui/StatusBadge';
-import { mockPendingCertifications } from '../../data/adminData';
+import { adminService } from '../../services/adminService';
 
 /**
  * VerificationGatewayPage — Admin review of incoming physician licensure certifications.
  */
 function VerificationGatewayPage() {
-  const [certifications, setCertifications] = useState(mockPendingCertifications);
+  const [certifications, setCertifications] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedAction, setSelectedAction] = useState(null); // { type: 'Approve' | 'Reject', cert }
   const [showConfirm, setShowConfirm] = useState(false);
+
+  useEffect(() => {
+    fetchCertifications();
+  }, []);
+
+  const fetchCertifications = async () => {
+    try {
+      setLoading(true);
+      const data = await adminService.getPendingCertifications();
+      
+      const mapped = data.map(c => ({
+        id: c.id,
+        doctorName: c.provider_name,
+        specialty: c.specialty,
+        clinicName: c.clinic,
+        licenseNumber: c.license_number,
+        status: c.status
+      }));
+      setCertifications(mapped);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleActionClick = (type, cert) => {
     setSelectedAction({ type, cert });
     setShowConfirm(true);
   };
 
-  const confirmAction = () => {
+  const confirmAction = async () => {
     if (!selectedAction) return;
     
-    // Remove from pending list
-    setCertifications(certifications.filter(c => c.id !== selectedAction.cert.id));
-    
-    // In real app, make API call here and trigger Nodemailer email
-    const actionText = selectedAction.type === 'Approve' ? 'approved and added to the network' : 'rejected';
-    alert(`Licensure for ${selectedAction.cert.doctorName} has been ${actionText}. (Nodemailer email triggered)`);
+    try {
+      await adminService.updateCertificationStatus(selectedAction.cert.id, selectedAction.type === 'Approve' ? 'Approved' : 'Rejected');
+      setCertifications(certifications.filter(c => c.id !== selectedAction.cert.id));
+      
+      const actionText = selectedAction.type === 'Approve' ? 'approved and added to the network' : 'rejected';
+      alert(`Licensure for ${selectedAction.cert.doctorName} has been ${actionText}.`);
+      
+      setShowConfirm(false);
+      setSelectedAction(null);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to process certification');
+    }
   };
 
   return (
@@ -102,7 +135,14 @@ function VerificationGatewayPage() {
                     </td>
                   </tr>
                 ))}
-                {certifications.length === 0 && (
+                {loading && (
+                  <tr>
+                    <td colSpan="6" className="text-center py-5 text-muted">
+                      Loading...
+                    </td>
+                  </tr>
+                )}
+                {!loading && certifications.length === 0 && (
                   <tr>
                     <td colSpan="6" className="text-center py-5 text-muted">
                       <Shield size={48} className="mx-auto mb-3 opacity-50" />

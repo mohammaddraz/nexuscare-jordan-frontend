@@ -1,18 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Form, InputGroup, Button, Modal, Row, Col } from 'react-bootstrap';
 import { Search, Shield, Edit3, Trash2, UserPlus, Clock } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
-import { mockAdmins } from '../../data/adminData';
+import { adminService } from '../../services/adminService';
 
 /**
  * ManageAdminsPage — Super Admin view to add, edit, and remove system administrators.
  */
 function ManageAdminsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [admins, setAdmins] = useState(mockAdmins);
+  const [admins, setAdmins] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState(null);
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
+  const fetchAdmins = async () => {
+    try {
+      setLoading(true);
+      const data = await adminService.getAdmins();
+      
+      const mapped = data.map(a => ({
+        id: a.user_id,
+        name: a.name,
+        email: a.email,
+        role: a.admin_role,
+        status: a.status,
+        lastLogin: a.last_login
+      }));
+      setAdmins(mapped);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
@@ -44,6 +70,7 @@ function ManageAdminsPage() {
   const handleDeleteClick = (id) => {
     if (window.confirm('Are you sure you want to revoke access for this administrator?')) {
       setAdmins(admins.filter(a => a.id !== id));
+      // In a real app, you would make an API call here to DELETE
     }
   };
 
@@ -56,6 +83,7 @@ function ManageAdminsPage() {
       // Add
       setAdmins([...admins, editingAdmin]);
     }
+    // In a real app, you would make an API call here to POST/PUT
     setShowModal(false);
     setEditingAdmin(null);
   };
@@ -149,7 +177,14 @@ function ManageAdminsPage() {
                   </tr>
                 ))}
                 
-                {filteredAdmins.length === 0 && (
+                {loading && (
+                  <tr>
+                    <td colSpan="5" className="text-center py-5 text-muted">
+                      Loading...
+                    </td>
+                  </tr>
+                )}
+                {!loading && filteredAdmins.length === 0 && (
                   <tr>
                     <td colSpan="5" className="text-center py-5 text-muted">
                       <Shield size={48} className="mx-auto mb-3 opacity-50" />
