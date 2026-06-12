@@ -175,7 +175,12 @@ function CoverageConfigPage() {
                   >
                     <div className="flex-grow-1 text-start">
                       <h6 className="mb-1 fw-bold" style={{ fontSize: '0.9rem' }}>{dep.name}</h6>
-                      <p className="mb-0 text-muted" style={{ fontSize: '0.75rem' }}>Current: {dep.plan_type}</p>
+                      <p className="mb-1 text-muted" style={{ fontSize: '0.75rem' }}>Current: {dep.plan_type}</p>
+                      <div className="d-flex align-items-center gap-1">
+                        <Badge bg={dep.network_tier === 'Premium' ? 'primary' : dep.network_tier === 'Standard' ? 'success' : 'secondary'} style={{ fontSize: '0.65rem' }}>
+                          {dep.insurance_company_name || 'No Insurance'} {dep.network_tier}
+                        </Badge>
+                      </div>
                     </div>
                   </button>
                 ))}
@@ -195,7 +200,10 @@ function CoverageConfigPage() {
                   </div>
                   <div>
                     <h5 className="fw-bold mb-1">Configure Plan for {activeMember.name}</h5>
-                    <p className="mb-0 text-muted" style={{ fontSize: '0.85rem' }}>Changes require MOH administrative approval.</p>
+                    <p className="mb-1 text-muted" style={{ fontSize: '0.85rem' }}>Changes require MOH administrative approval.</p>
+                    <Badge bg="light" text="dark" className="border">
+                      Active Network: {activeMember.insurance_company_name} ({activeMember.network_tier} Tier)
+                    </Badge>
                   </div>
                 </div>
 
@@ -206,11 +214,11 @@ function CoverageConfigPage() {
                   <Row className="mb-4">
                     <Col md={6}>
                       <Form.Group>
-                        <Form.Label>Insurance Contract Tier</Form.Label>
+                        <Form.Label>Plan Type</Form.Label>
                         <Form.Select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)}>
-                          <option value="Platinum Care JOR">Platinum Care JOR (100% In-Network)</option>
-                          <option value="Gold Shield JOR">Gold Shield JOR (80% In-Network)</option>
-                          <option value="Basic Silver JOR">Silver Basic JOR (MOH Public Clinics Only)</option>
+                          <option value="Individual">Individual</option>
+                          <option value="Family">Family</option>
+                          <option value="Corporate">Corporate</option>
                         </Form.Select>
                       </Form.Group>
                     </Col>

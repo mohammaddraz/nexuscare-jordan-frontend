@@ -11,6 +11,7 @@ import { consumerService } from '../../services/consumerService';
 function ClaimsPage() {
   const [claims, setClaims] = useState([]);
   const [dependents, setDependents] = useState([]);
+  const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [newClaimSubmitted, setNewClaimSubmitted] = useState(false);
@@ -22,9 +23,14 @@ function ClaimsPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const family = await consumerService.getFamily();
+      const [family, providerList] = await Promise.all([
+        consumerService.getFamily(),
+        consumerService.getProviders()
+      ]);
       setDependents(family);
-      if (family.length > 0) setClaimDep(family[0].name);
+      setProviders(providerList);
+      if (family.length > 0) setClaimDep(family[0].id);
+      if (providerList.length > 0) setClaimProvider(providerList[0].user_id);
 
       let allClaims = [];
       for (const member of family) {
@@ -57,20 +63,23 @@ function ClaimsPage() {
   const [claimProvider, setClaimProvider] = useState('');
   const [claimAmount, setClaimAmount] = useState('');
 
-  const handleSubmitClaim = (e) => {
+  const handleSubmitClaim = async (e) => {
     e.preventDefault();
-    const newClaim = {
-      id: `CLM-2024-${Math.floor(Math.random() * 9000) + 1000}`,
-      dependentName: claimDep,
-      date: claimDate,
-      type: 'Outpatient Consultation',
-      providerName: claimProvider,
-      amount: parseFloat(claimAmount).toFixed(2),
-      status: 'Pending',
-      deductibleApplied: 0.00,
-    };
-    setClaims([newClaim, ...claims]);
-    setNewClaimSubmitted(true);
+    if (!claimDep || !claimProvider || !claimDate || !claimAmount) return;
+
+    try {
+      await consumerService.submitClaim({
+        patient_id: claimDep,
+        provider_id: claimProvider,
+        claim_date: claimDate,
+        amount: parseFloat(claimAmount).toFixed(2),
+      });
+      setNewClaimSubmitted(true);
+      fetchData(); // Refresh ledger
+    } catch (err) {
+      console.error(err);
+      alert('Failed to submit claim. Please try again.');
+    }
   };
 
   const resetModal = () => {
@@ -146,7 +155,7 @@ function ClaimsPage() {
                     <Form.Group>
                       <Form.Label>Patient (Dependent)</Form.Label>
                       <Form.Select value={claimDep} onChange={e => setClaimDep(e.target.value)}>
-                        {dependents.map(dep => <option key={dep.id} value={dep.name}>{dep.name}</option>)}
+                        {dependents.map(dep => <option key={dep.id} value={dep.id}>{dep.name}</option>)}
                       </Form.Select>
                     </Form.Group>
                   </Col>
@@ -161,7 +170,12 @@ function ClaimsPage() {
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>Healthcare Provider / Clinic</Form.Label>
-                      <Form.Control required placeholder="e.g. Arab Medical Center" value={claimProvider} onChange={e => setClaimProvider(e.target.value)} />
+                      <Form.Select required value={claimProvider} onChange={e => setClaimProvider(e.target.value)}>
+                        <option value="">Select a provider...</option>
+                        {providers.map(p => (
+                          <option key={p.user_id} value={p.user_id}>{p.name} - {p.clinic}</option>
+                        ))}
+                      </Form.Select>
                     </Form.Group>
                   </Col>
                   <Col md={6}>

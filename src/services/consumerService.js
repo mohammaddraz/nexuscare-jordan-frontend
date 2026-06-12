@@ -68,7 +68,13 @@ export const consumerService = {
    * @returns {Promise<Object>}
    */
   submitCoverageRequest: async (data) => {
-    return await api.post('/consumers/coverage-request', data);
+    const response = await api.post('/consumers/coverage-requests', data);
+    return response.data;
+  },
+
+  submitClaim: async (data) => {
+    const response = await api.post('/consumers/claims', data);
+    return response.data;
   },
 
   /**
