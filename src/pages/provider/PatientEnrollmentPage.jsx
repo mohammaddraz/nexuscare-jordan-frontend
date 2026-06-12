@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Button, Badge } from 'react-bootstrap';
+import { Table, Button, Badge, Tabs, Tab } from 'react-bootstrap';
 import { Check, X, FileText } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
@@ -10,7 +10,9 @@ import { providerService } from '../../services/providerService';
  */
 function PatientEnrollmentPage() {
   const [enrollments, setEnrollments] = useState([]);
+  const [claims, setClaims] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('enrollments');
 
   useEffect(() => {
     fetchEnrollments();
@@ -19,9 +21,11 @@ function PatientEnrollmentPage() {
   const fetchEnrollments = async () => {
     try {
       setLoading(true);
-      const data = await providerService.getPendingAssignments();
+      const [data, claimsData] = await Promise.all([
+        providerService.getPendingAssignments(),
+        providerService.getClaims()
+      ]);
       
-      // Map backend fields to what component expects
       const mapped = data.map(e => ({
         id: e.id,
         dateRequested: new Date(e.date_requested).toLocaleDateString(),
@@ -30,10 +34,21 @@ function PatientEnrollmentPage() {
         planType: e.plan_type,
       }));
       setEnrollments(mapped);
+      setClaims(claimsData.filter(c => c.status === 'Pending')); // Only show pending for verification
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleVerifyClaim = async (id, status) => {
+    try {
+      await providerService.verifyClaim(id, status);
+      setClaims(claims.filter(c => c.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to process claim verification');
     }
   };
 
@@ -66,12 +81,18 @@ function PatientEnrollmentPage() {
       title="Patient Enrollment Gateway"
       subtitle="Audit, approve, or reject new consumer enrollment applications requesting assignment to your facility."
     >
-      <div className="card glass-panel animate-fadeIn">
-        <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
-          <h6 className="fw-bold mb-0">Pending Applications Queue</h6>
-          <Badge bg="danger" pill>{enrollments.length} Pending</Badge>
-        </div>
-        <div className="card-body p-0">
+      <Tabs
+        id="provider-tabs"
+        activeKey={activeTab}
+        onSelect={(k) => setActiveTab(k)}
+        className="mb-4 modern-tabs"
+      >
+        <Tab eventKey="enrollments" title={<>Patient Enrollments <Badge bg="danger" pill className="ms-2">{enrollments.length}</Badge></>}>
+          <div className="card glass-panel animate-fadeIn">
+            <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
+              <h6 className="fw-bold mb-0">Pending Applications Queue</h6>
+            </div>
+            <div className="card-body p-0">
           <div className="table-responsive">
             <Table hover className="mb-0 align-middle">
               <thead className="bg-light">
@@ -142,6 +163,68 @@ function PatientEnrollmentPage() {
           </div>
         </div>
       </div>
+        </Tab>
+        <Tab eventKey="claims" title={<>Verify Claims <Badge bg="warning" text="dark" pill className="ms-2">{claims.length}</Badge></>}>
+          <div className="card glass-panel animate-fadeIn">
+            <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex align-items-center justify-content-between">
+              <h6 className="fw-bold mb-0">Claims Pending Verification</h6>
+            </div>
+            <div className="card-body p-0">
+              <div className="table-responsive">
+                <Table hover className="mb-0 align-middle">
+                  <thead className="bg-light">
+                    <tr>
+                      <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Claim ID</th>
+                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date</th>
+                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Patient Name</th>
+                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Amount (JOD)</th>
+                      <th className="py-3 text-muted text-uppercase text-end px-4" style={{ fontSize: '0.65rem' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {claims.map((claim) => (
+                      <tr key={claim.id}>
+                        <td className="px-4 fw-bold font-mono text-muted" style={{ fontSize: '0.75rem' }}>{claim.id.substring(0,8)}...</td>
+                        <td style={{ fontSize: '0.8rem' }}>{new Date(claim.claim_date).toLocaleDateString()}</td>
+                        <td className="fw-bold" style={{ fontSize: '0.85rem' }}>{claim.patient_name}</td>
+                        <td style={{ fontSize: '0.8rem' }}>{claim.amount}</td>
+                        <td className="text-end px-4">
+                          <div className="d-flex justify-content-end gap-2">
+                            <Button 
+                              variant="outline-danger" 
+                              size="sm" 
+                              onClick={() => handleVerifyClaim(claim.id, 'Rejected')}
+                              title="Reject Fraudulent Claim"
+                            >
+                              Reject
+                            </Button>
+                            <Button 
+                              variant="success" 
+                              size="sm" 
+                              onClick={() => handleVerifyClaim(claim.id, 'In Review')}
+                              title="Verify Service"
+                            >
+                              Verify
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {!loading && claims.length === 0 && (
+                      <tr>
+                        <td colSpan="5" className="text-center py-5 text-muted">
+                          <FileText size={48} className="mx-auto mb-3 opacity-50" />
+                          <p>No claims require verification at this time.</p>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </Table>
+              </div>
+            </div>
+          </div>
+        </Tab>
+      </Tabs>
 
       <ConfirmDialog
         show={showConfirm}

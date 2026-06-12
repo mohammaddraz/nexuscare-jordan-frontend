@@ -22,6 +22,7 @@ function ClinicalLoggingPage() {
 
   useEffect(() => {
     fetchPatients();
+    fetchLogs();
   }, []);
 
   const fetchPatients = async () => {
@@ -30,6 +31,15 @@ function ClinicalLoggingPage() {
       setPatients(data);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const fetchLogs = async () => {
+    try {
+      const data = await providerService.getMyClinicalLogs();
+      setLogs(data);
+    } catch (err) {
+      console.error('Failed to fetch clinical logs:', err);
     }
   };
 
@@ -47,22 +57,16 @@ function ClinicalLoggingPage() {
       };
       await providerService.addMedicalRecord(reqData);
 
-      const patientObj = patients.find(p => p.id === patientId);
-      
-      const newLog = {
-        id: `LOG-NEW`,
-        patientName: patientObj ? patientObj.name : 'Unknown',
-        date: new Date().toISOString().split('T')[0],
-        diagnosis,
-        icdCode: icd,
-        billingCode: billing,
-        claimStatus: 'Pending',
-      };
-      
-      setLogs([newLog, ...logs]);
       setShowLogModal(false);
       // Reset
-      setPatientId(''); setDiagnosis(''); setIcd(''); setNotes('');
+      setPatientId('');
+      setDiagnosis('');
+      setIcd('');
+      setNotes('');
+      setShowLogModal(false);
+      
+      // Refresh logs from backend instead of manually pushing to local array
+      fetchLogs(); 
       alert('Medical record logged successfully');
     } catch (err) {
       console.error(err);
@@ -98,10 +102,10 @@ function ClinicalLoggingPage() {
                 </tr>
               </thead>
               <tbody>
-                {logs.map((log) => (
-                  <tr key={log.id}>
-                    <td className="px-4 fw-bold font-mono text-muted" style={{ fontSize: '0.75rem' }}>{log.id}</td>
-                    <td style={{ fontSize: '0.8rem' }}>{log.date}</td>
+                {logs.map((log, idx) => (
+                  <tr key={`${log.id}-${idx}`}>
+                    <td className="px-4 fw-bold font-mono text-muted" style={{ fontSize: '0.75rem' }}>{log.id.substring(0, 8)}...</td>
+                    <td style={{ fontSize: '0.8rem' }}>{new Date(log.date).toLocaleDateString()}</td>
                     <td className="fw-bold" style={{ fontSize: '0.85rem' }}>{log.patientName}</td>
                     <td>
                       <div style={{ fontSize: '0.8rem' }}>{log.diagnosis}</div>
@@ -133,8 +137,8 @@ function ClinicalLoggingPage() {
                   <Form.Label>Patient Name</Form.Label>
                   <Form.Select required value={patientId} onChange={e => setPatientId(e.target.value)}>
                     <option value="">Select a patient...</option>
-                    {patients.map(p => (
-                      <option key={p.id} value={p.id}>{p.name} - {p.national_id}</option>
+                    {patients.map((p, idx) => (
+                      <option key={`${p.id}-${idx}`} value={p.id}>{p.name} - {p.national_id}</option>
                     ))}
                   </Form.Select>
                 </Form.Group>

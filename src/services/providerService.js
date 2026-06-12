@@ -28,6 +28,14 @@ export const providerService = {
   },
 
   /**
+   * Get provider's historical clinical logs
+   * @returns {Promise<Array>}
+   */
+  getMyClinicalLogs: async () => {
+    return await api.get('/providers/clinical-logs');
+  },
+
+  /**
    * Add a medical record
    * @param {Object} data { patient_id, diagnosis, icd_code, prescription, notes }
    * @returns {Promise<Object>}
@@ -44,6 +52,21 @@ export const providerService = {
   submitClaim: async (data) => {
     const response = await api.post('/providers/claims', data);
     return response;
+  },
+
+  updatePcpRequest: async (id, status) => {
+    const response = await api.put(`/providers/pcp-requests/${id}`, { status });
+    return response.data;
+  },
+
+  getClaims: async () => {
+    const response = await api.get('/providers/claims');
+    return response.data;
+  },
+
+  verifyClaim: async (id, status) => {
+    const response = await api.put(`/providers/claims/${id}/verify`, { status });
+    return response.data;
   },
 
   verifyCoverage: async (nationalId) => {
