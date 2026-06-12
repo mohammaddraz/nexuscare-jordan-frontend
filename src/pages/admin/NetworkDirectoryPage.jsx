@@ -12,33 +12,51 @@ import { adminService } from '../../services/adminService';
 function NetworkDirectoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [providers, setProviders] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [networks, setNetworks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Fetch providers from backend
   useEffect(() => {
-    const fetchProviders = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await adminService.getProviderDirectory();
+        const [provData, compData, netData] = await Promise.all([
+          adminService.getProviderDirectory(),
+          adminService.getInsuranceCompanies(),
+          adminService.getProviderNetworks()
+        ]);
         
-        // Map backend response fields to frontend component expectations
-        const mappedData = data.map(p => ({
+        // Map backend response fields
+        const mappedData = provData.map(p => ({
           ...p,
-          id: p.user_id, // Important for mapping
+          id: p.user_id,
           acceptingNew: p.accepting_new,
+          networks: netData.filter(n => n.provider_id === p.user_id)
         }));
 
         setProviders(mappedData);
+        setCompanies(compData);
+        setNetworks(netData);
       } catch (err) {
-        console.error("Failed to fetch provider directory:", err);
+        console.error("Failed to fetch data:", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchProviders();
+    fetchData();
   }, []);
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingProvider, setEditingProvider] = useState(null);
+  
+  // Assign Network Modal State
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [assignProvider, setAssignProvider] = useState(null);
+  const [selectedCompanyId, setSelectedCompanyId] = useState('');
+  const [selectedTier, setSelectedTier] = useState('Basic');
+  const [assignError, setAssignError] = useState(null);
+  const [assignLoading, setAssignLoading] = useState(false);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
@@ -67,6 +85,65 @@ function NetworkDirectoryPage() {
   const handleDeleteProvider = (id) => {
     if (window.confirm('Are you sure you want to remove this provider from the network?')) {
       setProviders(providers.filter(p => p.id !== id));
+    }
+  };
+
+  const openAssignModal = (provider) => {
+    setAssignProvider(provider);
+    setSelectedCompanyId(companies.length > 0 ? companies[0].id : '');
+    setSelectedTier('Basic');
+    setAssignError(null);
+    setShowAssignModal(true);
+  };
+
+  const handleAssignNetwork = async (e) => {
+    e.preventDefault();
+    if (!selectedCompanyId) return setAssignError("Please select a company");
+    try {
+      setAssignLoading(true);
+      setAssignError(null);
+      await adminService.assignProviderToNetwork({
+        provider_id: assignProvider.id,
+        company_id: selectedCompanyId,
+        accepted_tier: selectedTier
+      });
+      
+      // Update local state
+      const comp = companies.find(c => c.id === selectedCompanyId);
+      const newNetwork = {
+        provider_id: assignProvider.id,
+        company_id: selectedCompanyId,
+        accepted_tier: selectedTier,
+        companyName: comp ? comp.name : 'Unknown'
+      };
+      
+      setProviders(providers.map(p => {
+        if (p.id === assignProvider.id) {
+          return { ...p, networks: [...p.networks, newNetwork] };
+        }
+        return p;
+      }));
+      
+      setShowAssignModal(false);
+    } catch (err) {
+      setAssignError(err.response?.data?.message || 'Failed to assign network');
+    } finally {
+      setAssignLoading(false);
+    }
+  };
+
+  const handleRemoveNetwork = async (providerId, companyId) => {
+    if (!window.confirm("Remove provider from this network?")) return;
+    try {
+      await adminService.removeProviderFromNetwork(providerId, companyId);
+      setProviders(providers.map(p => {
+        if (p.id === providerId) {
+          return { ...p, networks: p.networks.filter(n => n.company_id !== companyId) };
+        }
+        return p;
+      }));
+    } catch (err) {
+      alert("Failed to remove network: " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -113,6 +190,7 @@ function NetworkDirectoryPage() {
                   <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Specialty</th>
                   <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Clinic Affiliation</th>
                   <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Location</th>
+                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Networks</th>
                   <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Status</th>
                   <th className="py-3 text-muted text-uppercase text-end px-4" style={{ fontSize: '0.65rem' }}>Actions</th>
                 </tr>
@@ -138,6 +216,20 @@ function NetworkDirectoryPage() {
                       </div>
                     </td>
                     <td>
+                      <div className="d-flex flex-wrap gap-1">
+                        {provider.networks && provider.networks.length > 0 ? (
+                          provider.networks.map(n => (
+                            <span key={`${n.provider_id}-${n.company_id}`} className="badge bg-light text-dark border d-flex align-items-center gap-1" style={{ fontSize: '0.7rem' }}>
+                              {n.companyName} ({n.accepted_tier})
+                              <button onClick={() => handleRemoveNetwork(provider.id, n.company_id)} className="btn-close ms-1" style={{ fontSize: '0.4rem' }}></button>
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-muted" style={{ fontSize: '0.75rem' }}>None</span>
+                        )}
+                      </div>
+                    </td>
+                    <td>
                       <StatusBadge 
                         status={provider.acceptingNew ? 'Active' : 'Pending'} 
                         size="sm" 
@@ -146,6 +238,15 @@ function NetworkDirectoryPage() {
                     </td>
                     <td className="text-end px-4">
                       <div className="d-flex justify-content-end gap-2">
+                        <Button 
+                          variant="outline-primary" 
+                          size="sm" 
+                          className="d-flex align-items-center gap-1 px-3 py-1"
+                          onClick={() => openAssignModal(provider)}
+                          style={{ fontSize: '0.75rem', fontWeight: 600, borderRadius: 'var(--radius-md)' }}
+                        >
+                          <Star size={14} /> Assign
+                        </Button>
                         <Button 
                           variant="light" 
                           size="sm" 
@@ -183,6 +284,55 @@ function NetworkDirectoryPage() {
           )}
         </div>
       </div>
+
+      {/* Assign Network Modal */}
+      <Modal show={showAssignModal} onHide={() => setShowAssignModal(false)} centered>
+        <Form onSubmit={handleAssignNetwork}>
+          <Modal.Header closeButton className="border-bottom-0 pb-0">
+            <Modal.Title style={{ fontSize: '1.1rem', fontWeight: 700 }}>Assign to Network</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {assignError && (
+              <div className="alert alert-danger py-2" style={{ fontSize: '0.85rem' }}>{assignError}</div>
+            )}
+            <p className="mb-4 text-muted" style={{ fontSize: '0.85rem' }}>
+              Select an insurance company and the supported tier to enroll <strong>{assignProvider?.name}</strong>.
+            </p>
+
+            <Form.Group className="mb-3">
+              <Form.Label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Insurance Company</Form.Label>
+              <Form.Select 
+                value={selectedCompanyId} 
+                onChange={(e) => setSelectedCompanyId(e.target.value)}
+                required
+              >
+                {companies.length === 0 && <option value="">No companies found</option>}
+                {companies.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Accepted Network Tier</Form.Label>
+              <Form.Select 
+                value={selectedTier} 
+                onChange={(e) => setSelectedTier(e.target.value)}
+              >
+                <option value="Basic">Basic (Open to all)</option>
+                <option value="Standard">Standard (Requires Standard+ Coverage)</option>
+                <option value="Premium">Premium (Requires Premium Coverage)</option>
+              </Form.Select>
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer className="border-top-0 pt-0">
+            <Button variant="light" onClick={() => setShowAssignModal(false)}>Cancel</Button>
+            <Button variant="primary" type="submit" disabled={assignLoading}>
+              {assignLoading ? 'Assigning...' : 'Assign Network'}
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
 
       {/* Edit Provider Modal */}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered size="lg">

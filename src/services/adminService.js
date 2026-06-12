@@ -76,5 +76,38 @@ export const adminService = {
    */
   updateCoverageRequest: async (id, status, adminNotes) => {
     return await api.put(`/admin/coverage-requests/${id}`, { status, admin_notes: adminNotes });
+  },
+
+  // -- Insurance Networks --
+  getInsuranceCompanies: async () => {
+    return await api.get('/admin/insurance-companies');
+  },
+  getProviderNetworks: async () => {
+    return await api.get('/admin/provider-networks');
+  },
+  assignProviderToNetwork: async (data) => {
+    return await api.post('/admin/provider-networks', data);
+  },
+  removeProviderFromNetwork: async (providerId, companyId) => {
+    return await api.delete(`/admin/provider-networks/${providerId}/${companyId}`);
+  },
+  
+  // -- Manage All Consumers --
+  getAllConsumers: async () => {
+    return await api.get('/admin/consumers');
+  },
+  updateConsumerDetails: async (id, data) => {
+    const response = await api.put(`/admin/consumers/${id}`, data);
+    return response.data;
+  },
+
+  getClaims: async () => {
+    const response = await api.get('/admin/claims');
+    return response.data;
+  },
+
+  processClaim: async (id, status) => {
+    const response = await api.put(`/admin/claims/${id}/process`, { status });
+    return response.data;
   }
 };
