@@ -50,6 +50,18 @@ export const adminService = {
   getAdmins: async () => {
     return await api.get('/admin/admins');
   },
+  
+  addAdmin: async (adminData) => {
+    return await api.post('/admin/admins', adminData);
+  },
+
+  updateAdmin: async (id, adminData) => {
+    return await api.put(`/admin/admins/${id}`, adminData);
+  },
+
+  deleteAdmin: async (id) => {
+    return await api.delete(`/admin/admins/${id}`);
+  },
 
   /**
    * Get provider directory
@@ -97,17 +109,14 @@ export const adminService = {
     return await api.get('/admin/consumers');
   },
   updateConsumerDetails: async (id, data) => {
-    const response = await api.put(`/admin/consumers/${id}`, data);
-    return response.data;
+    return await api.put(`/admin/consumers/${id}`, data);
   },
 
   getClaims: async () => {
-    const response = await api.get('/admin/claims');
-    return response.data;
+    return await api.get('/admin/claims');
   },
 
   processClaim: async (id, status) => {
-    const response = await api.put(`/admin/claims/${id}/process`, { status });
-    return response.data;
+    return await api.put(`/admin/claims/${id}/process`, { status });
   }
 };

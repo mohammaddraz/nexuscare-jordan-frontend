@@ -55,18 +55,15 @@ export const providerService = {
   },
 
   updatePcpRequest: async (id, status) => {
-    const response = await api.put(`/providers/pcp-requests/${id}`, { status });
-    return response.data;
+    return await api.put(`/providers/pcp-requests/${id}`, { status });
   },
 
   getClaims: async () => {
-    const response = await api.get('/providers/claims');
-    return response.data;
+    return await api.get('/providers/claims');
   },
 
   verifyClaim: async (id, status) => {
-    const response = await api.put(`/providers/claims/${id}/verify`, { status });
-    return response.data;
+    return await api.put(`/providers/claims/${id}/verify`, { status });
   },
 
   verifyCoverage: async (nationalId) => {

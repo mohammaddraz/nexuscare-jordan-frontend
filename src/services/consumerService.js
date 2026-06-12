@@ -10,6 +10,15 @@ export const consumerService = {
   },
 
   /**
+   * Add a family member (dependent)
+   * @param {Object} data { name, relation, dob, nationalId }
+   * @returns {Promise<Object>}
+   */
+  addFamilyMember: async (data) => {
+    return await api.post('/consumers/family', data);
+  },
+
+  /**
    * Get provider directory with optional filters
    * @param {Object} filters { city, specialty, accepting_new }
    * @returns {Promise<Array>}
@@ -68,13 +77,11 @@ export const consumerService = {
    * @returns {Promise<Object>}
    */
   submitCoverageRequest: async (data) => {
-    const response = await api.post('/consumers/coverage-requests', data);
-    return response.data;
+    return await api.post('/consumers/coverage-request', data);
   },
 
   submitClaim: async (data) => {
-    const response = await api.post('/consumers/claims', data);
-    return response.data;
+    return await api.post('/consumers/claims', data);
   },
 
   /**

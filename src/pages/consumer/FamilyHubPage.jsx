@@ -59,26 +59,22 @@ function FamilyHubPage() {
 
   const activeDependent = dependents.find(d => d.id === activeDependentId);
 
-  const handleAddDependent = (e) => {
+  const handleAddDependent = async (e) => {
     e.preventDefault();
-    const newDep = {
-      id: `DEP-00${dependents.length + 1}`,
-      name: newName,
-      relation: newRelation,
-      dob: newDob,
-      nationalId: newNationalId,
-      planType: 'MOH Basic (Pending)',
-      pcpId: null,
-      pcpName: null,
-      pcpStatus: null,
-      avatarUrl: null,
-      coverageLimit: 0,
-      usedCoverage: 0,
-    };
-    setDependents([...dependents, newDep]);
-    setShowAddModal(false);
-    // Reset form
-    setNewName(''); setNewDob(''); setNewNationalId('');
+    try {
+      await consumerService.addFamilyMember({
+        name: newName,
+        relation: newRelation,
+        dob: newDob,
+        nationalId: newNationalId
+      });
+      setShowAddModal(false);
+      setNewName(''); setNewDob(''); setNewNationalId('');
+      fetchFamily();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to add family member. Please check details and try again.');
+    }
   };
 
   const fetchHistory = async () => {

@@ -388,11 +388,26 @@ function NetworkDirectoryPage() {
                 <Col md={6}>
                   <Form.Group>
                     <Form.Label className="fw-bold text-muted" style={{ fontSize: '0.85rem' }}>Clinic Affiliation</Form.Label>
-                    <Form.Control 
+                    <Form.Select 
                       required 
                       value={editingProvider.clinic} 
                       onChange={e => setEditingProvider({...editingProvider, clinic: e.target.value})} 
-                    />
+                    >
+                      <option value="">Select Clinic/Hospital...</option>
+                      <option value="Al-Khalidi Hospital">Al-Khalidi Hospital</option>
+                      <option value="Jordan Hospital">Jordan Hospital</option>
+                      <option value="Istishari Hospital">Istishari Hospital</option>
+                      <option value="Arab Medical Center">Arab Medical Center</option>
+                      <option value="Abdali Hospital">Abdali Hospital</option>
+                      <option value="Specialty Hospital">Specialty Hospital</option>
+                      <option value="King Hussein Cancer Center">King Hussein Cancer Center</option>
+                      <option value="Royal Medical Services">Royal Medical Services</option>
+                      <option value="Amman Private Clinic">Amman Private Clinic</option>
+                      <option value="Irbid Central Clinic">Irbid Central Clinic</option>
+                      <option value="Zarqa Specialized Center">Zarqa Specialized Center</option>
+                      <option value="Aqaba General Hospital">Aqaba General Hospital</option>
+                      <option value="Independent Practice">Independent Practice</option>
+                    </Form.Select>
                   </Form.Group>
                 </Col>
                 <Col md={6}>

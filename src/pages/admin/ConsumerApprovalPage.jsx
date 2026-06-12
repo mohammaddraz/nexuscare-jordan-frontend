@@ -160,20 +160,19 @@ const ConsumerApprovalPage = () => {
         </Col>
       </Row>
 
-      <Row>
-        <Col xs={12}>
-          <Card className="shadow-sm border-0 rounded-4">
-            <Card.Body className="p-4">
-              {loading ? (
-                <div className="text-center py-5">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
+      {activeTab === 'PENDING' && (
+        <Row>
+          <Col xs={12}>
+            <Card className="shadow-sm border-0 rounded-4">
+              <Card.Body className="p-4">
+                {loading ? (
+                  <div className="text-center py-5">
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-2 text-muted">Loading data...</p>
                   </div>
-                  <p className="mt-2 text-muted">Loading data...</p>
-                </div>
-              ) : activeTab === 'PENDING' ? (
-                // --- PENDING TAB ---
-                pendingConsumers.length === 0 ? (
+                ) : pendingConsumers.length === 0 ? (
                   <div className="text-center py-5">
                     <CheckCircle size={48} className="text-success mb-3" />
                     <h5 className="text-muted">All caught up!</h5>
@@ -211,42 +210,56 @@ const ConsumerApprovalPage = () => {
                       ))}
                     </tbody>
                   </Table>
-                )
-              ) : (
-                // --- ALL CONSUMERS TAB ---
-                <Table responsive hover className="align-middle">
-                  <thead className="table-light">
-                    <tr>
-                      <th>Consumer Name</th>
-                      <th>National ID</th>
-                      <th>Insurance Network</th>
-                      <th>Tier</th>
-                      <th>Status</th>
-                      <th className="text-end">Actions</th>
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      )}
+
+      {activeTab === 'ALL' && (
+        <Row>
+          <Col xs={12}>
+            {loading ? (
+              <div className="text-center py-5">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                <p className="mt-2 text-muted">Loading data...</p>
+              </div>
+            ) : (
+              <Table responsive hover className="align-middle">
+                <thead className="table-light">
+                  <tr>
+                    <th>Consumer Name</th>
+                    <th>National ID</th>
+                    <th>Insurance Network</th>
+                    <th>Tier</th>
+                    <th>Status</th>
+                    <th className="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allConsumers.map((consumer) => (
+                    <tr key={consumer.id}>
+                      <td className="fw-bold">{consumer.accountName}</td>
+                      <td className="text-muted">{consumer.nationalId}</td>
+                      <td>{consumer.insuranceCompanyName || <span className="text-muted fst-italic">Unassigned</span>}</td>
+                      <td>{consumer.networkTier || <span className="text-muted fst-italic">None</span>}</td>
+                      <td>{getStatusBadge(consumer.status)}</td>
+                      <td className="text-end">
+                        <Button variant="light" size="sm" className="border" onClick={() => openEditModal(consumer)}>
+                          <Edit3 size={14} className="me-1" /> Edit
+                        </Button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {allConsumers.map((consumer) => (
-                      <tr key={consumer.id}>
-                        <td className="fw-bold">{consumer.accountName}</td>
-                        <td className="text-muted">{consumer.nationalId}</td>
-                        <td>{consumer.insuranceCompanyName || <span className="text-muted fst-italic">Unassigned</span>}</td>
-                        <td>{consumer.networkTier || <span className="text-muted fst-italic">None</span>}</td>
-                        <td>{getStatusBadge(consumer.status)}</td>
-                        <td className="text-end">
-                          <Button variant="light" size="sm" className="border" onClick={() => openEditModal(consumer)}>
-                            <Edit3 size={14} className="me-1" /> Edit
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+          </Col>
+        </Row>
+      )}
 
       {activeTab === 'CLAIMS' && <Row>
         <Col>

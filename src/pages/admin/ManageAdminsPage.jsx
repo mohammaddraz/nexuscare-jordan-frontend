@@ -52,12 +52,11 @@ function ManageAdminsPage() {
 
   const handleAddClick = () => {
     setEditingAdmin({
-      id: `ADM-00${admins.length + 1}`,
+      isNew: true,
       name: '',
       email: '',
       role: 'SYSTEM_ADMIN',
       status: 'Active',
-      lastLogin: 'Never'
     });
     setShowModal(true);
   };
@@ -67,25 +66,45 @@ function ManageAdminsPage() {
     setShowModal(true);
   };
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = async (id) => {
     if (window.confirm('Are you sure you want to revoke access for this administrator?')) {
-      setAdmins(admins.filter(a => a.id !== id));
-      // In a real app, you would make an API call here to DELETE
+      try {
+        await adminService.deleteAdmin(id);
+        fetchAdmins();
+      } catch (err) {
+        console.error(err);
+        alert(err.response?.data?.message || 'Failed to delete administrator');
+      }
     }
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    if (admins.some(a => a.id === editingAdmin.id)) {
-      // Edit
-      setAdmins(admins.map(a => a.id === editingAdmin.id ? editingAdmin : a));
-    } else {
-      // Add
-      setAdmins([...admins, editingAdmin]);
+    try {
+      if (editingAdmin.isNew) {
+        // Add
+        await adminService.addAdmin({
+          name: editingAdmin.name,
+          role: editingAdmin.role,
+          email: editingAdmin.email,
+          status: editingAdmin.status
+        });
+      } else {
+        // Edit
+        await adminService.updateAdmin(editingAdmin.id, {
+          name: editingAdmin.name,
+          role: editingAdmin.role,
+          email: editingAdmin.email,
+          status: editingAdmin.status
+        });
+      }
+      fetchAdmins();
+      setShowModal(false);
+      setEditingAdmin(null);
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || 'Failed to save administrator');
     }
-    // In a real app, you would make an API call here to POST/PUT
-    setShowModal(false);
-    setEditingAdmin(null);
   };
 
   return (
@@ -151,7 +170,7 @@ function ManageAdminsPage() {
                     <td>
                       <div className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '0.75rem' }}>
                         <Clock size={12} />
-                        {admin.lastLogin !== 'Never' ? new Date(admin.lastLogin).toLocaleString() : 'Never'}
+                        {admin.lastLogin && admin.lastLogin !== 'Never' ? new Date(admin.lastLogin).toLocaleString() : 'Never'}
                       </div>
                     </td>
                     <td className="text-end px-4">
