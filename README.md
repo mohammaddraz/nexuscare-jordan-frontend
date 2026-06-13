@@ -1,123 +1,297 @@
-# NexusCare Jordan — Unified Healthcare Ledger
+<div align="center">
 
-A centralized, full-stack healthcare portal built for the Ministry of Health (MOH) in Jordan. NexusCare connects Consumers (Patients), Providers (Clinics/Doctors), and System Administrators through a unified, Role-Based Access Control (RBAC) platform.
+# 🏥 NexusCare Jordan — Frontend
 
-This project was built to satisfy the requirements for the **Special Topics in Computer Science 1 (React)** Final Assignment.
+**A multi-role healthcare management web application**  
+Built with React.js · Vite · Bootstrap 5 · Google Maps API
 
----
+[![React](https://img.shields.io/badge/React-v19-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-v6-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-v5-7952B3?style=flat&logo=bootstrap&logoColor=white)](https://getbootstrap.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🌟 Key Features
-
-The application is divided into three distinct portals based on user roles:
-
-### 1. Consumer Portal
-*   **Family Hub:** Manage dependents and switch between active family profiles interactively.
-*   **Coverage Configuration:** Independently customize health insurance contracts (e.g., Platinum Care JOR, MOH Basic) and deductibles for each family member.
-*   **Provider Assignment (Google Maps API):** Search a geographic directory to find and request a Primary Care Provider (PCP).
-*   **Medical Records:** Review historical ICD-10 diagnoses and view electronic prescriptions.
-*   **Self-Service Claims:** Build and submit outpatient reimbursement claims with automated UI deductible calculations.
-
-### 2. Provider Portal (Doctors & Clinics)
-*   **Practice Dashboard:** High-level analytical visibility over clinic visits, claims success rates, and pending queues.
-*   **Patient Enrollment Gateway:** Audit, approve, or reject new consumer PCP enrollment requests.
-*   **Clinical Logging:** Real-time visit logging, ICD-10 diagnostic recording, and auto-claim filing.
-*   **Coverage Verification Sandbox:** Instantly check national ID listings to verify real-time insurance eligibility.
-
-### 3. Admin Portal (MOH Operators)
-*   **System Compliance Dashboard:** Monitor network-wide analytics, including active insured counts, regional coverage metrics (with progress bars), and system latency alerts.
-*   **Verification Gateway:** Review and verify incoming licensure certifications from doctors requesting to join the network.
-*   **Provider Network Directory:** Searchable directory of all active physicians in the network.
-*   **Provider Management:** Admins can Edit provider details (name, specialty, clinic, capacity) and Remove providers from the network entirely.
-*   **Administrator Management:** Dedicated table to add, modify, and revoke access for system administrators.
-
-### 4. Global Features
-*   **Universal Profile Management:** All roles (Consumer, Provider, Admin) can manage their personal details and security preferences, with instant UI syncing via Context API.
+</div>
 
 ---
 
-## 🛠️ Technology Stack
+## 📋 Table of Contents
 
-*   **Frontend Framework:** React 19 + Vite
-*   **Routing:** React Router v6
-*   **UI Library:** React-Bootstrap
-*   **Styling & Theming:** Custom Vanilla CSS utilizing CSS Variables to achieve a premium "Glassmorphism" design aesthetic, strictly adhering to the NexusCare branding (Navy/Teal).
-*   **Icons:** Lucide-React
-*   **HTTP Client:** Axios (configured with interceptors for future backend JWT integration)
-*   **External API Integration:** `@react-google-maps/api`
-*   **State Management:** Context API (`AuthContext`)
-
----
-
-## 📋 Assignment Requirements Met
-
-| Criteria | Implementation Status | Notes |
-| :--- | :--- | :--- |
-| **P1** (Component Architecture) | ✅ Completed | React components broken down by feature (Pages, Layout, Common UI). |
-| **P2** (Responsive Design) | ✅ Completed | React-Bootstrap grid system utilized extensively for mobile compatibility. |
-| **P3** (State Management) | ✅ Completed | Context API used for RBAC/Auth state; `useState` used for page-level data. |
-| **P4** (Routing) | ✅ Completed | React Router implemented with nested routes and a `ProtectedRoute` component. |
-| **P5** (API Integration) | ✅ Completed | Google Maps API integrated into the Provider Directory. Axios configured for backend. |
-| **M1** (Advanced UI/UX) | ✅ Completed | "Glassmorphism" design, staggered CSS animations, hover-lift effects, and premium layout. |
-| **M2** (Complex State) | ✅ Completed | Provider directory filtering, Map state syncing, and active dependent switching. |
-| **M3** (Form Validation) | ✅ Completed | Required fields, number restrictions, and date pickers utilized in modals. |
-| **M4** (Error Handling) | ✅ Completed | Axios interceptors prepared for global error handling; `ErrorAlert` component built. |
-| **D1, D2, D3** (Code Quality & Git) | ✅ Completed | Feature-branch Git Flow strictly followed. DRY principles used. Backend email architecture planned (see `backend-email-service-guide.md`). |
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Application Roles & Pages](#application-roles--pages)
+  - [Consumer](#consumer-role)
+  - [Provider](#provider-role)
+  - [Admin](#admin-role)
+- [Key Components & Architecture](#key-components--architecture)
+- [API Integration](#api-integration)
+- [Contributing](#contributing)
 
 ---
 
-## 🚀 Running the Project Locally
+## Overview
+
+NexusCare Jordan Frontend is the React.js web application that serves as the user interface for the NexusCare Jordan platform. It provides three fully distinct dashboards — one per user role — each tailored to the specific workflows of Insurance Administrators, Healthcare Providers, and Consumers.
+
+Key features:
+- 🔐 Role-aware routing — each role sees only their permitted pages
+- 👨‍👩‍👧 Family hub — consumers manage multiple dependents from one account
+- 🗺️ Google Maps integration for geographic provider search
+- 📊 Admin analytics dashboard with Recharts visualisations
+- 📋 Full claims, coverage request, and PCP assignment workflows
+- 💊 Clinical logging interface for providers
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| Framework | React.js | v19 |
+| Build Tool | Vite | v6 |
+| Routing | React Router DOM | v7 |
+| HTTP Client | Axios | v1 |
+| UI Framework | Bootstrap | v5 |
+| Icons | React Icons | v5 |
+| Charts | Recharts | v2 |
+| Maps | @react-google-maps/api | v2 |
+| State Management | React Context API | — |
+
+---
+
+## Project Structure
+
+```
+nexuscare-jordan-frontend/
+├── public/
+│   └── favicon.ico
+├── src/
+│   ├── assets/                    # Static images and logos
+│   ├── components/
+│   │   ├── common/                # Shared UI components
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   └── ProtectedRoute.jsx
+│   │   ├── admin/                 # Admin-specific components
+│   │   ├── consumer/              # Consumer-specific components
+│   │   └── provider/              # Provider-specific components
+│   ├── context/
+│   │   └── AuthContext.jsx        # Global auth state (user, token, login, logout)
+│   ├── pages/
+│   │   ├── auth/
+│   │   │   ├── LoginPage.jsx
+│   │   │   └── RegisterPage.jsx
+│   │   ├── admin/                 # All admin pages
+│   │   ├── consumer/              # All consumer pages
+│   │   └── provider/              # All provider pages
+│   ├── services/
+│   │   ├── api.js                 # Centralized Axios instance with interceptors
+│   │   ├── authService.js         # Auth API calls
+│   │   ├── adminService.js        # Admin API calls
+│   │   ├── consumerService.js     # Consumer API calls
+│   │   └── providerService.js     # Provider API calls
+│   ├── App.jsx                    # Root component + route definitions
+│   └── main.jsx                   # Vite entry point
+├── .env.sample                    # Environment variable template
+├── index.html
+├── vite.config.js
+├── package.json
+└── README.md
+```
+
+---
+
+## Getting Started
 
 ### Prerequisites
-- Node.js (v18+)
-- npm
 
-### 1. Clone & Install
+- [Node.js v18+](https://nodejs.org)
+- [Git](https://git-scm.com)
+- A running instance of the [NexusCare Jordan Backend](https://github.com/mohammaddraz/nexuscare-jordan-backend)
+
+### Installation
+
 ```bash
-# Install dependencies
+# 1. Clone the repository
+git clone https://github.com/mohammaddraz/nexuscare-jordan-frontend.git
+cd nexuscare-jordan-frontend
+
+# 2. Checkout develop branch
+git checkout develop
+
+# 3. Install dependencies
 npm install
-```
 
-### 2. Environment Setup
-Create a `.env` file in the root directory and add your Google Maps API key (optional, the map will load in developer mode without it):
-```env
-VITE_GOOGLE_MAPS_API_KEY="YOUR_API_KEY_HERE"
-```
+# 4. Set up environment variables
+cp .env.sample .env
+# Edit .env with your values (see Environment Variables section)
 
-### 3. Start Development Server
-```bash
+# 5. Start development server
 npm run dev
 ```
 
-### 4. Logging In (Demo Access)
-The login screen features quick-access demo buttons to easily switch between the three roles without needing a backend:
-- **Ahmed Al-Amiri:** Logs in as a Consumer (Patient)
-- **Dr. Reem Al-Khalidi:** Logs in as a Provider (Doctor)
-- **Dr. Layla Mahmoud:** Logs in as a System Admin (MOH)
+The app will be available at `http://localhost:5173`.
+
+### Build for Production
+
+```bash
+npm run build        # Outputs to /dist
+npm run preview      # Preview the production build locally
+```
 
 ---
 
-## 📁 Repository Structure
+## Environment Variables
+
+Copy `.env.sample` to `.env`. **Never commit `.env` to version control.**
+
+```env
+# Backend API base URL
+VITE_API_BASE_URL=http://localhost:5000/api
+
+# Google Maps API Key
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 ```
-final/
-├── public/                 # Static assets
-├── src/
-│   ├── components/         # Reusable React components
-│   │   ├── common/         # Modals, Spinners, Alerts
-│   │   ├── layout/         # Navbar, Footer, PageWrapper
-│   │   └── ui/             # StatusBadge, StatsCard
-│   ├── context/            # AuthContext for Role-Based Access
-│   ├── data/               # Mock JSON databases for frontend demo
-│   ├── pages/              # Route-level components
-│   │   ├── admin/          # Admin-only views
-│   │   ├── auth/           # Login / Register
-│   │   ├── consumer/       # Patient-only views
-│   │   └── provider/       # Doctor-only views
-│   ├── routes/             # AppRouter & ProtectedRoute
-│   ├── services/           # Axios API instance
-│   ├── styles/             # Global CSS, Bootstrap overrides, Animations
-│   ├── App.jsx             # Root Component
-│   └── main.jsx            # Entry Point
-├── .env.sample             # Environment template
-├── backend-email-service-guide.md # Backend architecture plan
-└── package.json
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `VITE_API_BASE_URL` | Yes | Base URL of the NexusCare backend API |
+| `VITE_GOOGLE_MAPS_API_KEY` | Yes | Google Maps JavaScript API key (enable Maps JS API in GCP Console) |
+
+> **Note:** Vite only exposes variables prefixed with `VITE_` to the browser. Never put secrets in frontend `.env` files.
+
+---
+
+## Application Roles & Pages
+
+After login, users are redirected to their role-specific dashboard. React Router's `<ProtectedRoute>` component enforces this — unauthenticated users are redirected to `/login`, and users accessing a route outside their role are redirected to their own dashboard.
+
+---
+
+### Consumer Role
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Dashboard | `/consumer/dashboard` | Overview of account, coverage summary, recent activity |
+| Family Hub | `/consumer/family` | Manage account holder + all dependents |
+| Find Providers | `/consumer/providers` | Search in-network doctors with map view |
+| PCP Assignment | `/consumer/pcp` | Request and track PCP assignments per dependent |
+| Medical Records | `/consumer/records` | View clinical logs per family member |
+| Claims | `/consumer/claims` | View insurance claims and their status |
+| Coverage Requests | `/consumer/coverage` | Submit and track plan change requests |
+
+---
+
+### Provider Role
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Practice Dashboard | `/provider/dashboard` | Summary stats — patients, claims, pending PCP requests |
+| My Patients | `/provider/patients` | Enrolled patient list with coverage verification |
+| PCP Assignments | `/provider/pcp` | Review and accept/reject incoming PCP requests |
+| Clinical Logging | `/provider/clinical-logs` | Submit encounter records (diagnosis, ICD code, prescription) |
+| Claims | `/provider/claims` | Submit and track billing claims |
+| Certifications | `/provider/certifications` | Submit and view licence verification status |
+| Profile | `/provider/profile` | Update clinic details, specialty, location coordinates |
+
+---
+
+### Admin Role
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Compliance Dashboard | `/admin/dashboard` | Platform-wide KPIs and analytics charts |
+| Consumer Approvals | `/admin/consumers` | Review and approve/reject pending registrations |
+| Provider Network | `/admin/network` | Manage provider-insurer network assignments |
+| Certifications | `/admin/certifications` | Review and update provider certification statuses |
+| Claims Management | `/admin/claims` | Process all platform claims |
+| Coverage Requests | `/admin/coverage-requests` | Review and approve coverage change requests |
+| Admin Accounts | `/admin/admins` | Manage other administrator accounts |
+
+---
+
+## Key Components & Architecture
+
+### AuthContext (`src/context/AuthContext.jsx`)
+
+Global authentication state provider. Wraps the entire application and exposes:
+
+```js
+const { user, token, login, logout, isAuthenticated } = useAuth();
 ```
+
+| Value | Type | Description |
+|-------|------|-------------|
+| `user` | Object | `{ id, email, role }` — the logged-in user |
+| `token` | String | JWT token stored in localStorage |
+| `login(userData, token)` | Function | Sets user + token, persists to localStorage |
+| `logout()` | Function | Clears state and localStorage, redirects to `/login` |
+| `isAuthenticated` | Boolean | True if a valid token exists |
+
+### ProtectedRoute (`src/components/common/ProtectedRoute.jsx`)
+
+Route guard component that enforces authentication and role-based access:
+
+```jsx
+<ProtectedRoute allowedRoles={['ADMIN']}>
+  <AdminDashboard />
+</ProtectedRoute>
+```
+
+### Centralized API Client (`src/services/api.js`)
+
+A single Axios instance shared across all service files:
+
+- **Base URL** from `VITE_API_BASE_URL` environment variable
+- **Request interceptor** — automatically attaches `Authorization: Bearer <token>` to every request
+- **Response interceptor** — normalises all errors to `{ message, status, data }` format
+- **Auto-logout** — on `401 Unauthorized`, clears storage and redirects to `/login`
+
+### Service Layer (`src/services/`)
+
+All API calls are abstracted into role-specific service files — never called directly from components:
+
+```
+authService.js      → login(), register()
+adminService.js     → getDashboard(), getConsumers(), approveClaim(), etc.
+consumerService.js  → getPatients(), searchProviders(), submitCoverage(), etc.
+providerService.js  → getPatients(), submitClinicalLog(), submitClaim(), etc.
+```
+
+---
+
+## API Integration
+
+The frontend communicates exclusively with the NexusCare Jordan Backend REST API.
+
+**Base URL:** Configured via `VITE_API_BASE_URL` (default: `http://localhost:5000/api`)
+
+**Authentication flow:**
+1. User submits credentials on `/login`
+2. `authService.login()` calls `POST /api/auth/login`
+3. On success, `AuthContext.login()` stores the JWT and user object
+4. All subsequent requests automatically include `Authorization: Bearer <token>`
+5. On `401` response, the user is automatically logged out
+
+See the [Backend API Documentation](https://github.com/mohammaddraz/nexuscare-jordan-backend/tree/develop) for the full endpoint reference.
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature-name`
+3. Commit your changes: `git commit -m "feat: add your feature"`
+4. Push your branch: `git push origin feature/your-feature-name`
+5. Open a Pull Request against `develop`
+
+**Branch naming convention:**
+- `feature/` — new features
+- `fix/` — bug fixes
+- `docs/` — documentation updates
+- `style/` — UI/styling changes
+
+---
+
