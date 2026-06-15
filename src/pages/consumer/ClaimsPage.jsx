@@ -4,6 +4,7 @@ import { UploadCloud, FileText, CheckCircle } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { consumerService } from '../../services/consumerService';
+import './ClaimsPage.css';
 
 /**
  * ClaimsPage — Self-Service Claims Processing
@@ -107,12 +108,12 @@ function ClaimsPage() {
             <Table hover className="mb-0 align-middle">
               <thead className="bg-light">
                 <tr>
-                  <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Claim ID</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Dependent</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Provider</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Amount (JOD)</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Status</th>
+                  <th className="px-4 py-3 text-muted text-uppercase page-table-header">Claim ID</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Date</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Dependent</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Provider</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Amount (JOD)</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -123,11 +124,11 @@ function ClaimsPage() {
                 )}
                 {!loading && claims.map(claim => (
                   <tr key={claim.id}>
-                    <td className="px-4 fw-bold font-mono" style={{ fontSize: '0.8rem' }}>{claim.id}</td>
-                    <td style={{ fontSize: '0.8rem' }}>{claim.date}</td>
-                    <td style={{ fontSize: '0.8rem' }}>{claim.dependentName}</td>
-                    <td style={{ fontSize: '0.8rem' }}>{claim.providerName}</td>
-                    <td style={{ fontSize: '0.8rem', fontWeight: 600 }}>{claim.amount}</td>
+                    <td className="px-4 fw-bold font-mono page-table-cell">{claim.id}</td>
+                    <td className="page-table-cell">{claim.date}</td>
+                    <td className="page-table-cell">{claim.dependentName}</td>
+                    <td className="page-table-cell">{claim.providerName}</td>
+                    <td className="page-table-cell--bold">{claim.amount}</td>
                     <td><StatusBadge status={claim.status} size="sm" /></td>
                   </tr>
                 ))}
@@ -187,8 +188,8 @@ function ClaimsPage() {
                 </Row>
                 <div className="p-4 bg-light border border-dashed rounded-3 text-center mb-4 cursor-pointer hover-lift">
                   <FileText size={32} color="var(--color-text-muted)" className="mb-2" />
-                  <p className="mb-0 fw-bold" style={{ fontSize: '0.85rem' }}>Upload Original Invoice & Medical Report</p>
-                  <p className="text-muted" style={{ fontSize: '0.75rem' }}>Click to browse or drag and drop files here</p>
+                  <p className="mb-0 fw-bold claims-page-upload-text">Upload Original Invoice & Medical Report</p>
+                  <p className="text-muted claims-page-upload-hint">Click to browse or drag and drop files here</p>
                 </div>
                 <div className="d-flex justify-content-end gap-2">
                   <Button variant="light" onClick={resetModal}>Cancel</Button>
@@ -201,7 +202,7 @@ function ClaimsPage() {
           <Modal.Body className="p-5 text-center">
             <CheckCircle size={64} color="var(--color-success)" className="mx-auto mb-3 animate-scaleIn" />
             <h4 className="fw-bold mb-2">Claim Submitted Successfully</h4>
-            <p className="text-muted" style={{ fontSize: '0.85rem' }}>Your claim has been added to the ledger and is currently pending review.</p>
+            <p className="text-muted claims-page-success-text">Your claim has been added to the ledger and is currently pending review.</p>
             <Button variant="primary" className="mt-3" onClick={resetModal}>Return to Ledger</Button>
           </Modal.Body>
         )}

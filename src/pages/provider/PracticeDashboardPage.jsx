@@ -5,6 +5,7 @@ import PageWrapper from '../../components/layout/PageWrapper';
 import StatsCard from '../../components/ui/StatsCard';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { mockDashboardStats, mockRecentLogs } from '../../data/providerData';
+import './PracticeDashboardPage.css';
 
 /**
  * PracticeDashboardPage — Analytics overview for clinics.
@@ -29,7 +30,7 @@ function PracticeDashboardPage() {
       <Row className="g-4 mb-5 stagger-children">
         <Col md={6} lg={3}>
           <OverlayTrigger placement="top" overlay={renderTooltip("Compared to previous 30 days")}>
-            <div style={{ cursor: 'pointer' }}>
+            <div className="dashboard-tooltip-trigger">
               <StatsCard
                 title="Total Clinic Visits"
                 value={mockDashboardStats.totalVisits}
@@ -45,7 +46,7 @@ function PracticeDashboardPage() {
         </Col>
         <Col md={6} lg={3}>
           <OverlayTrigger placement="top" overlay={renderTooltip("Percentage of first-pass approvals")}>
-            <div style={{ cursor: 'pointer' }}>
+            <div className="dashboard-tooltip-trigger">
               <StatsCard
                 title="Claims Approval Rate"
                 value={`${mockDashboardStats.claimsSuccessRate}%`}
@@ -111,25 +112,25 @@ function PracticeDashboardPage() {
                 <table className="table table-hover align-middle mb-0">
                   <thead className="bg-light">
                     <tr>
-                      <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date</th>
-                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Patient</th>
-                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>
+                      <th className="px-4 py-3 text-muted text-uppercase page-table-header">Date</th>
+                      <th className="py-3 text-muted text-uppercase page-table-header">Patient</th>
+                      <th className="py-3 text-muted text-uppercase page-table-header">
                         Diagnosis 
                         <OverlayTrigger placement="right" overlay={renderTooltip("ICD-10 and Billing Codes")}>
-                          <Info size={12} className="ms-1 d-inline text-primary" style={{ cursor: 'help' }} />
+                          <Info size={12} className="ms-1 d-inline text-primary dashboard-info-icon" />
                         </OverlayTrigger>
                       </th>
-                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Claim Status</th>
+                      <th className="py-3 text-muted text-uppercase page-table-header">Claim Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredLogs.map((log) => (
                       <tr key={log.id}>
-                        <td className="px-4" style={{ fontSize: '0.8rem' }}>{log.date}</td>
-                        <td className="fw-bold" style={{ fontSize: '0.85rem' }}>{log.patientName}</td>
+                        <td className="px-4 page-table-cell">{log.date}</td>
+                        <td className="fw-bold page-table-cell">{log.patientName}</td>
                         <td>
-                          <div style={{ fontSize: '0.8rem' }}>{log.diagnosis}</div>
-                          <div className="text-muted font-mono" style={{ fontSize: '0.7rem' }}>{log.icdCode} • {log.billingCode}</div>
+                          <div className="page-table-cell">{log.diagnosis}</div>
+                          <div className="text-muted font-mono clinical-log-icd">{log.icdCode} • {log.billingCode}</div>
                         </td>
                         <td><StatusBadge status={log.claimStatus} size="sm" /></td>
                       </tr>
@@ -159,10 +160,10 @@ function PracticeDashboardPage() {
                   <Accordion.Header>
                     <div>
                       <Badge bg="danger" className="rounded-pill mb-1">Urgent Update</Badge>
-                      <div className="fw-bold" style={{ fontSize: '0.85rem' }}>MOH API Maintenance</div>
+                      <div className="fw-bold dashboard-announcement-title">MOH API Maintenance</div>
                     </div>
                   </Accordion.Header>
-                  <Accordion.Body className="text-muted" style={{ fontSize: '0.8rem' }}>
+                  <Accordion.Body className="text-muted dashboard-announcement-body">
                     The central registry will undergo scheduled maintenance on Friday at 02:00 AM AST. Claims submitted during this window will be queued.
                   </Accordion.Body>
                 </Accordion.Item>
@@ -170,10 +171,10 @@ function PracticeDashboardPage() {
                   <Accordion.Header>
                     <div>
                       <Badge bg="primary" className="rounded-pill mb-1">New Feature</Badge>
-                      <div className="fw-bold" style={{ fontSize: '0.85rem' }}>ICD-11 Transition Plan</div>
+                      <div className="fw-bold dashboard-announcement-title">ICD-11 Transition Plan</div>
                     </div>
                   </Accordion.Header>
-                  <Accordion.Body className="text-muted" style={{ fontSize: '0.8rem' }}>
+                  <Accordion.Body className="text-muted dashboard-announcement-body">
                     NexusCare is preparing for the ICD-11 coding update. A sandbox environment will be available next month for staff training. Detailed documentation will be provided via email.
                   </Accordion.Body>
                 </Accordion.Item>

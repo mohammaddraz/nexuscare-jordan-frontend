@@ -1,4 +1,5 @@
 import { Badge as BsBadge } from 'react-bootstrap';
+import './StatusBadge.css';
 
 /**
  * StatusBadge — Consistent status indicator (DRY)
@@ -26,30 +27,20 @@ const statusColorMap = {
 
 function StatusBadge({ status, size = 'md' }) {
   const colors = statusColorMap[status] || statusColorMap['default'];
-  const fontSize = size === 'sm' ? '0.55rem' : '0.625rem';
-  const padding = size === 'sm' ? '0.2em 0.5em' : '0.3em 0.7em';
+  const sizeClass = size === 'sm' ? 'status-badge--sm' : 'status-badge--md';
 
   return (
     <span
-      className="rounded-pill d-inline-flex align-items-center"
+      className={`rounded-pill d-inline-flex align-items-center status-badge ${sizeClass}`}
       style={{
-        fontSize,
-        fontWeight: 700,
-        padding,
         backgroundColor: colors.bg,
         color: colors.color,
         border: `1px solid ${colors.border}`,
-        letterSpacing: '0.02em',
       }}
     >
       <span
-        className="rounded-circle me-1"
-        style={{
-          width: 6,
-          height: 6,
-          display: 'inline-block',
-          backgroundColor: colors.color,
-        }}
+        className="rounded-circle me-1 status-badge-dot"
+        style={{ backgroundColor: colors.color }}
       />
       {status}
     </span>

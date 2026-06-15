@@ -1,4 +1,5 @@
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
+import './StatsCard.css';
 
 /**
  * StatsCard — Reusable KPI/statistics card (DRY)
@@ -31,22 +32,15 @@ function StatsCard({ title, value, subtitle, icon: Icon, trend, trendDirection =
       <div className="card-body p-3 d-flex flex-column z-1 position-relative">
         <div className="d-flex align-items-start justify-content-between mb-3">
           <div
-            className="d-flex align-items-center justify-content-center rounded-3 shadow-sm"
-            style={{
-              width: 40,
-              height: 40,
-              backgroundColor: style.iconBg,
-              backdropFilter: 'blur(4px)'
-            }}
+            className="d-flex align-items-center justify-content-center rounded-3 shadow-sm stats-card-icon-box"
+            style={{ backgroundColor: style.iconBg }}
           >
             {Icon && <Icon size={20} color={style.iconColor} />}
           </div>
           {trend && (
             <span
-              className="px-2 py-1 rounded-pill"
+              className="px-2 py-1 rounded-pill stats-card-trend"
               style={{
-                fontSize: '0.6rem',
-                fontWeight: 700,
                 backgroundColor: trendDirection === 'up' ? 'rgba(16, 185, 129, 0.1)' :
                   trendDirection === 'down' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(100, 116, 139, 0.1)',
                 color: trendDirection === 'up' ? 'var(--color-success)' :
@@ -59,32 +53,14 @@ function StatsCard({ title, value, subtitle, icon: Icon, trend, trendDirection =
         </div>
 
         <div>
-          <p
-            className="mb-1"
-            style={{
-              fontSize: '0.625rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              color: 'var(--color-text-secondary)',
-            }}
-          >
+          <p className="mb-1 stats-card-label">
             {title}
           </p>
-          <p
-            className="mb-0"
-            style={{
-              fontSize: '1.5rem',
-              fontWeight: 800,
-              color: 'var(--color-text-primary)',
-              letterSpacing: '-0.02em',
-              lineHeight: 1.2,
-            }}
-          >
+          <p className="mb-0 stats-card-value">
             {value}
           </p>
           {subtitle && (
-            <p className="mb-0 mt-1" style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
+            <p className="mb-0 mt-1 stats-card-subtitle">
               {subtitle}
             </p>
           )}
@@ -92,7 +68,7 @@ function StatsCard({ title, value, subtitle, icon: Icon, trend, trendDirection =
       </div>
 
       {chartData && chartData.length > 0 && (
-        <div className="position-absolute bottom-0 start-0 w-100 z-0" style={{ height: '60px', opacity: 0.25, pointerEvents: 'none' }}>
+        <div className="position-absolute bottom-0 start-0 w-100 z-0 stats-card-chart-bg">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
               <defs>

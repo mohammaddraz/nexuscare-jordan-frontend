@@ -9,6 +9,7 @@ import {
   LogOut,
   Activity,
 } from 'lucide-react';
+import './Navbar.css';
 
 /**
  * Navbar — Main navigation header (NexusCare style)
@@ -67,48 +68,31 @@ function Navbar() {
   return (
     <BsNavbar
       expand="lg"
-      className="glass-header sidebar-navbar px-3 py-2"
-      style={{ zIndex: 50 }}
+      className="glass-header sidebar-navbar px-3 py-2 navbar-wrapper"
     >
       <Container fluid className="d-flex flex-lg-column h-100 p-0">
         {/* Brand Logo */}
         <BsNavbar.Brand
           onClick={() => navigate(links[0]?.path || '/')}
-          style={{ cursor: 'pointer' }}
-          className="d-flex align-items-center gap-2 animate-fadeIn"
+          className="d-flex align-items-center gap-2 animate-fadeIn navbar-brand-link"
         >
           <div
-            className="d-flex align-items-center justify-content-center rounded-3"
-            style={{
-              width: 38,
-              height: 38,
-              backgroundColor: 'var(--color-brand-primary)',
-              boxShadow: '0 2px 8px rgba(19, 27, 46, 0.15)',
-            }}
+            className="d-flex align-items-center justify-content-center rounded-3 navbar-brand-logo"
           >
             <HeartHandshake size={20} color="#34d399" />
           </div>
           <div>
             <div className="d-flex align-items-baseline gap-1">
-              <span style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--color-brand-primary)', letterSpacing: '-0.02em' }}>
+              <span className="navbar-brand-name">
                 NexusCare
               </span>
               <span
-                className="px-2 py-0 rounded"
-                style={{
-                  fontSize: '0.6rem',
-                  fontWeight: 800,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  color: 'var(--color-brand-secondary)',
-                  backgroundColor: 'var(--color-emerald-50)',
-                  border: '1px solid rgba(16, 185, 129, 0.15)',
-                }}
+                className="px-2 py-0 rounded navbar-brand-tag"
               >
                 Jordan
               </span>
             </div>
-            <p className="mb-0" style={{ fontSize: '0.6rem', color: 'var(--color-text-secondary)', fontWeight: 700 }}>
+            <p className="mb-0 navbar-brand-subtitle">
               MOH Coverage Auditing Platform
             </p>
           </div>
@@ -116,21 +100,13 @@ function Navbar() {
 
         {/* Active Role Indicator */}
         <div
-          className="d-none d-md-flex align-items-center gap-2 px-3 py-1 rounded-3 mx-3"
-          style={{
-            fontSize: '0.7rem',
-            fontWeight: 600,
-            color: 'var(--color-text-secondary)',
-            backgroundColor: '#f8fafc',
-            border: '1px solid var(--color-border-default)',
-          }}
+          className="d-none d-md-flex align-items-center gap-2 px-3 py-1 rounded-3 mx-3 navbar-role-indicator"
         >
           <span
-            className="animate-pulse rounded-circle"
-            style={{ width: 8, height: 8, display: 'inline-block', backgroundColor: 'var(--color-success)' }}
+            className="animate-pulse rounded-circle navbar-role-dot"
           />
           <span>
-            Active: <strong style={{ color: 'var(--color-text-primary)' }}>{config.label}</strong>
+            Active: <strong className="navbar-role-label">{config.label}</strong>
           </span>
         </div>
 
@@ -145,16 +121,7 @@ function Navbar() {
                 <Nav.Link
                   key={link.path}
                   onClick={() => navigate(link.path)}
-                  className="mx-1 px-3 py-2 rounded-3"
-                  style={{
-                    fontSize: '0.75rem',
-                    fontWeight: isActive ? 800 : 600,
-                    color: isActive ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-                    backgroundColor: isActive ? '#fff' : 'transparent',
-                    boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
-                    border: isActive ? '1px solid var(--color-border-default)' : '1px solid transparent',
-                    transition: 'all var(--transition-default)',
-                  }}
+                  className={`mx-1 px-3 py-2 rounded-3 navbar-nav-link ${isActive ? 'navbar-nav-link--active' : 'navbar-nav-link--inactive'}`}
                 >
                   {link.label}
                 </Nav.Link>
@@ -168,29 +135,19 @@ function Navbar() {
               <Dropdown.Toggle
                 variant="light"
                 size="sm"
-                className="d-flex align-items-center gap-2 rounded-3 border"
-                style={{ fontSize: '0.75rem', fontWeight: 600 }}
+                className="d-flex align-items-center gap-2 rounded-3 border navbar-user-toggle"
                 id="user-dropdown"
               >
                 {currentUser.avatarUrl ? (
                   <img
                     src={currentUser.avatarUrl}
                     alt={currentUser.name}
-                    className="rounded-circle"
-                    style={{ width: 24, height: 24, objectFit: 'cover' }}
+                    className="rounded-circle navbar-user-avatar"
                     referrerPolicy="no-referrer"
                   />
                 ) : (
                   <div
-                    className="rounded-circle d-flex align-items-center justify-content-center"
-                    style={{
-                      width: 24,
-                      height: 24,
-                      backgroundColor: 'var(--color-brand-primary)',
-                      color: '#34d399',
-                      fontSize: '0.6rem',
-                      fontWeight: 800,
-                    }}
+                    className="rounded-circle d-flex align-items-center justify-content-center navbar-user-initials"
                   >
                     {currentUser.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                   </div>
@@ -199,22 +156,21 @@ function Navbar() {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Header style={{ fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                <Dropdown.Header className="navbar-dropdown-header">
                   {config.label} Portal
                 </Dropdown.Header>
-                <Dropdown.Item style={{ fontSize: '0.8rem' }}>{currentUser.email}</Dropdown.Item>
+                <Dropdown.Item className="navbar-dropdown-item">{currentUser.email}</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item 
                   onClick={() => navigate('/profile')} 
-                  style={{ fontSize: '0.8rem', fontWeight: 600 }}
+                  className="navbar-dropdown-item--action"
                 >
                   My Profile
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={handleLogout}
-                  className="d-flex align-items-center gap-2 text-danger"
-                  style={{ fontSize: '0.8rem', fontWeight: 600 }}
+                  className="d-flex align-items-center gap-2 text-danger navbar-dropdown-item--action"
                 >
                   <LogOut size={14} />
                   Lock Gate

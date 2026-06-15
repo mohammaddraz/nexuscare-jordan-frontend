@@ -3,6 +3,7 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import { User, Mail, Lock, Save } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import { useAuth } from '../../context/AuthContext';
+import './ProfilePage.css';
 
 function ProfilePage() {
   const { currentUser, updateUser } = useAuth();
@@ -60,30 +61,23 @@ function ProfilePage() {
                   <img 
                     src={currentUser.avatarUrl} 
                     alt="Profile" 
-                    className="rounded-circle mb-3 border border-3 border-white shadow-sm"
-                    style={{ width: 100, height: 100, objectFit: 'cover' }}
+                    className="rounded-circle mb-3 border border-3 border-white shadow-sm profile-page-avatar"
                   />
                 ) : (
                   <div 
-                    className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm"
-                    style={{ 
-                      width: 100, height: 100, 
-                      backgroundColor: 'var(--color-brand-primary)', 
-                      color: 'var(--color-brand-secondary)', 
-                      fontSize: '2.5rem', fontWeight: 800 
-                    }}
+                    className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm profile-page-initials"
                   >
                     {currentUser.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                   </div>
                 )}
-                <h4 className="fw-bold mb-1" style={{ color: 'var(--color-brand-primary)' }}>{currentUser.name}</h4>
-                <p className="text-muted text-uppercase" style={{ fontSize: '0.8rem', letterSpacing: '0.05em', fontWeight: 600 }}>
+                <h4 className="fw-bold mb-1 profile-page-name">{currentUser.name}</h4>
+                <p className="text-muted text-uppercase profile-page-role">
                   Role: {currentUser.role}
                 </p>
               </div>
 
               {saveMessage && (
-                <div className="alert alert-success d-flex align-items-center py-2" style={{ fontSize: '0.85rem' }}>
+                <div className="alert alert-success d-flex align-items-center py-2 profile-page-alert">
                   {saveMessage}
                 </div>
               )}
@@ -92,7 +86,7 @@ function ProfilePage() {
                 <h6 className="fw-bold mb-3 border-bottom pb-2">Personal Information</h6>
                 
                 <Form.Group className="mb-3">
-                  <Form.Label className="text-muted fw-bold" style={{ fontSize: '0.8rem' }}>Full Name</Form.Label>
+                  <Form.Label className="text-muted fw-bold profile-page-label">Full Name</Form.Label>
                   <div className="input-group">
                     <span className="input-group-text bg-light border-end-0"><User size={16} className="text-muted" /></span>
                     <Form.Control 
@@ -106,7 +100,7 @@ function ProfilePage() {
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label className="text-muted fw-bold" style={{ fontSize: '0.8rem' }}>Email Address</Form.Label>
+                  <Form.Label className="text-muted fw-bold profile-page-label">Email Address</Form.Label>
                   <div className="input-group">
                     <span className="input-group-text bg-light border-end-0"><Mail size={16} className="text-muted" /></span>
                     <Form.Control 
@@ -123,7 +117,7 @@ function ProfilePage() {
                 <h6 className="fw-bold mb-3 border-bottom pb-2 mt-4">Security</h6>
 
                 <Form.Group className="mb-3">
-                  <Form.Label className="text-muted fw-bold" style={{ fontSize: '0.8rem' }}>Current Password</Form.Label>
+                  <Form.Label className="text-muted fw-bold profile-page-label">Current Password</Form.Label>
                   <div className="input-group">
                     <span className="input-group-text bg-light border-end-0"><Lock size={16} className="text-muted" /></span>
                     <Form.Control 
@@ -138,7 +132,7 @@ function ProfilePage() {
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label className="text-muted fw-bold" style={{ fontSize: '0.8rem' }}>New Password</Form.Label>
+                  <Form.Label className="text-muted fw-bold profile-page-label">New Password</Form.Label>
                   <div className="input-group">
                     <span className="input-group-text bg-light border-end-0"><Lock size={16} className="text-muted" /></span>
                     <Form.Control 

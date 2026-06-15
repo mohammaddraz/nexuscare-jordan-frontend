@@ -1,0 +1,200 @@
+/* LoginPage — Page Styles */
+
+.login-page-bg {
+  background-color: #f8fafc;
+}
+
+.login-page-bg-circle-top {
+  top: -10rem;
+  right: -10rem;
+  width: 24rem;
+  height: 24rem;
+  background-color: var(--color-emerald-100);
+  filter: blur(80px);
+  opacity: 0.5;
+}
+
+.login-page-bg-circle-bottom {
+  bottom: -10rem;
+  left: -10rem;
+  width: 24rem;
+  height: 24rem;
+  background-color: #e2e8f0;
+  filter: blur(80px);
+  opacity: 0.5;
+}
+
+.login-page-card {
+  max-width: 900px;
+  width: 100%;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-border-default);
+  min-height: 560px;
+}
+
+.login-page-banner {
+  background-color: var(--color-brand-primary);
+}
+
+.login-page-banner-overlay {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(19, 27, 46, 0.9) 50%, var(--color-brand-primary) 100%);
+  pointer-events: none;
+}
+
+.login-page-banner-content {
+  z-index: 2;
+}
+
+.login-page-brand-icon {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.login-page-brand-name {
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.login-page-brand-tag {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #34d399;
+}
+
+.login-page-hero-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.login-page-hero-title {
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.login-page-hero-desc {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.login-page-features {
+  z-index: 2;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.login-page-feature-icon {
+  width: 24px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.login-page-feature-label {
+  font-size: 0.75rem;
+  color: #cbd5e1;
+}
+
+.login-page-form-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+}
+
+.login-page-form-subtitle {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.login-page-section-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-brand-secondary);
+}
+
+.login-page-profile-btn {
+  cursor: pointer;
+  transition: all var(--transition-default);
+  border-color: var(--color-border-default);
+}
+
+.login-page-profile-btn:hover {
+  background-color: #f8fafc;
+  transform: translateY(-1px);
+}
+
+.login-page-profile-avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-color: var(--color-border-default);
+}
+
+.login-page-profile-initials {
+  width: 40px;
+  height: 40px;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.login-page-profile-name {
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+}
+
+.login-page-profile-subtitle {
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+}
+
+.login-page-profile-action {
+  font-size: 0.625rem;
+  font-weight: 700;
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.login-page-divider-line {
+  height: 1px;
+  background-color: var(--color-border-default);
+}
+
+.login-page-divider-text {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.login-page-input-icon {
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+}
+
+.login-page-input-with-icon {
+  padding-left: 38px;
+}
+
+.login-page-footer-text {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.login-page-footer-link {
+  font-weight: 700;
+}

@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import './MainLayout.css';
 
 /**
  * MainLayout — Wraps all authenticated pages
@@ -10,9 +11,9 @@ import Footer from './Footer';
  */
 function MainLayout() {
   return (
-    <div className="d-flex flex-column flex-lg-row min-vh-100" style={{ backgroundColor: 'var(--color-bg-body)' }}>
+    <div className="d-flex flex-column flex-lg-row min-vh-100 main-layout-wrapper">
       <Navbar />
-      <div className="d-flex flex-column flex-grow-1" style={{ minWidth: 0 }}>
+      <div className="d-flex flex-column flex-grow-1 main-layout-content">
         <main className="flex-grow-1">
           <Outlet />
         </main>

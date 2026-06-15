@@ -1,5 +1,6 @@
 import { Modal, Button } from 'react-bootstrap';
 import { AlertTriangle } from 'lucide-react';
+import './ConfirmDialog.css';
 
 /**
  * ConfirmDialog — Reusable confirmation modal (DRY)
@@ -26,12 +27,7 @@ function ConfirmDialog({
     <Modal show={show} onHide={onClose} centered size="sm">
       <Modal.Body className="text-center p-4">
         <div
-          className="d-flex align-items-center justify-content-center mx-auto mb-3 rounded-circle"
-          style={{
-            width: 56,
-            height: 56,
-            backgroundColor: variant === 'danger' ? 'rgba(239, 68, 68, 0.08)' : 'rgba(0, 106, 97, 0.08)',
-          }}
+          className={`d-flex align-items-center justify-content-center mx-auto mb-3 rounded-circle confirm-dialog-icon-wrapper ${variant === 'danger' ? 'confirm-dialog-icon-wrapper--danger' : 'confirm-dialog-icon-wrapper--default'}`}
         >
           <AlertTriangle
             size={28}
@@ -39,8 +35,8 @@ function ConfirmDialog({
           />
         </div>
 
-        <h5 style={{ fontWeight: 800, fontSize: '1rem', marginBottom: '0.5rem' }}>{title}</h5>
-        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginBottom: '1.5rem' }}>
+        <h5 className="confirm-dialog-title">{title}</h5>
+        <p className="confirm-dialog-message">
           {message}
         </p>
 
@@ -49,7 +45,7 @@ function ConfirmDialog({
             variant="light"
             size="sm"
             onClick={onClose}
-            style={{ fontWeight: 600, fontSize: '0.8rem', minWidth: 80 }}
+            className="confirm-dialog-btn"
           >
             Cancel
           </Button>
@@ -57,7 +53,7 @@ function ConfirmDialog({
             variant={variant}
             size="sm"
             onClick={() => { onConfirm(); onClose(); }}
-            style={{ fontWeight: 600, fontSize: '0.8rem', minWidth: 80 }}
+            className="confirm-dialog-btn"
           >
             {confirmLabel}
           </Button>

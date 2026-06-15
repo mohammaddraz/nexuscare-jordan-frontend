@@ -4,6 +4,7 @@ import { Search, Shield, Edit3, Trash2, UserPlus, Clock } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { adminService } from '../../services/adminService';
+import './ManageAdminsPage.css';
 
 /**
  * ManageAdminsPage — Super Admin view to add, edit, and remove system administrators.
@@ -121,7 +122,7 @@ function ManageAdminsPage() {
         <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
           <h6 className="fw-bold mb-0">System Administrators ({filteredAdmins.length})</h6>
           
-          <div style={{ width: '100%', maxWidth: '300px' }}>
+          <div className="manage-admins-search">
             <InputGroup>
               <InputGroup.Text className="bg-white"><Search size={16} color="var(--color-text-muted)" /></InputGroup.Text>
               <Form.Control 
@@ -138,24 +139,24 @@ function ManageAdminsPage() {
             <Table hover className="mb-0 align-middle">
               <thead className="bg-light border-bottom border-top">
                 <tr>
-                  <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Administrator</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>System Role</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Account Status</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Last Login</th>
-                  <th className="py-3 text-muted text-uppercase text-end px-4" style={{ fontSize: '0.65rem' }}>Actions</th>
+                  <th className="px-4 py-3 text-muted text-uppercase page-table-header">Administrator</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">System Role</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Account Status</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Last Login</th>
+                  <th className="py-3 text-muted text-uppercase text-end px-4 page-table-header">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredAdmins.map((admin) => (
                   <tr key={admin.id}>
                     <td className="px-4">
-                      <div className="fw-bold" style={{ fontSize: '0.85rem', color: 'var(--color-brand-primary)' }}>{admin.name}</div>
-                      <div className="text-muted d-flex align-items-center gap-1" style={{ fontSize: '0.75rem' }}>
+                      <div className="fw-bold manage-admins-name">{admin.name}</div>
+                      <div className="text-muted d-flex align-items-center gap-1 manage-admins-email">
                         {admin.email}
                       </div>
                     </td>
                     <td>
-                      <div className="d-flex align-items-center gap-2" style={{ fontSize: '0.8rem', fontWeight: 600 }}>
+                      <div className="d-flex align-items-center gap-2 manage-admins-role">
                         <Shield size={14} className="text-primary" />
                         {admin.role.replace('_', ' ')}
                       </div>
@@ -168,7 +169,7 @@ function ManageAdminsPage() {
                       />
                     </td>
                     <td>
-                      <div className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '0.75rem' }}>
+                      <div className="d-flex align-items-center gap-1 text-muted manage-admins-date">
                         <Clock size={12} />
                         {admin.lastLogin && admin.lastLogin !== 'Never' ? new Date(admin.lastLogin).toLocaleString() : 'Never'}
                       </div>
@@ -222,7 +223,7 @@ function ManageAdminsPage() {
         {editingAdmin && (
           <Form onSubmit={handleSave}>
             <Modal.Header closeButton className="bg-light">
-              <Modal.Title className="d-flex align-items-center gap-2" style={{ fontSize: '1.1rem' }}>
+              <Modal.Title className="d-flex align-items-center gap-2 manage-admins-modal-title">
                 <Shield size={18} color="var(--color-brand-primary)" />
                 {admins.some(a => a.id === editingAdmin.id) ? 'Edit Administrator' : 'Add New Administrator'}
               </Modal.Title>
@@ -231,7 +232,7 @@ function ManageAdminsPage() {
               <Row className="mb-3">
                 <Col>
                   <Form.Group>
-                    <Form.Label className="fw-bold text-muted" style={{ fontSize: '0.8rem' }}>Full Name</Form.Label>
+                    <Form.Label className="fw-bold text-muted manage-admins-form-label">Full Name</Form.Label>
                     <Form.Control 
                       required 
                       value={editingAdmin.name} 
@@ -243,7 +244,7 @@ function ManageAdminsPage() {
               <Row className="mb-3">
                 <Col>
                   <Form.Group>
-                    <Form.Label className="fw-bold text-muted" style={{ fontSize: '0.8rem' }}>Official MOH Email</Form.Label>
+                    <Form.Label className="fw-bold text-muted manage-admins-form-label">Official MOH Email</Form.Label>
                     <Form.Control 
                       type="email"
                       required 
@@ -256,7 +257,7 @@ function ManageAdminsPage() {
               <Row className="mb-4">
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label className="fw-bold text-muted" style={{ fontSize: '0.8rem' }}>System Role</Form.Label>
+                    <Form.Label className="fw-bold text-muted manage-admins-form-label">System Role</Form.Label>
                     <Form.Select 
                       value={editingAdmin.role} 
                       onChange={e => setEditingAdmin({...editingAdmin, role: e.target.value})}
@@ -270,7 +271,7 @@ function ManageAdminsPage() {
                 </Col>
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label className="fw-bold text-muted" style={{ fontSize: '0.8rem' }}>Account Status</Form.Label>
+                    <Form.Label className="fw-bold text-muted manage-admins-form-label">Account Status</Form.Label>
                     <Form.Select 
                       value={editingAdmin.status} 
                       onChange={e => setEditingAdmin({...editingAdmin, status: e.target.value})}

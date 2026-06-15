@@ -1,4 +1,5 @@
 import { Container } from 'react-bootstrap';
+import './PageWrapper.css';
 
 /**
  * PageWrapper — Consistent page container with title and optional subtitle
@@ -19,27 +20,12 @@ function PageWrapper({ title, subtitle, actions, children }) {
         <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-4 gap-3">
           <div>
             {title && (
-              <h1
-                className="mb-1"
-                style={{
-                  fontSize: '1.5rem',
-                  fontWeight: 800,
-                  color: 'var(--color-text-primary)',
-                  letterSpacing: '-0.02em',
-                }}
-              >
+              <h1 className="mb-1 page-wrapper-title">
                 {title}
               </h1>
             )}
             {subtitle && (
-              <p
-                className="mb-0"
-                style={{
-                  fontSize: '0.8rem',
-                  color: 'var(--color-text-secondary)',
-                  maxWidth: 600,
-                }}
-              >
+              <p className="mb-0 page-wrapper-subtitle">
                 {subtitle}
               </p>
             )}

@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 import './styles/bootstrap-overrides.css';
 import './styles/animations.css';
+import './styles/pages.css';
 
 import App from './App.jsx';
 

@@ -3,6 +3,7 @@ import { Row, Col, Form, Button, Badge, Modal, Table, Spinner, Alert } from 'rea
 import { ShieldCheck, Clock, CheckCircle, XCircle, History } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import { consumerService } from '../../services/consumerService';
+import './CoverageConfigPage.css';
 
 /**
  * CoverageConfigPage — Independent Coverage Configuration
@@ -168,16 +169,13 @@ function CoverageConfigPage() {
                   <button
                     key={dep.id}
                     onClick={() => handleSelectMember(dep)}
-                    className={`list-group-item list-group-item-action border-0 px-4 py-3 d-flex align-items-center gap-3 ${activeMemberId === dep.id ? 'bg-light' : ''}`}
-                    style={{
-                      borderLeft: activeMemberId === dep.id ? '4px solid var(--color-brand-secondary)' : '4px solid transparent',
-                    }}
+                    className={`list-group-item list-group-item-action border-0 px-4 py-3 d-flex align-items-center gap-3 ${activeMemberId === dep.id ? 'bg-light page-list-item--active' : 'page-list-item--inactive'}`}
                   >
                     <div className="flex-grow-1 text-start">
-                      <h6 className="mb-1 fw-bold" style={{ fontSize: '0.9rem' }}>{dep.name}</h6>
-                      <p className="mb-1 text-muted" style={{ fontSize: '0.75rem' }}>Current: {dep.plan_type}</p>
+                      <h6 className="mb-1 fw-bold coverage-config-member-name">{dep.name}</h6>
+                      <p className="mb-1 text-muted coverage-config-member-plan">Current: {dep.plan_type}</p>
                       <div className="d-flex align-items-center gap-1">
-                        <Badge bg={dep.network_tier === 'Premium' ? 'primary' : dep.network_tier === 'Standard' ? 'success' : 'secondary'} style={{ fontSize: '0.65rem' }}>
+                        <Badge bg={dep.network_tier === 'Premium' ? 'primary' : dep.network_tier === 'Standard' ? 'success' : 'secondary'} className="coverage-config-badge">
                           {dep.insurance_company_name || 'No Insurance'} {dep.network_tier}
                         </Badge>
                       </div>
@@ -195,12 +193,12 @@ function CoverageConfigPage() {
             <div className="card glass-panel animate-fadeIn" key={activeMemberId}>
               <div className="card-body p-4 p-md-5">
                 <div className="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom">
-                  <div className="rounded-circle d-flex align-items-center justify-content-center bg-secondary bg-opacity-10" style={{ width: 48, height: 48 }}>
+                  <div className="rounded-circle d-flex align-items-center justify-content-center bg-secondary bg-opacity-10 page-icon-box-48">
                     <ShieldCheck size={24} color="var(--color-brand-secondary)" />
                   </div>
                   <div>
                     <h5 className="fw-bold mb-1">Configure Plan for {activeMember.name}</h5>
-                    <p className="mb-1 text-muted" style={{ fontSize: '0.85rem' }}>Changes require MOH administrative approval.</p>
+                    <p className="mb-1 text-muted coverage-config-subtitle">Changes require MOH administrative approval.</p>
                     <Badge bg="light" text="dark" className="border">
                       Active Network: {activeMember.insurance_company_name} ({activeMember.network_tier} Tier)
                     </Badge>
@@ -234,11 +232,11 @@ function CoverageConfigPage() {
                     </Col>
                   </Row>
 
-                  <div className="p-3 border rounded-3 mb-4" style={{ backgroundColor: '#f8fafc' }}>
-                    <h6 className="fw-bold" style={{ fontSize: '0.85rem' }}>Additional Riders (Optional)</h6>
-                    <Form.Check type="switch" id="dental" label="Dental Coverage (+15 JOD/mo)" className="mb-2" style={{ fontSize: '0.85rem' }} checked={riderDental} onChange={(e) => setRiderDental(e.target.checked)} />
-                    <Form.Check type="switch" id="vision" label="Vision Coverage (+10 JOD/mo)" className="mb-2" style={{ fontSize: '0.85rem' }} checked={riderVision} onChange={(e) => setRiderVision(e.target.checked)} />
-                    <Form.Check type="switch" id="maternity" label="Maternity Care (+25 JOD/mo)" style={{ fontSize: '0.85rem' }} checked={riderMaternity} onChange={(e) => setRiderMaternity(e.target.checked)} />
+                  <div className="p-3 border rounded-3 mb-4 coverage-config-riders-box">
+                    <h6 className="fw-bold coverage-config-section-title">Additional Riders (Optional)</h6>
+                    <Form.Check type="switch" id="dental" label="Dental Coverage (+15 JOD/mo)" className="mb-2 coverage-config-rider-label" checked={riderDental} onChange={(e) => setRiderDental(e.target.checked)} />
+                    <Form.Check type="switch" id="vision" label="Vision Coverage (+10 JOD/mo)" className="mb-2 coverage-config-rider-label" checked={riderVision} onChange={(e) => setRiderVision(e.target.checked)} />
+                    <Form.Check type="switch" id="maternity" label="Maternity Care (+25 JOD/mo)" className="coverage-config-rider-label" checked={riderMaternity} onChange={(e) => setRiderMaternity(e.target.checked)} />
                   </div>
 
                   <div className="d-flex justify-content-end">

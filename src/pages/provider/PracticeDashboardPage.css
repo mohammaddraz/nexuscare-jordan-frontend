@@ -1,0 +1,17 @@
+/* PracticeDashboardPage — Page Styles */
+
+.dashboard-tooltip-trigger {
+  cursor: pointer;
+}
+
+.dashboard-announcement-title {
+  font-size: 0.85rem;
+}
+
+.dashboard-announcement-body {
+  font-size: 0.8rem;
+}
+
+.dashboard-info-icon {
+  cursor: help;
+}

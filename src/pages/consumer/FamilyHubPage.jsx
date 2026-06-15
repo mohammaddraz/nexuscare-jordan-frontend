@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { consumerService } from '../../services/consumerService';
+import './FamilyHubPage.css';
 
 /**
  * FamilyHubPage — Active Profile Switcher
@@ -120,22 +121,18 @@ function FamilyHubPage() {
                   <button
                     key={dep.id}
                     onClick={() => setActiveDependentId(dep.id)}
-                    className={`list-group-item list-group-item-action border-0 px-4 py-3 d-flex align-items-center gap-3 hover-lift ${activeDependentId === dep.id ? 'bg-light' : ''}`}
-                    style={{
-                      borderLeft: activeDependentId === dep.id ? '4px solid var(--color-brand-secondary)' : '4px solid transparent',
-                      transition: 'all var(--transition-fast)'
-                    }}
+                    className={`list-group-item list-group-item-action border-0 px-4 py-3 d-flex align-items-center gap-3 hover-lift ${activeDependentId === dep.id ? 'bg-light family-hub-list-item--active' : 'family-hub-list-item--inactive'}`}
                   >
                     {dep.avatarUrl ? (
-                      <img src={dep.avatarUrl} alt={dep.name} className="rounded-circle" style={{ width: 48, height: 48, objectFit: 'cover' }} />
+                      <img src={dep.avatarUrl} alt={dep.name} className="rounded-circle family-hub-avatar" />
                     ) : (
-                      <div className="rounded-circle d-flex align-items-center justify-content-center bg-secondary bg-opacity-10" style={{ width: 48, height: 48 }}>
+                      <div className="rounded-circle d-flex align-items-center justify-content-center bg-secondary bg-opacity-10 family-hub-icon-box">
                         <User size={24} color="var(--color-brand-secondary)" />
                       </div>
                     )}
                     <div className="flex-grow-1 text-start">
-                      <h6 className="mb-1 fw-bold" style={{ fontSize: '0.9rem', color: 'var(--color-text-primary)' }}>{dep.name}</h6>
-                      <p className="mb-0 text-muted" style={{ fontSize: '0.75rem' }}>
+                      <h6 className="mb-1 fw-bold family-hub-member-name">{dep.name}</h6>
+                      <p className="mb-0 text-muted family-hub-member-subtitle">
                         {dep.relation} • {dep.planType}
                       </p>
                     </div>
@@ -154,16 +151,16 @@ function FamilyHubPage() {
                 <div className="d-flex align-items-start justify-content-between mb-4 pb-4 border-bottom">
                   <div className="d-flex align-items-center gap-4">
                     {activeDependent.avatarUrl ? (
-                      <img src={activeDependent.avatarUrl} alt={activeDependent.name} className="rounded-circle shadow-sm" style={{ width: 80, height: 80, objectFit: 'cover' }} />
+                      <img src={activeDependent.avatarUrl} alt={activeDependent.name} className="rounded-circle shadow-sm family-hub-avatar-lg" />
                     ) : (
-                      <div className="rounded-circle d-flex align-items-center justify-content-center bg-secondary bg-opacity-10 shadow-sm" style={{ width: 80, height: 80 }}>
+                      <div className="rounded-circle d-flex align-items-center justify-content-center bg-secondary bg-opacity-10 shadow-sm family-hub-icon-box-lg">
                         <User size={40} color="var(--color-brand-secondary)" />
                       </div>
                     )}
                     <div>
-                      <h4 className="fw-bold mb-1" style={{ color: 'var(--color-brand-primary)' }}>{activeDependent.name}</h4>
-                      <p className="mb-2 text-muted" style={{ fontSize: '0.85rem' }}>National ID: <strong className="font-mono">{activeDependent.nationalId}</strong></p>
-                      <span className="badge bg-secondary rounded-pill fw-bold" style={{ fontSize: '0.7rem' }}>
+                      <h4 className="fw-bold mb-1 family-hub-detail-name">{activeDependent.name}</h4>
+                      <p className="mb-2 text-muted family-hub-detail-text">National ID: <strong className="font-mono">{activeDependent.nationalId}</strong></p>
+                      <span className="badge bg-secondary rounded-pill fw-bold family-hub-badge">
                         {activeDependent.planType}
                       </span>
                     </div>
@@ -172,30 +169,30 @@ function FamilyHubPage() {
 
                 <Row className="g-4 mb-4">
                   <Col sm={6}>
-                    <div className="p-3 rounded-3 border" style={{ backgroundColor: '#f8fafc' }}>
-                      <p className="mb-1 text-uppercase fw-bold text-muted" style={{ fontSize: '0.65rem', letterSpacing: '0.05em' }}>
+                    <div className="p-3 rounded-3 border family-hub-info-box">
+                      <p className="mb-1 text-uppercase fw-bold text-muted family-hub-info-label">
                         Primary Care Provider
                       </p>
                       {activeDependent.pcpName ? (
                         <div className="d-flex align-items-center gap-2">
                           {activeDependent.pcpStatus === 'Approved' ? <CheckCircle2 size={16} color="var(--color-success)" /> : <Clock size={16} color="var(--color-warning)" />}
-                          <span className="fw-bold" style={{ fontSize: '0.9rem' }}>{activeDependent.pcpName}</span>
+                          <span className="fw-bold family-hub-info-value">{activeDependent.pcpName}</span>
                         </div>
                       ) : (
-                        <span className="text-muted" style={{ fontSize: '0.85rem' }}>No PCP assigned</span>
+                        <span className="text-muted family-hub-info-no-pcp">No PCP assigned</span>
                       )}
                     </div>
                   </Col>
                   <Col sm={6}>
-                    <div className="p-3 rounded-3 border" style={{ backgroundColor: '#f8fafc' }}>
-                      <p className="mb-1 text-uppercase fw-bold text-muted" style={{ fontSize: '0.65rem', letterSpacing: '0.05em' }}>
+                    <div className="p-3 rounded-3 border family-hub-info-box">
+                      <p className="mb-1 text-uppercase fw-bold text-muted family-hub-info-label">
                         Coverage Utilization
                       </p>
                       <div className="d-flex align-items-end justify-content-between mb-1">
-                        <span className="fw-bold" style={{ fontSize: '0.9rem' }}>JOD {activeDependent.usedCoverage}</span>
-                        <span className="text-muted" style={{ fontSize: '0.75rem' }}>/ {activeDependent.coverageLimit}</span>
+                        <span className="fw-bold family-hub-info-value">JOD {activeDependent.usedCoverage}</span>
+                        <span className="text-muted family-hub-info-sublabel">/ {activeDependent.coverageLimit}</span>
                       </div>
-                      <div className="progress" style={{ height: 6 }}>
+                      <div className="progress family-hub-progress">
                         <div className="progress-bar bg-success" style={{ width: `${(activeDependent.usedCoverage / activeDependent.coverageLimit) * 100}%` }} />
                       </div>
                     </div>
@@ -267,10 +264,10 @@ function FamilyHubPage() {
           <Table hover className="mb-0 align-middle">
             <thead className="bg-light">
               <tr>
-                <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date Requested</th>
-                <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Family Member</th>
-                <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Provider</th>
-                <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Status</th>
+                <th className="px-4 py-3 text-muted text-uppercase page-table-header">Date Requested</th>
+                <th className="py-3 text-muted text-uppercase page-table-header">Family Member</th>
+                <th className="py-3 text-muted text-uppercase page-table-header">Provider</th>
+                <th className="py-3 text-muted text-uppercase page-table-header">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -279,9 +276,9 @@ function FamilyHubPage() {
               ) : historyData.length > 0 ? (
                 historyData.map(req => (
                   <tr key={req.id}>
-                    <td className="px-4" style={{ fontSize: '0.8rem' }}>{new Date(req.date_requested).toLocaleDateString()}</td>
-                    <td style={{ fontSize: '0.8rem', fontWeight: 600 }}>{req.patient_name}</td>
-                    <td style={{ fontSize: '0.8rem' }}>{req.provider_name}</td>
+                    <td className="px-4 page-table-cell">{new Date(req.date_requested).toLocaleDateString()}</td>
+                    <td className="page-table-cell--bold">{req.patient_name}</td>
+                    <td className="page-table-cell">{req.provider_name}</td>
                     <td><StatusBadge status={req.status} size="sm" /></td>
                   </tr>
                 ))

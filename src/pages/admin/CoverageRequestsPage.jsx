@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Table, Button, Badge, Modal, Form, Spinner }
 import { adminService } from '../../services/adminService';
 import { CheckCircle, XCircle, Clock, ShieldCheck } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
+import './CoverageRequestsPage.css';
 
 /**
  * CoverageRequestsPage — Admin page to review and approve/reject
@@ -80,19 +81,19 @@ const CoverageRequestsPage = () => {
         <Col md={4}>
           <div className="card glass-panel p-4 text-center">
             <h3 className="fw-bold mb-1">{requests.length}</h3>
-            <p className="text-muted mb-0" style={{ fontSize: '0.85rem' }}>Total Requests</p>
+            <p className="text-muted mb-0 coverage-request-stat-label">Total Requests</p>
           </div>
         </Col>
         <Col md={4}>
           <div className="card glass-panel p-4 text-center">
             <h3 className="fw-bold mb-1 text-warning">{pendingCount}</h3>
-            <p className="text-muted mb-0" style={{ fontSize: '0.85rem' }}>Pending Review</p>
+            <p className="text-muted mb-0 coverage-request-stat-label">Pending Review</p>
           </div>
         </Col>
         <Col md={4}>
           <div className="card glass-panel p-4 text-center">
             <h3 className="fw-bold mb-1 text-success">{requests.filter(r => r.status === 'Approved').length}</h3>
-            <p className="text-muted mb-0" style={{ fontSize: '0.85rem' }}>Approved</p>
+            <p className="text-muted mb-0 coverage-request-stat-label">Approved</p>
           </div>
         </Col>
       </Row>
@@ -115,32 +116,32 @@ const CoverageRequestsPage = () => {
               <Table hover className="align-middle mb-0">
                 <thead className="bg-light">
                   <tr>
-                    <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Patient</th>
-                    <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Consumer Email</th>
-                    <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Current Plan</th>
-                    <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Requested Plan</th>
-                    <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Riders</th>
-                    <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date</th>
-                    <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Status</th>
-                    <th className="py-3 text-muted text-uppercase text-end px-4" style={{ fontSize: '0.65rem' }}>Actions</th>
+                    <th className="px-4 py-3 text-muted text-uppercase page-table-header">Patient</th>
+                    <th className="py-3 text-muted text-uppercase page-table-header">Consumer Email</th>
+                    <th className="py-3 text-muted text-uppercase page-table-header">Current Plan</th>
+                    <th className="py-3 text-muted text-uppercase page-table-header">Requested Plan</th>
+                    <th className="py-3 text-muted text-uppercase page-table-header">Riders</th>
+                    <th className="py-3 text-muted text-uppercase page-table-header">Date</th>
+                    <th className="py-3 text-muted text-uppercase page-table-header">Status</th>
+                    <th className="py-3 text-muted text-uppercase text-end px-4 page-table-header">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {requests.map((req) => (
                     <tr key={req.id}>
-                      <td className="px-4 fw-bold" style={{ fontSize: '0.85rem' }}>{req.patient_name}</td>
-                      <td style={{ fontSize: '0.85rem' }}>{req.consumer_email}</td>
-                      <td style={{ fontSize: '0.85rem' }}>{req.current_plan}</td>
-                      <td className="fw-bold" style={{ fontSize: '0.85rem' }}>{req.requested_plan}</td>
+                      <td className="px-4 fw-bold page-table-cell">{req.patient_name}</td>
+                      <td className="page-table-cell">{req.consumer_email}</td>
+                      <td className="page-table-cell">{req.current_plan}</td>
+                      <td className="fw-bold page-table-cell">{req.requested_plan}</td>
                       <td>
                         <div className="d-flex gap-1 flex-wrap">
-                          {req.rider_dental && <Badge bg="info" className="fw-normal" style={{ fontSize: '0.7rem' }}>Dental</Badge>}
-                          {req.rider_vision && <Badge bg="info" className="fw-normal" style={{ fontSize: '0.7rem' }}>Vision</Badge>}
-                          {req.rider_maternity && <Badge bg="info" className="fw-normal" style={{ fontSize: '0.7rem' }}>Maternity</Badge>}
-                          {!req.rider_dental && !req.rider_vision && !req.rider_maternity && <span className="text-muted" style={{ fontSize: '0.75rem' }}>None</span>}
+                          {req.rider_dental && <Badge bg="info" className="fw-normal coverage-request-rider-badge">Dental</Badge>}
+                          {req.rider_vision && <Badge bg="info" className="fw-normal coverage-request-rider-badge">Vision</Badge>}
+                          {req.rider_maternity && <Badge bg="info" className="fw-normal coverage-request-rider-badge">Maternity</Badge>}
+                          {!req.rider_dental && !req.rider_vision && !req.rider_maternity && <span className="text-muted coverage-request-rider-none">None</span>}
                         </div>
                       </td>
-                      <td style={{ fontSize: '0.85rem' }}>{new Date(req.date_requested).toLocaleDateString()}</td>
+                      <td className="page-table-cell">{new Date(req.date_requested).toLocaleDateString()}</td>
                       <td>{getStatusBadge(req.status)}</td>
                       <td className="text-end px-4">
                         {req.status === 'Pending' ? (
@@ -153,7 +154,7 @@ const CoverageRequestsPage = () => {
                             </Button>
                           </div>
                         ) : (
-                          <span className="text-muted" style={{ fontSize: '0.8rem' }}>
+                          <span className="text-muted coverage-request-reviewed-text">
                             {req.date_reviewed ? `Reviewed ${new Date(req.date_reviewed).toLocaleDateString()}` : '—'}
                           </span>
                         )}
@@ -182,7 +183,7 @@ const CoverageRequestsPage = () => {
                 modification request for <strong>{selectedRequest.patient_name}</strong>.
               </p>
               {actionStatus === 'Approved' && (
-                <div className="alert alert-info" style={{ fontSize: '0.85rem' }}>
+                <div className="alert alert-info coverage-request-alert-text">
                   Their plan will be changed from <strong>{selectedRequest.current_plan}</strong> to <strong>{selectedRequest.requested_plan}</strong>.
                 </div>
               )}

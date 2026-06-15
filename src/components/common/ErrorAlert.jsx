@@ -1,5 +1,6 @@
 import { Alert } from 'react-bootstrap';
 import { AlertCircle, X } from 'lucide-react';
+import './ErrorAlert.css';
 
 /**
  * ErrorAlert — Consistent error display (DRY, centralized error handling)
@@ -14,8 +15,7 @@ function ErrorAlert({ message, onClose, variant = 'danger' }) {
   return (
     <Alert
       variant={variant}
-      className="d-flex align-items-center gap-2 animate-fadeIn"
-      style={{ borderRadius: 'var(--radius-md)', fontSize: '0.8rem', fontWeight: 500 }}
+      className="d-flex align-items-center gap-2 animate-fadeIn error-alert"
       dismissible={!!onClose}
       onClose={onClose}
     >

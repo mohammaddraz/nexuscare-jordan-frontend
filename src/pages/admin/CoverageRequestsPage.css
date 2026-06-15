@@ -1,0 +1,21 @@
+/* CoverageRequestsPage — Page Styles */
+
+.coverage-request-stat-label {
+  font-size: 0.85rem;
+}
+
+.coverage-request-rider-badge {
+  font-size: 0.7rem;
+}
+
+.coverage-request-rider-none {
+  font-size: 0.75rem;
+}
+
+.coverage-request-reviewed-text {
+  font-size: 0.8rem;
+}
+
+.coverage-request-alert-text {
+  font-size: 0.85rem;
+}

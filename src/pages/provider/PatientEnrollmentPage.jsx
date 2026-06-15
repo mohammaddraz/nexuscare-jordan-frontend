@@ -4,6 +4,7 @@ import { Check, X, FileText } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { providerService } from '../../services/providerService';
+import './PatientEnrollmentPage.css';
 
 /**
  * PatientEnrollmentPage — Audit, approve, or reject consumer PCP requests.
@@ -97,23 +98,23 @@ function PatientEnrollmentPage() {
             <Table hover className="mb-0 align-middle">
               <thead className="bg-light">
                 <tr>
-                  <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Req ID</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date Requested</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Patient Name</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>National ID</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Insurance Plan</th>
-                  <th className="py-3 text-muted text-uppercase text-end px-4" style={{ fontSize: '0.65rem' }}>Actions</th>
+                  <th className="px-4 py-3 text-muted text-uppercase page-table-header">Req ID</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Date Requested</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Patient Name</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">National ID</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Insurance Plan</th>
+                  <th className="py-3 text-muted text-uppercase text-end px-4 page-table-header">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {enrollments.map((enr) => (
                   <tr key={enr.id}>
-                    <td className="px-4 fw-bold font-mono text-muted" style={{ fontSize: '0.75rem' }}>{enr.id}</td>
-                    <td style={{ fontSize: '0.8rem' }}>{enr.dateRequested}</td>
-                    <td className="fw-bold" style={{ fontSize: '0.85rem' }}>{enr.patientName}</td>
-                    <td className="font-mono" style={{ fontSize: '0.8rem' }}>{enr.nationalId}</td>
+                    <td className="px-4 fw-bold font-mono text-muted enrollment-id">{enr.id}</td>
+                    <td className="page-table-cell">{enr.dateRequested}</td>
+                    <td className="fw-bold enrollment-patient">{enr.patientName}</td>
+                    <td className="font-mono page-table-cell">{enr.nationalId}</td>
                     <td>
-                      <span className="badge bg-secondary rounded-pill" style={{ fontSize: '0.65rem' }}>
+                      <span className="badge bg-secondary rounded-pill enrollment-badge">
                         {enr.planType}
                       </span>
                     </td>
@@ -122,8 +123,7 @@ function PatientEnrollmentPage() {
                         <Button 
                           variant="outline-danger" 
                           size="sm" 
-                          className="d-flex align-items-center justify-content-center p-1"
-                          style={{ width: 28, height: 28 }}
+                          className="d-flex align-items-center justify-content-center p-1 enrollment-action-btn"
                           onClick={() => handleActionClick('Rejected', enr)}
                           title="Reject"
                         >
@@ -132,8 +132,7 @@ function PatientEnrollmentPage() {
                         <Button 
                           variant="success" 
                           size="sm" 
-                          className="d-flex align-items-center justify-content-center p-1"
-                          style={{ width: 28, height: 28 }}
+                          className="d-flex align-items-center justify-content-center p-1 enrollment-action-btn"
                           onClick={() => handleActionClick('Approved', enr)}
                           title="Approve"
                         >
@@ -174,20 +173,20 @@ function PatientEnrollmentPage() {
                 <Table hover className="mb-0 align-middle">
                   <thead className="bg-light">
                     <tr>
-                      <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Claim ID</th>
-                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date</th>
-                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Patient Name</th>
-                      <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Amount (JOD)</th>
-                      <th className="py-3 text-muted text-uppercase text-end px-4" style={{ fontSize: '0.65rem' }}>Actions</th>
+                      <th className="px-4 py-3 text-muted text-uppercase page-table-header">Claim ID</th>
+                      <th className="py-3 text-muted text-uppercase page-table-header">Date</th>
+                      <th className="py-3 text-muted text-uppercase page-table-header">Patient Name</th>
+                      <th className="py-3 text-muted text-uppercase page-table-header">Amount (JOD)</th>
+                      <th className="py-3 text-muted text-uppercase text-end px-4 page-table-header">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {claims.map((claim) => (
                       <tr key={claim.id}>
-                        <td className="px-4 fw-bold font-mono text-muted" style={{ fontSize: '0.75rem' }}>{claim.id.substring(0,8)}...</td>
-                        <td style={{ fontSize: '0.8rem' }}>{new Date(claim.claim_date).toLocaleDateString()}</td>
-                        <td className="fw-bold" style={{ fontSize: '0.85rem' }}>{claim.patient_name}</td>
-                        <td style={{ fontSize: '0.8rem' }}>{claim.amount}</td>
+                        <td className="px-4 fw-bold font-mono text-muted enrollment-id">{claim.id.substring(0,8)}...</td>
+                        <td className="page-table-cell">{new Date(claim.claim_date).toLocaleDateString()}</td>
+                        <td className="fw-bold enrollment-patient">{claim.patient_name}</td>
+                        <td className="page-table-cell">{claim.amount}</td>
                         <td className="text-end px-4">
                           <div className="d-flex justify-content-end gap-2">
                             <Button 

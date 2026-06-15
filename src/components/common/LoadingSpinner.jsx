@@ -1,4 +1,5 @@
 import { Spinner } from 'react-bootstrap';
+import './LoadingSpinner.css';
 
 /**
  * LoadingSpinner — Consistent loading indicator (DRY)
@@ -12,11 +13,11 @@ function LoadingSpinner({ message = 'Loading...', fullPage = false }) {
       <Spinner
         animation="border"
         role="status"
-        style={{ color: 'var(--color-brand-secondary)', width: 40, height: 40 }}
+        className="loading-spinner-icon"
       >
         <span className="visually-hidden">{message}</span>
       </Spinner>
-      <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-secondary)' }}>
+      <p className="loading-spinner-message">
         {message}
       </p>
     </div>

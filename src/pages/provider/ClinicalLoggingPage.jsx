@@ -4,6 +4,7 @@ import { Activity, Plus, FileText, UploadCloud } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { providerService } from '../../services/providerService';
+import './ClinicalLoggingPage.css';
 
 /**
  * ClinicalLoggingPage — Log real-time visits, record clinical ICD diagnostics.
@@ -93,25 +94,25 @@ function ClinicalLoggingPage() {
             <Table hover className="mb-0 align-middle">
               <thead className="bg-light">
                 <tr>
-                  <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Log ID</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Patient Name</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Diagnosis & ICD-10</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Billing Code</th>
-                  <th className="py-3 text-muted text-uppercase px-4" style={{ fontSize: '0.65rem' }}>Status</th>
+                  <th className="px-4 py-3 text-muted text-uppercase page-table-header">Log ID</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Date</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Patient Name</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Diagnosis & ICD-10</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Billing Code</th>
+                  <th className="py-3 text-muted text-uppercase px-4 page-table-header">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {logs.map((log, idx) => (
                   <tr key={`${log.id}-${idx}`}>
-                    <td className="px-4 fw-bold font-mono text-muted" style={{ fontSize: '0.75rem' }}>{log.id.substring(0, 8)}...</td>
-                    <td style={{ fontSize: '0.8rem' }}>{new Date(log.date).toLocaleDateString()}</td>
-                    <td className="fw-bold" style={{ fontSize: '0.85rem' }}>{log.patientName}</td>
+                    <td className="px-4 fw-bold font-mono text-muted clinical-log-id">{log.id.substring(0, 8)}...</td>
+                    <td className="page-table-cell">{new Date(log.date).toLocaleDateString()}</td>
+                    <td className="fw-bold clinical-log-patient">{log.patientName}</td>
                     <td>
-                      <div style={{ fontSize: '0.8rem' }}>{log.diagnosis}</div>
-                      <div className="text-muted font-mono" style={{ fontSize: '0.7rem' }}>{log.icdCode}</div>
+                      <div className="clinical-log-diagnosis">{log.diagnosis}</div>
+                      <div className="text-muted font-mono clinical-log-icd">{log.icdCode}</div>
                     </td>
-                    <td className="font-mono text-muted" style={{ fontSize: '0.75rem' }}>{log.billingCode}</td>
+                    <td className="font-mono text-muted clinical-log-billing">{log.billingCode}</td>
                     <td className="px-4"><StatusBadge status={log.claimStatus} size="sm" /></td>
                   </tr>
                 ))}
@@ -156,7 +157,7 @@ function ClinicalLoggingPage() {
             </Row>
             
             <div className="p-3 bg-light border rounded-3 mb-4">
-              <h6 className="fw-bold mb-3" style={{ fontSize: '0.85rem' }}>Clinical Diagnostics</h6>
+              <h6 className="fw-bold mb-3 clinical-log-section-title">Clinical Diagnostics</h6>
               <Row className="mb-3">
                 <Col md={8}>
                   <Form.Group>
@@ -183,8 +184,7 @@ function ClinicalLoggingPage() {
                 id="auto-claim"
                 label="Auto-file direct insurance claim (Recommended)"
                 defaultChecked
-                className="fw-bold"
-                style={{ fontSize: '0.85rem', color: 'var(--color-brand-secondary)' }}
+                className="fw-bold clinical-log-auto-claim"
               />
               <div className="d-flex gap-2">
                 <Button variant="light" onClick={() => setShowLogModal(false)}>Cancel</Button>

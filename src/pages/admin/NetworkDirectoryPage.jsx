@@ -4,6 +4,7 @@ import { Search, MapPin, Building, Star, Download, Edit3, Save } from 'lucide-re
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { adminService } from '../../services/adminService';
+import './NetworkDirectoryPage.css';
 
 /**
  * NetworkDirectoryPage — Admin view of all active providers in the network.
@@ -161,7 +162,7 @@ function NetworkDirectoryPage() {
         <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
           <h6 className="fw-bold mb-0">Active Providers ({filteredProviders.length})</h6>
           
-          <div style={{ width: '100%', maxWidth: '300px' }}>
+          <div className="network-directory-search">
             <InputGroup>
               <InputGroup.Text className="bg-white"><Search size={16} color="var(--color-text-muted)" /></InputGroup.Text>
               <Form.Control 
@@ -186,31 +187,31 @@ function NetworkDirectoryPage() {
             <Table hover className="mb-0 align-middle">
               <thead className="bg-light border-bottom border-top">
                 <tr>
-                  <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Physician</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Specialty</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Clinic Affiliation</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Location</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Networks</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Status</th>
-                  <th className="py-3 text-muted text-uppercase text-end px-4" style={{ fontSize: '0.65rem' }}>Actions</th>
+                  <th className="px-4 py-3 text-muted text-uppercase page-table-header">Physician</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Specialty</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Clinic Affiliation</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Location</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Networks</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Status</th>
+                  <th className="py-3 text-muted text-uppercase text-end px-4 page-table-header">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredProviders.map((provider) => (
                   <tr key={provider.id}>
                     <td className="px-4">
-                      <div className="fw-bold" style={{ fontSize: '0.85rem', color: 'var(--color-brand-primary)' }}>{provider.name}</div>
-                      <div className="font-mono text-muted" style={{ fontSize: '0.75rem' }}>{provider.id}</div>
+                      <div className="fw-bold network-directory-name">{provider.name}</div>
+                      <div className="font-mono text-muted network-directory-id">{provider.id}</div>
                     </td>
-                    <td style={{ fontSize: '0.85rem' }}>{provider.specialty}</td>
+                    <td className="network-directory-specialty">{provider.specialty}</td>
                     <td>
-                      <div className="d-flex align-items-center gap-2" style={{ fontSize: '0.8rem' }}>
+                      <div className="d-flex align-items-center gap-2 network-directory-meta">
                         <Building size={14} className="text-muted" />
                         {provider.clinic}
                       </div>
                     </td>
                     <td>
-                      <div className="d-flex align-items-center gap-2" style={{ fontSize: '0.8rem' }}>
+                      <div className="d-flex align-items-center gap-2 network-directory-meta">
                         <MapPin size={14} className="text-muted" />
                         {provider.city}
                       </div>
@@ -219,13 +220,13 @@ function NetworkDirectoryPage() {
                       <div className="d-flex flex-wrap gap-1">
                         {provider.networks && provider.networks.length > 0 ? (
                           provider.networks.map(n => (
-                            <span key={`${n.provider_id}-${n.company_id}`} className="badge bg-light text-dark border d-flex align-items-center gap-1" style={{ fontSize: '0.7rem' }}>
+                            <span key={`${n.provider_id}-${n.company_id}`} className="badge bg-light text-dark border d-flex align-items-center gap-1 network-directory-network-badge">
                               {n.companyName} ({n.accepted_tier})
-                              <button onClick={() => handleRemoveNetwork(provider.id, n.company_id)} className="btn-close ms-1" style={{ fontSize: '0.4rem' }}></button>
+                              <button onClick={() => handleRemoveNetwork(provider.id, n.company_id)} className="btn-close ms-1 network-directory-network-close"></button>
                             </span>
                           ))
                         ) : (
-                          <span className="text-muted" style={{ fontSize: '0.75rem' }}>None</span>
+                          <span className="text-muted network-directory-network-none">None</span>
                         )}
                       </div>
                     </td>
@@ -241,9 +242,8 @@ function NetworkDirectoryPage() {
                         <Button 
                           variant="outline-primary" 
                           size="sm" 
-                          className="d-flex align-items-center gap-1 px-3 py-1"
+                          className="d-flex align-items-center gap-1 px-3 py-1 network-directory-btn-assign"
                           onClick={() => openAssignModal(provider)}
-                          style={{ fontSize: '0.75rem', fontWeight: 600, borderRadius: 'var(--radius-md)' }}
                         >
                           <Star size={14} /> Assign
                         </Button>
@@ -254,7 +254,7 @@ function NetworkDirectoryPage() {
                           onClick={() => handleEditClick(provider)}
                           title="Edit Provider"
                         >
-                          <Edit3 size={14} className="text-primary me-1" /> <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>Edit</span>
+                          <Edit3 size={14} className="text-primary me-1" /> <span className="network-directory-btn-text">Edit</span>
                         </Button>
                         <Button 
                           variant="light" 
@@ -263,7 +263,7 @@ function NetworkDirectoryPage() {
                           onClick={() => handleDeleteProvider(provider.id)}
                           title="Remove Provider"
                         >
-                          <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>Remove</span>
+                          <span className="network-directory-btn-text">Remove</span>
                         </Button>
                       </div>
                     </td>
@@ -289,18 +289,18 @@ function NetworkDirectoryPage() {
       <Modal show={showAssignModal} onHide={() => setShowAssignModal(false)} centered>
         <Form onSubmit={handleAssignNetwork}>
           <Modal.Header closeButton className="border-bottom-0 pb-0">
-            <Modal.Title style={{ fontSize: '1.1rem', fontWeight: 700 }}>Assign to Network</Modal.Title>
+            <Modal.Title className="network-directory-modal-title">Assign to Network</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {assignError && (
-              <div className="alert alert-danger py-2" style={{ fontSize: '0.85rem' }}>{assignError}</div>
+              <div className="alert alert-danger py-2 network-directory-alert">{assignError}</div>
             )}
-            <p className="mb-4 text-muted" style={{ fontSize: '0.85rem' }}>
+            <p className="mb-4 text-muted network-directory-desc">
               Select an insurance company and the supported tier to enroll <strong>{assignProvider?.name}</strong>.
             </p>
 
             <Form.Group className="mb-3">
-              <Form.Label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Insurance Company</Form.Label>
+              <Form.Label className="network-directory-form-label">Insurance Company</Form.Label>
               <Form.Select 
                 value={selectedCompanyId} 
                 onChange={(e) => setSelectedCompanyId(e.target.value)}
@@ -314,7 +314,7 @@ function NetworkDirectoryPage() {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Accepted Network Tier</Form.Label>
+              <Form.Label className="network-directory-form-label">Accepted Network Tier</Form.Label>
               <Form.Select 
                 value={selectedTier} 
                 onChange={(e) => setSelectedTier(e.target.value)}
@@ -339,7 +339,7 @@ function NetworkDirectoryPage() {
         {editingProvider && (
           <Form onSubmit={handleSaveEdit}>
             <Modal.Header closeButton className="bg-light">
-              <Modal.Title className="d-flex align-items-center gap-2" style={{ fontSize: '1.2rem' }}>
+              <Modal.Title className="d-flex align-items-center gap-2 network-directory-edit-title">
                 <Edit3 size={20} color="var(--color-brand-primary)" />
                 Edit Provider Profile
               </Modal.Title>
@@ -347,8 +347,8 @@ function NetworkDirectoryPage() {
             <Modal.Body className="p-4">
               <div className="mb-4 pb-3 border-bottom d-flex align-items-center justify-content-between">
                 <div>
-                  <h5 className="fw-bold mb-1" style={{ color: 'var(--color-brand-primary)' }}>{editingProvider.name}</h5>
-                  <p className="font-mono text-muted mb-0" style={{ fontSize: '0.85rem' }}>ID: {editingProvider.id}</p>
+                  <h5 className="fw-bold mb-1 network-directory-name">{editingProvider.name}</h5>
+                  <p className="font-mono text-muted mb-0 network-directory-desc">ID: {editingProvider.id}</p>
                 </div>
                 <div className="d-flex align-items-center gap-2 text-warning fw-bold bg-warning bg-opacity-10 px-3 py-2 rounded">
                   <Star size={18} className="fill-warning" /> {editingProvider.rating} Rating
@@ -358,7 +358,7 @@ function NetworkDirectoryPage() {
               <Row className="mb-3 g-3">
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label className="fw-bold text-muted" style={{ fontSize: '0.85rem' }}>Physician Name</Form.Label>
+                    <Form.Label className="fw-bold text-muted network-directory-form-label">Physician Name</Form.Label>
                     <Form.Control 
                       required 
                       value={editingProvider.name} 
@@ -368,7 +368,7 @@ function NetworkDirectoryPage() {
                 </Col>
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label className="fw-bold text-muted" style={{ fontSize: '0.85rem' }}>Medical Specialty</Form.Label>
+                    <Form.Label className="fw-bold text-muted network-directory-form-label">Medical Specialty</Form.Label>
                     <Form.Select 
                       value={editingProvider.specialty} 
                       onChange={e => setEditingProvider({...editingProvider, specialty: e.target.value})}
@@ -387,7 +387,7 @@ function NetworkDirectoryPage() {
               <Row className="mb-4 g-3">
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label className="fw-bold text-muted" style={{ fontSize: '0.85rem' }}>Clinic Affiliation</Form.Label>
+                    <Form.Label className="fw-bold text-muted network-directory-form-label">Clinic Affiliation</Form.Label>
                     <Form.Select 
                       required 
                       value={editingProvider.clinic} 
@@ -412,7 +412,7 @@ function NetworkDirectoryPage() {
                 </Col>
                 <Col md={6}>
                   <Form.Group>
-                    <Form.Label className="fw-bold text-muted" style={{ fontSize: '0.85rem' }}>City Location</Form.Label>
+                    <Form.Label className="fw-bold text-muted network-directory-form-label">City Location</Form.Label>
                     <Form.Select 
                       value={editingProvider.city} 
                       onChange={e => setEditingProvider({...editingProvider, city: e.target.value})}
@@ -428,15 +428,15 @@ function NetworkDirectoryPage() {
 
               <div className="p-3 bg-light border rounded-3 d-flex align-items-center justify-content-between">
                 <div>
-                  <h6 className="fw-bold mb-1" style={{ fontSize: '0.95rem' }}>Network Capacity Status</h6>
-                  <p className="mb-0 text-muted" style={{ fontSize: '0.8rem' }}>Toggle whether this provider is currently accepting new PCP enrollments.</p>
+                  <h6 className="fw-bold mb-1 network-directory-edit-status-title">Network Capacity Status</h6>
+                  <p className="mb-0 text-muted network-directory-edit-status-desc">Toggle whether this provider is currently accepting new PCP enrollments.</p>
                 </div>
                 <Form.Check 
                   type="switch"
                   id="accepting-new-switch"
                   checked={editingProvider.acceptingNew}
                   onChange={e => setEditingProvider({...editingProvider, acceptingNew: e.target.checked})}
-                  style={{ transform: 'scale(1.2)' }}
+                  className="network-directory-switch"
                 />
               </div>
             </Modal.Body>

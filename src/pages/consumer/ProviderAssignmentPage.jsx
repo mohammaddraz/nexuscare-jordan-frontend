@@ -6,6 +6,7 @@ import PageWrapper from '../../components/layout/PageWrapper';
 import { consumerService } from '../../services/consumerService';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import StatusBadge from '../../components/ui/StatusBadge';
+import './ProviderAssignmentPage.css';
 
 const mapContainerStyle = {
   width: '100%',
@@ -181,10 +182,10 @@ function ProviderAssignmentPage() {
                   position={{ lat: provider.lat, lng: provider.lng }} 
                   onCloseClick={() => setActiveMarker(null)}
                 >
-                  <div style={{ color: '#333', padding: '5px', maxWidth: '200px' }}>
-                    <h6 style={{ margin: 0, fontWeight: 'bold', fontSize: '14px' }}>{provider.name}</h6>
-                    <p style={{ margin: '4px 0', fontSize: '12px' }}>{provider.specialty}</p>
-                    <p style={{ margin: 0, fontSize: '12px', fontWeight: 'bold' }}>{provider.clinic}</p>
+                  <div className="provider-assignment-map-info">
+                    <h6>{provider.name}</h6>
+                    <p>{provider.specialty}</p>
+                    <p>{provider.clinic}</p>
                   </div>
                 </InfoWindow>
               )}
@@ -252,10 +253,10 @@ function ProviderAssignmentPage() {
             </div>
           </div>
 
-          <div className="card glass-panel" style={{ height: 350, overflow: 'hidden' }}>
+          <div className="card glass-panel provider-assignment-map-container">
             <div className="card-body p-0 h-100 position-relative">
                {!import.meta.env.VITE_GOOGLE_MAPS_API_KEY && (
-                 <div className="position-absolute top-0 start-0 w-100 p-2 bg-warning text-dark text-center" style={{ zIndex: 10, fontSize: '0.8rem', fontWeight: 'bold' }}>
+                 <div className="position-absolute top-0 start-0 w-100 p-2 bg-warning text-dark text-center provider-assignment-map-warning">
                    Missing VITE_GOOGLE_MAPS_API_KEY. Map is in dev mode.
                  </div>
                )}
@@ -267,7 +268,7 @@ function ProviderAssignmentPage() {
         <Col lg={8}>
           <div className="d-flex flex-column gap-3">
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <h2 className="mb-0 fw-bold" style={{ fontSize: '1.1rem' }}>Available Providers</h2>
+              <h2 className="mb-0 fw-bold provider-assignment-title">Available Providers</h2>
               <Badge bg="primary" pill>{filteredProviders.length}</Badge>
             </div>
 
@@ -282,16 +283,15 @@ function ProviderAssignmentPage() {
               filteredProviders.map((provider) => (
                 <div 
                   key={provider.id} 
-                  className={`card glass-panel-hover p-4 animate-fadeInUp ${activeMarker === provider.id ? 'border-primary shadow-sm' : ''}`}
-                  style={{ transition: 'all 0.3s ease' }}
+                  className={`card glass-panel-hover p-4 animate-fadeInUp provider-assignment-card ${activeMarker === provider.id ? 'border-primary shadow-sm' : ''}`}
                 >
                   <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                     <div>
-                      <h5 className="fw-bold mb-1" style={{ color: 'var(--color-brand-primary)' }}>{provider.name}</h5>
-                      <p className="mb-2 text-muted" style={{ fontSize: '0.85rem' }}>
+                      <h5 className="fw-bold mb-1 provider-assignment-name">{provider.name}</h5>
+                      <p className="mb-2 text-muted provider-assignment-subtitle">
                         {provider.specialty} • {provider.clinic}
                       </p>
-                      <div className="d-flex align-items-center gap-3" style={{ fontSize: '0.75rem' }}>
+                      <div className="d-flex align-items-center gap-3 provider-assignment-meta">
                         <span className="d-flex align-items-center gap-1 text-muted cursor-pointer hover-text-primary" onClick={() => handleMarkerClick(provider)}>
                           <MapPin size={14} /> {provider.city} (View on Map)
                         </span>
@@ -300,11 +300,11 @@ function ProviderAssignmentPage() {
                         </span>
                         {provider.accepting_new ? (
                           <span className="text-success fw-bold d-flex align-items-center gap-1">
-                            <span className="rounded-circle bg-success" style={{width: 6, height: 6}}></span> Accepting New Patients
+                            <span className="rounded-circle bg-success provider-assignment-dot"></span> Accepting New Patients
                           </span>
                         ) : (
                           <span className="text-danger fw-bold d-flex align-items-center gap-1">
-                            <span className="rounded-circle bg-danger" style={{width: 6, height: 6}}></span> Full Capacity
+                            <span className="rounded-circle bg-danger provider-assignment-dot"></span> Full Capacity
                           </span>
                         )}
                       </div>
@@ -319,7 +319,7 @@ function ProviderAssignmentPage() {
                           };
                           const companyName = companyMap[net.company_id] || 'Insurance';
                           return (
-                            <Badge key={idx} bg={net.tier === 'Premium' ? 'primary' : net.tier === 'Standard' ? 'success' : 'secondary'} className="fw-normal" style={{ fontSize: '0.7rem' }}>
+                            <Badge key={idx} bg={net.tier === 'Premium' ? 'primary' : net.tier === 'Standard' ? 'success' : 'secondary'} className="fw-normal provider-assignment-network-badge">
                               {companyName} {net.tier}
                             </Badge>
                           );
@@ -369,10 +369,10 @@ function ProviderAssignmentPage() {
           <Table hover className="mb-0 align-middle">
             <thead className="bg-light">
               <tr>
-                <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Date Requested</th>
-                <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Family Member</th>
-                <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Provider</th>
-                <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Status</th>
+                <th className="px-4 py-3 text-muted text-uppercase page-table-header">Date Requested</th>
+                <th className="py-3 text-muted text-uppercase page-table-header">Family Member</th>
+                <th className="py-3 text-muted text-uppercase page-table-header">Provider</th>
+                <th className="py-3 text-muted text-uppercase page-table-header">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -381,9 +381,9 @@ function ProviderAssignmentPage() {
               ) : historyData.length > 0 ? (
                 historyData.map(req => (
                   <tr key={req.id}>
-                    <td className="px-4" style={{ fontSize: '0.8rem' }}>{new Date(req.date_requested).toLocaleDateString()}</td>
-                    <td style={{ fontSize: '0.8rem', fontWeight: 600 }}>{req.patient_name}</td>
-                    <td style={{ fontSize: '0.8rem' }}>{req.provider_name}</td>
+                    <td className="px-4 page-table-cell">{new Date(req.date_requested).toLocaleDateString()}</td>
+                    <td className="page-table-cell--bold">{req.patient_name}</td>
+                    <td className="page-table-cell">{req.provider_name}</td>
                     <td><StatusBadge status={req.status} size="sm" /></td>
                   </tr>
                 ))

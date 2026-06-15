@@ -5,6 +5,7 @@ import PageWrapper from '../../components/layout/PageWrapper';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { adminService } from '../../services/adminService';
+import './VerificationGatewayPage.css';
 
 /**
  * VerificationGatewayPage — Admin review of incoming physician licensure certifications.
@@ -81,31 +82,31 @@ function VerificationGatewayPage() {
             <Table hover className="mb-0 align-middle">
               <thead className="bg-light border-bottom border-top">
                 <tr>
-                  <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Submission ID</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Physician Name & Specialty</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Clinic Affiliation</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>License Number</th>
-                  <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Status</th>
-                  <th className="py-3 text-muted text-uppercase text-end px-4" style={{ fontSize: '0.65rem' }}>Actions</th>
+                  <th className="px-4 py-3 text-muted text-uppercase page-table-header">Submission ID</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Physician Name & Specialty</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Clinic Affiliation</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">License Number</th>
+                  <th className="py-3 text-muted text-uppercase page-table-header">Status</th>
+                  <th className="py-3 text-muted text-uppercase text-end px-4 page-table-header">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {certifications.map((cert) => (
                   <tr key={cert.id}>
-                    <td className="px-4 fw-bold font-mono text-muted" style={{ fontSize: '0.75rem' }}>
+                    <td className="px-4 fw-bold font-mono text-muted verification-gateway-id">
                       <div className="d-flex align-items-center gap-2">
                         {cert.id}
-                        <div className="bg-light rounded p-1" style={{ cursor: 'pointer' }} title="View Uploaded Document">
+                        <div className="bg-light rounded p-1 verification-gateway-doc-icon" title="View Uploaded Document">
                           <ExternalLink size={14} color="var(--color-brand-primary)" />
                         </div>
                       </div>
                     </td>
                     <td>
-                      <div className="fw-bold" style={{ fontSize: '0.85rem' }}>{cert.doctorName}</div>
-                      <div className="text-muted" style={{ fontSize: '0.75rem' }}>{cert.specialty}</div>
+                      <div className="fw-bold verification-gateway-name">{cert.doctorName}</div>
+                      <div className="text-muted verification-gateway-specialty">{cert.specialty}</div>
                     </td>
-                    <td style={{ fontSize: '0.8rem' }}>{cert.clinicName}</td>
-                    <td className="font-mono" style={{ fontSize: '0.8rem' }}>{cert.licenseNumber}</td>
+                    <td className="verification-gateway-clinic">{cert.clinicName}</td>
+                    <td className="font-mono verification-gateway-clinic">{cert.licenseNumber}</td>
                     <td>
                       <StatusBadge 
                         status={cert.status === 'Flagged' ? 'Rejected' : 'Pending'} 

@@ -1,0 +1,32 @@
+/* ManageAdminsPage — Page Styles */
+
+.manage-admins-search {
+  width: 100%;
+  max-width: 300px;
+}
+
+.manage-admins-name {
+  font-size: 0.85rem;
+  color: var(--color-brand-primary);
+}
+
+.manage-admins-email {
+  font-size: 0.75rem;
+}
+
+.manage-admins-role {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.manage-admins-date {
+  font-size: 0.75rem;
+}
+
+.manage-admins-modal-title {
+  font-size: 1.1rem;
+}
+
+.manage-admins-form-label {
+  font-size: 0.8rem;
+}

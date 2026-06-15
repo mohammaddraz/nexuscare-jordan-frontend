@@ -6,6 +6,7 @@ import StatsCard from '../../components/ui/StatsCard';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { mockComplianceStats, mockRegionalData } from '../../data/adminData';
 import { adminService } from '../../services/adminService';
+import './ComplianceDashboardPage.css';
 
 /**
  * ComplianceDashboardPage — System-wide analytics for MOH admins.
@@ -43,7 +44,7 @@ function ComplianceDashboardPage() {
       <Row className="g-4 mb-5 stagger-children">
         <Col md={6} lg={3}>
           <OverlayTrigger placement="top" overlay={renderTooltip("Compared to Q3 2023 baseline")}>
-            <div style={{ cursor: 'pointer' }}>
+            <div className="dashboard-tooltip-trigger">
               <StatsCard
                 title="Active Insured Citizens"
                 value={stats.total_consumers}
@@ -59,7 +60,7 @@ function ComplianceDashboardPage() {
         </Col>
         <Col md={6} lg={3}>
           <OverlayTrigger placement="top" overlay={renderTooltip("Newly verified facilities this month")}>
-            <div style={{ cursor: 'pointer' }}>
+            <div className="dashboard-tooltip-trigger">
               <StatsCard
                 title="Pending Consumer Approvals"
                 value={stats.pending_approvals}
@@ -75,7 +76,7 @@ function ComplianceDashboardPage() {
         </Col>
         <Col md={6} lg={3}>
           <OverlayTrigger placement="top" overlay={renderTooltip("Improvement from last quarter")}>
-            <div style={{ cursor: 'pointer' }}>
+            <div className="dashboard-tooltip-trigger">
               <StatsCard
                 title="Total Claims Submitted"
                 value={stats.total_claims}
@@ -91,7 +92,7 @@ function ComplianceDashboardPage() {
         </Col>
         <Col md={6} lg={3}>
           <OverlayTrigger placement="top" overlay={renderTooltip("Year to date total operations")}>
-            <div style={{ cursor: 'pointer' }}>
+            <div className="dashboard-tooltip-trigger">
               <StatsCard
                 title="Total Processed Claims"
                 value={(mockComplianceStats.totalClaims / 1000000).toFixed(2) + 'M'}
@@ -132,27 +133,27 @@ function ComplianceDashboardPage() {
                   <table className="table table-hover align-middle mb-0">
                     <thead className="bg-light border-bottom border-top">
                       <tr>
-                        <th className="px-4 py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Region</th>
-                        <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Population Coverage</th>
-                        <th className="py-3 text-muted text-uppercase" style={{ fontSize: '0.65rem' }}>Active Clinics</th>
-                        <th className="py-3 text-muted text-uppercase text-end px-4" style={{ fontSize: '0.65rem' }}>Health Status</th>
+                        <th className="px-4 py-3 text-muted text-uppercase dashboard-table-header">Region</th>
+                        <th className="py-3 text-muted text-uppercase dashboard-table-header">Population Coverage</th>
+                        <th className="py-3 text-muted text-uppercase dashboard-table-header">Active Clinics</th>
+                        <th className="py-3 text-muted text-uppercase text-end px-4 dashboard-table-header">Health Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {mockRegionalData.map((region, idx) => (
                         <tr key={idx}>
-                          <td className="px-4 fw-bold" style={{ fontSize: '0.85rem' }}>{region.region}</td>
+                          <td className="px-4 fw-bold dashboard-table-cell">{region.region}</td>
                           <td style={{ width: '40%' }}>
                             <div className="d-flex align-items-center gap-2">
-                              <span className="font-mono text-muted" style={{ fontSize: '0.75rem', width: '35px' }}>{region.coverage}%</span>
+                              <span className="font-mono text-muted dashboard-table-cell-sm" style={{ width: '35px' }}>{region.coverage}%</span>
                               <ProgressBar 
                                 now={region.coverage} 
                                 variant={region.coverage > 75 ? 'success' : region.coverage > 60 ? 'warning' : 'danger'} 
-                                style={{ height: '6px', flexGrow: 1 }} 
+                                className="dashboard-progress-bar"
                               />
                             </div>
                           </td>
-                          <td className="font-mono text-muted" style={{ fontSize: '0.8rem' }}>{region.clinics}</td>
+                          <td className="font-mono text-muted dashboard-table-cell-mono">{region.clinics}</td>
                           <td className="text-end px-4">
                             <StatusBadge 
                               status={region.status === 'Optimal' ? 'Active' : region.status === 'Good' ? 'Pending' : 'Rejected'} 
@@ -166,10 +167,10 @@ function ComplianceDashboardPage() {
                   </table>
                 </div>
               ) : (
-                <div className="d-flex flex-column align-items-center justify-content-center py-5 text-muted" style={{ minHeight: '300px' }}>
+                <div className="d-flex flex-column align-items-center justify-content-center py-5 text-muted dashboard-map-container">
                   <Map size={48} className="mb-3 opacity-50 text-primary" />
                   <h6 className="fw-bold">Interactive Map Coming Soon</h6>
-                  <p className="text-center" style={{ fontSize: '0.85rem', maxWidth: '300px' }}>
+                  <p className="text-center dashboard-map-text">
                     The geographical visualization of coverage data is currently in beta testing.
                   </p>
                   <Badge bg="primary" className="mt-2">Beta Sandbox</Badge>
@@ -193,12 +194,12 @@ function ComplianceDashboardPage() {
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>
                     <div className="d-flex align-items-center gap-2">
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-danger)' }}></div>
-                      <span className="fw-bold" style={{ fontSize: '0.85rem' }}>Zarqa Provider Shortage</span>
+                      <div className="dashboard-alert-dot" style={{ backgroundColor: 'var(--color-danger)' }}></div>
+                      <span className="fw-bold dashboard-alert-title">Zarqa Provider Shortage</span>
                     </div>
                   </Accordion.Header>
                   <Accordion.Body className="bg-danger bg-opacity-10 text-danger border-top">
-                    <p className="mb-0 fw-medium" style={{ fontSize: '0.8rem' }}>
+                    <p className="mb-0 fw-medium dashboard-alert-text">
                       Coverage in Zarqa has dropped below 60%. Prioritize onboarding new clinics in this region immediately to prevent overflow.
                     </p>
                   </Accordion.Body>
@@ -206,12 +207,12 @@ function ComplianceDashboardPage() {
                 <Accordion.Item eventKey="1">
                   <Accordion.Header>
                     <div className="d-flex align-items-center gap-2">
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-warning)' }}></div>
-                      <span className="fw-bold" style={{ fontSize: '0.85rem' }}>API Gateway Latency</span>
+                      <div className="dashboard-alert-dot" style={{ backgroundColor: 'var(--color-warning)' }}></div>
+                      <span className="fw-bold dashboard-alert-title">API Gateway Latency</span>
                     </div>
                   </Accordion.Header>
                   <Accordion.Body className="bg-warning bg-opacity-10 text-dark border-top">
-                    <p className="mb-0" style={{ fontSize: '0.8rem' }}>
+                    <p className="mb-0 dashboard-alert-text">
                       The national ID verification endpoint is currently experiencing elevated latency (avg 850ms). IT operations are investigating.
                     </p>
                   </Accordion.Body>

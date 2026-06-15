@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Table, Button, Badge, Nav, Modal, Form } from 'react-bootstrap';
 import { adminService } from '../../services/adminService';
 import { CheckCircle, XCircle, Clock, AlertTriangle, Users, Edit3, FileText } from 'lucide-react';
+import './ConsumerApprovalPage.css';
 
 const ConsumerApprovalPage = () => {
   const [activeTab, setActiveTab] = useState('PENDING');
@@ -193,7 +194,7 @@ const ConsumerApprovalPage = () => {
                     <tbody>
                       {pendingConsumers.map((consumer) => (
                         <tr key={consumer.id}>
-                          <td className="fw-medium font-mono" style={{ fontSize: '0.8rem' }}>{consumer.id.substring(0,8)}...</td>
+                          <td className="fw-medium font-mono consumer-approval-id">{consumer.id.substring(0,8)}...</td>
                           <td className="fw-bold">{consumer.accountName}</td>
                           <td className="text-muted">{consumer.nationalId}</td>
                           <td>{consumer.planType}</td>
@@ -282,7 +283,7 @@ const ConsumerApprovalPage = () => {
                   ) : (
                     claims.map(claim => (
                       <tr key={claim.id}>
-                        <td className="px-4 font-mono text-muted" style={{ fontSize: '0.85rem' }}>{claim.id.substring(0,8)}...</td>
+                        <td className="px-4 font-mono text-muted consumer-approval-note">{claim.id.substring(0,8)}...</td>
                         <td>{new Date(claim.claim_date).toLocaleDateString()}</td>
                         <td className="fw-bold">{claim.patient_name}</td>
                         <td>{claim.provider_name}</td>
