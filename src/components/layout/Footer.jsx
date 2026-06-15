@@ -14,7 +14,7 @@ function Footer() {
           <div className="d-flex align-items-center gap-2">
             <HeartHandshake size={16} color="var(--color-brand-secondary)" />
             <span className="footer-brand-name">
-              NexusCare Jordan
+              SehaGrid Jordan
             </span>
             <span className="footer-brand-subtitle">
               — MOH Coverage Auditing Platform
@@ -23,7 +23,7 @@ function Footer() {
 
           {/* Copyright */}
           <p className="mb-0 footer-copyright">
-            © {new Date().getFullYear()} NexusCare Jordan. Ministry of Health Certified.
+            © {new Date().getFullYear()} SehaGrid Jordan. Ministry of Health Certified.
           </p>
         </div>
       </Container>

@@ -67,7 +67,7 @@ function VerificationGatewayPage() {
   return (
     <PageWrapper
       title="Professional Verification Gateway"
-      subtitle="Review and verify incoming licensure certifications from doctors joining the NexusCare network."
+      subtitle="Review and verify incoming licensure certifications from doctors joining the SehaGrid network."
     >
       <div className="card glass-panel animate-fadeIn">
         <div className="card-header bg-transparent border-bottom px-4 py-3 d-flex align-items-center justify-content-between">

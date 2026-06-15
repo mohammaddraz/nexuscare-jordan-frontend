@@ -12,7 +12,7 @@ import {
 import './Navbar.css';
 
 /**
- * Navbar — Main navigation header (NexusCare style)
+ * Navbar — Main navigation header (SehaGrid style)
  * Shows role-specific navigation links + portal switcher (for demo)
  * Glassmorphism header effect from the reference project
  */
@@ -84,7 +84,7 @@ function Navbar() {
           <div>
             <div className="d-flex align-items-baseline gap-1">
               <span className="navbar-brand-name">
-                NexusCare
+                SehaGrid
               </span>
               <span
                 className="px-2 py-0 rounded navbar-brand-tag"

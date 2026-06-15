@@ -12,15 +12,15 @@ import { authService } from '../services/authService';
 const AuthContext = createContext(null);
 
 let initialUser = null;
-const savedUser = localStorage.getItem('nexuscare_user');
-const savedToken = localStorage.getItem('nexuscare_token');
+const savedUser = localStorage.getItem('sehagrid_user');
+const savedToken = localStorage.getItem('sehagrid_token');
 
 if (savedUser && savedToken) {
   try {
     initialUser = JSON.parse(savedUser);
   } catch (err) {
-    localStorage.removeItem('nexuscare_user');
-    localStorage.removeItem('nexuscare_token');
+    localStorage.removeItem('sehagrid_user');
+    localStorage.removeItem('sehagrid_token');
   }
 }
 
@@ -75,16 +75,16 @@ export function AuthProvider({ children }) {
 
   // Check for existing session on mount
   const checkAuth = useCallback(() => {
-    const savedUser = localStorage.getItem('nexuscare_user');
-    const token = localStorage.getItem('nexuscare_token');
+    const savedUser = localStorage.getItem('sehagrid_user');
+    const token = localStorage.getItem('sehagrid_token');
     
     if (savedUser && token) {
       try {
         const user = JSON.parse(savedUser);
         dispatch({ type: 'LOGIN_SUCCESS', payload: user });
       } catch {
-        localStorage.removeItem('nexuscare_user');
-        localStorage.removeItem('nexuscare_token');
+        localStorage.removeItem('sehagrid_user');
+        localStorage.removeItem('sehagrid_token');
       }
     }
   }, []);
@@ -101,8 +101,8 @@ export function AuthProvider({ children }) {
       const { user, token } = await authService.login(email, password);
 
       // Store JWT token in localStorage
-      localStorage.setItem('nexuscare_user', JSON.stringify(user));
-      localStorage.setItem('nexuscare_token', token);
+      localStorage.setItem('sehagrid_user', JSON.stringify(user));
+      localStorage.setItem('sehagrid_token', token);
       
       dispatch({ type: 'LOGIN_SUCCESS', payload: user });
     } catch (error) {
@@ -117,8 +117,8 @@ export function AuthProvider({ children }) {
 
   // Logout function
   const logout = useCallback(() => {
-    localStorage.removeItem('nexuscare_user');
-    localStorage.removeItem('nexuscare_token');
+    localStorage.removeItem('sehagrid_user');
+    localStorage.removeItem('sehagrid_token');
     dispatch({ type: 'LOGOUT' });
   }, []);
 
@@ -127,7 +127,7 @@ export function AuthProvider({ children }) {
   const updateUser = useCallback((updates) => {
     dispatch({ type: 'UPDATE_USER', payload: updates });
     const updatedUser = { ...state.currentUser, ...updates };
-    localStorage.setItem('nexuscare_user', JSON.stringify(updatedUser));
+    localStorage.setItem('sehagrid_user', JSON.stringify(updatedUser));
   }, [state.currentUser]);
 
   // Clear error

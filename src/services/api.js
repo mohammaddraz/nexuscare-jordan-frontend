@@ -22,7 +22,7 @@ const api = axios.create({
 // ---- Request Interceptor: Attach auth token ----
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('nexuscare_token');
+    const token = localStorage.getItem('sehagrid_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -55,8 +55,8 @@ api.interceptors.response.use(
 
       // Handle 401 Unauthorized → auto-logout
       if (error.response.status === 401) {
-        localStorage.removeItem('nexuscare_user');
-        localStorage.removeItem('nexuscare_token');
+        localStorage.removeItem('sehagrid_user');
+        localStorage.removeItem('sehagrid_token');
         window.location.href = '/login';
       }
     } else if (error.request) {

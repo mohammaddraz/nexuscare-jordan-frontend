@@ -1,6 +1,6 @@
-# NexusCare Jordan - Backend Email Service Integration Guide
+# SehaGrid Jordan - Backend Email Service Integration Guide
 
-*This document outlines the planned architecture for Phase 2 (Backend) of the NexusCare Jordan project, specifically addressing the assignment requirement for API integrations.*
+*This document outlines the planned architecture for Phase 2 (Backend) of the SehaGrid Jordan project, specifically addressing the assignment requirement for API integrations.*
 
 ## Overview
 While the frontend relies on Google Maps, the backend API (Node.js/Express) will utilize **Nodemailer** to send transactional emails to users. 
@@ -26,7 +26,7 @@ SMTP_HOST=smtp.mailtrap.io
 SMTP_PORT=2525
 SMTP_USER=your_mailtrap_user
 SMTP_PASS=your_mailtrap_pass
-EMAIL_FROM="NexusCare Jordan <noreply@nexuscare.jo>"
+EMAIL_FROM="SehaGrid Jordan <noreply@sehagrid.jo>"
 ```
 
 ### 2. Email Service Module (`src/services/emailService.js`)
@@ -80,14 +80,14 @@ exports.approvePcpRequest = async (req, res) => {
     const patientEmail = "ahmed.alamiri@example.com";
     
     // 2. Send Email Notification via Nodemailer
-    const emailSubject = "NexusCare: Primary Care Provider Approved";
+    const emailSubject = "SehaGrid: Primary Care Provider Approved";
     const emailBody = `
       <h2>PCP Assignment Approved</h2>
       <p>Dear Patient,</p>
       <p>Your request to assign Dr. Reem Al-Khalidi as your Primary Care Provider has been approved by the clinic.</p>
-      <p>You may now book appointments and log visits through the NexusCare portal.</p>
+      <p>You may now book appointments and log visits through the SehaGrid portal.</p>
       <br/>
-      <p>Regards,<br/>The NexusCare Jordan Team</p>
+      <p>Regards,<br/>The SehaGrid Jordan Team</p>
     `;
     
     await sendEmail(patientEmail, emailSubject, emailBody);

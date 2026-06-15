@@ -6,11 +6,11 @@ function TermsPage() {
   const navigate = useNavigate();
 
   return (
-    <PageWrapper title="Terms of Service" subtitle="Legal agreements for using the NexusCare Jordan portal.">
+    <PageWrapper title="Terms of Service" subtitle="Legal agreements for using the SehaGrid Jordan portal.">
       <div className="card glass-panel p-5">
         <h5 className="fw-bold mb-3">1. Acceptance of Terms</h5>
         <p className="text-muted mb-4">
-          By accessing the NexusCare portal, you agree to comply with all MOH regulations regarding data privacy and electronic healthcare records.
+          By accessing the SehaGrid portal, you agree to comply with all MOH regulations regarding data privacy and electronic healthcare records.
         </p>
 
         <h5 className="fw-bold mb-3">2. Data Privacy</h5>

@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏥 NexusCare Jordan — Frontend
+# 🏥 SehaGrid Jordan — Frontend
 
 **A multi-role healthcare management web application**  
 Built with React.js · Vite · Bootstrap 5 · Google Maps API
@@ -33,7 +33,7 @@ Built with React.js · Vite · Bootstrap 5 · Google Maps API
 
 ## Overview
 
-NexusCare Jordan Frontend is the React.js web application that serves as the user interface for the NexusCare Jordan platform. It provides three fully distinct dashboards — one per user role — each tailored to the specific workflows of Insurance Administrators, Healthcare Providers, and Consumers.
+SehaGrid Jordan Frontend is the React.js web application that serves as the user interface for the SehaGrid Jordan platform. It provides three fully distinct dashboards — one per user role — each tailored to the specific workflows of Insurance Administrators, Healthcare Providers, and Consumers.
 
 Key features:
 - 🔐 Role-aware routing — each role sees only their permitted pages
@@ -64,7 +64,7 @@ Key features:
 ## Project Structure
 
 ```
-nexuscare-jordan-frontend/
+sehagrid-jordan-frontend/
 ├── public/
 │   └── favicon.ico
 ├── src/
@@ -109,14 +109,14 @@ nexuscare-jordan-frontend/
 
 - [Node.js v18+](https://nodejs.org)
 - [Git](https://git-scm.com)
-- A running instance of the [NexusCare Jordan Backend](https://github.com/mohammaddraz/nexuscare-jordan-backend)
+- A running instance of the [SehaGrid Jordan Backend](https://github.com/mohammaddraz/sehagrid-jordan-backend)
 
 ### Installation
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/mohammaddraz/nexuscare-jordan-frontend.git
-cd nexuscare-jordan-frontend
+git clone https://github.com/mohammaddraz/sehagrid-jordan-frontend.git
+cd sehagrid-jordan-frontend
 
 # 2. Checkout develop branch
 git checkout develop
@@ -157,7 +157,7 @@ VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `VITE_API_BASE_URL` | Yes | Base URL of the NexusCare backend API |
+| `VITE_API_BASE_URL` | Yes | Base URL of the SehaGrid backend API |
 | `VITE_GOOGLE_MAPS_API_KEY` | Yes | Google Maps JavaScript API key (enable Maps JS API in GCP Console) |
 
 > **Note:** Vite only exposes variables prefixed with `VITE_` to the browser. Never put secrets in frontend `.env` files.
@@ -264,7 +264,7 @@ providerService.js  → getPatients(), submitClinicalLog(), submitClaim(), etc.
 
 ## API Integration
 
-The frontend communicates exclusively with the NexusCare Jordan Backend REST API.
+The frontend communicates exclusively with the SehaGrid Jordan Backend REST API.
 
 **Base URL:** Configured via `VITE_API_BASE_URL` (default: `http://localhost:5000/api`)
 
@@ -275,7 +275,7 @@ The frontend communicates exclusively with the NexusCare Jordan Backend REST API
 4. All subsequent requests automatically include `Authorization: Bearer <token>`
 5. On `401` response, the user is automatically logged out
 
-See the [Backend API Documentation](https://github.com/mohammaddraz/nexuscare-jordan-backend/tree/develop) for the full endpoint reference.
+See the [Backend API Documentation](https://github.com/mohammaddraz/sehagrid-jordan-backend/tree/develop) for the full endpoint reference.
 
 ---
 

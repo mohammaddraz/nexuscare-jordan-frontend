@@ -17,7 +17,7 @@ import {
 import './LoginPage.css';
 
 /**
- * LoginPage — NexusCare-style split-panel login
+ * LoginPage — SehaGrid-style split-panel login
  * Left: Dark branded banner
  * Right: Quick-login demo profiles + manual email/password form
  */
@@ -108,7 +108,7 @@ function LoginPage() {
                   <HeartHandshake size={20} color="#34d399" />
                 </div>
                 <div>
-                  <span className="d-block fw-bold login-page-brand-name">NexusCare</span>
+                  <span className="d-block fw-bold login-page-brand-name">SehaGrid</span>
                   <span className="login-page-brand-tag">Jordan</span>
                 </div>
               </div>

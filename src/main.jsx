@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 // Bootstrap CSS (UI Framework - M3 criterion)
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// NexusCare Jordan custom theme
+// SehaGrid Jordan custom theme
 import './styles/index.css';
 import './styles/bootstrap-overrides.css';
 import './styles/animations.css';

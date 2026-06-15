@@ -175,7 +175,7 @@ function PracticeDashboardPage() {
                     </div>
                   </Accordion.Header>
                   <Accordion.Body className="text-muted dashboard-announcement-body">
-                    NexusCare is preparing for the ICD-11 coding update. A sandbox environment will be available next month for staff training. Detailed documentation will be provided via email.
+                    SehaGrid is preparing for the ICD-11 coding update. A sandbox environment will be available next month for staff training. Detailed documentation will be provided via email.
                   </Accordion.Body>
                 </Accordion.Item>
               </Accordion>

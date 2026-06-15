@@ -12,7 +12,7 @@ import './RegisterPage.css';
  * RegisterPage — Multi-tab registration form
  * Tab 1: Apply as Family (Consumer)
  * Tab 2: Apply as Clinic (Provider)
- * Mirrors the NexusCare reference project's registration flow
+ * Mirrors the SehaGrid reference project's registration flow
  */
 function RegisterPage() {
   const [activeTab, setActiveTab] = useState('CONSUMER');
@@ -120,7 +120,7 @@ function RegisterPage() {
               <HeartHandshake size={20} color="#34d399" />
             </div>
             <div>
-              <span className="fw-bold register-page-brand-name">NexusCare</span>
+              <span className="fw-bold register-page-brand-name">SehaGrid</span>
               <span className="ms-1 px-2 py-0 rounded register-page-brand-tag">Jordan</span>
             </div>
           </div>
