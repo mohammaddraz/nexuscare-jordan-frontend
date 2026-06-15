@@ -1,0 +1,49 @@
+/* ComplianceDashboardPage — Page Styles */
+
+.dashboard-tooltip-trigger {
+  cursor: pointer;
+}
+
+.dashboard-table-header {
+  font-size: 0.65rem;
+}
+
+.dashboard-table-cell {
+  font-size: 0.85rem;
+}
+
+.dashboard-table-cell-sm {
+  font-size: 0.75rem;
+}
+
+.dashboard-table-cell-mono {
+  font-size: 0.8rem;
+}
+
+.dashboard-progress-bar {
+  height: 6px;
+  flex-grow: 1;
+}
+
+.dashboard-map-container {
+  min-height: 300px;
+}
+
+.dashboard-map-text {
+  font-size: 0.85rem;
+  max-width: 300px;
+}
+
+.dashboard-alert-title {
+  font-size: 0.85rem;
+}
+
+.dashboard-alert-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dashboard-alert-text {
+  font-size: 0.8rem;
+}

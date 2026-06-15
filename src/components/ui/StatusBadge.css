@@ -1,0 +1,22 @@
+/* StatusBadge — Component Styles */
+
+.status-badge {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.status-badge--sm {
+  font-size: 0.55rem;
+  padding: 0.2em 0.5em;
+}
+
+.status-badge--md {
+  font-size: 0.625rem;
+  padding: 0.3em 0.7em;
+}
+
+.status-badge-dot {
+  width: 6px;
+  height: 6px;
+  display: inline-block;
+}

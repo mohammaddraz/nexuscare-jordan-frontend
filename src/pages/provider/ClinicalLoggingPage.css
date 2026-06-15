@@ -1,0 +1,30 @@
+/* ClinicalLoggingPage — Page Styles */
+
+.clinical-log-id {
+  font-size: 0.75rem;
+}
+
+.clinical-log-patient {
+  font-size: 0.85rem;
+}
+
+.clinical-log-diagnosis {
+  font-size: 0.8rem;
+}
+
+.clinical-log-icd {
+  font-size: 0.7rem;
+}
+
+.clinical-log-billing {
+  font-size: 0.75rem;
+}
+
+.clinical-log-section-title {
+  font-size: 0.85rem;
+}
+
+.clinical-log-auto-claim {
+  font-size: 0.85rem;
+  color: var(--color-brand-secondary);
+}

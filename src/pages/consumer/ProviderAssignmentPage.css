@@ -1,0 +1,63 @@
+/* ProviderAssignmentPage — Page Styles */
+
+.provider-assignment-title {
+  font-size: 1.1rem;
+}
+
+.provider-assignment-name {
+  color: var(--color-brand-primary);
+}
+
+.provider-assignment-subtitle {
+  font-size: 0.85rem;
+}
+
+.provider-assignment-meta {
+  font-size: 0.75rem;
+}
+
+.provider-assignment-dot {
+  width: 6px;
+  height: 6px;
+}
+
+.provider-assignment-map-container {
+  height: 350px;
+  overflow: hidden;
+}
+
+.provider-assignment-map-warning {
+  z-index: 10;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.provider-assignment-map-info {
+  color: #333;
+  padding: 5px;
+  max-width: 200px;
+}
+
+.provider-assignment-map-info h6 {
+  margin: 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.provider-assignment-map-info p {
+  margin: 4px 0;
+  font-size: 12px;
+}
+
+.provider-assignment-map-info p:last-child {
+  margin: 0;
+  font-weight: bold;
+}
+
+.provider-assignment-card {
+  transition: all 0.3s ease;
+}
+
+.provider-assignment-network-badge {
+  font-size: 0.7rem;
+}

@@ -1,0 +1,79 @@
+/* FamilyHubPage — Page Styles */
+
+.family-hub-avatar {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+}
+
+.family-hub-icon-box {
+  width: 48px;
+  height: 48px;
+}
+
+.family-hub-avatar-lg {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.family-hub-icon-box-lg {
+  width: 80px;
+  height: 80px;
+}
+
+.family-hub-member-name {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+
+.family-hub-member-subtitle {
+  font-size: 0.75rem;
+}
+
+.family-hub-detail-name {
+  color: var(--color-brand-primary);
+}
+
+.family-hub-detail-text {
+  font-size: 0.85rem;
+}
+
+.family-hub-badge {
+  font-size: 0.7rem;
+}
+
+.family-hub-info-box {
+  background-color: #f8fafc;
+}
+
+.family-hub-info-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+}
+
+.family-hub-info-value {
+  font-size: 0.9rem;
+}
+
+.family-hub-info-sublabel {
+  font-size: 0.75rem;
+}
+
+.family-hub-info-no-pcp {
+  font-size: 0.85rem;
+}
+
+.family-hub-progress {
+  height: 6px;
+}
+
+.family-hub-list-item--active {
+  border-left: 4px solid var(--color-brand-secondary) !important;
+  transition: all var(--transition-fast);
+}
+
+.family-hub-list-item--inactive {
+  border-left: 4px solid transparent !important;
+  transition: all var(--transition-fast);
+}

@@ -1,0 +1,32 @@
+/* ConfirmDialog — Component Styles */
+
+.confirm-dialog-icon-wrapper {
+  width: 56px;
+  height: 56px;
+}
+
+.confirm-dialog-icon-wrapper--danger {
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+.confirm-dialog-icon-wrapper--default {
+  background-color: rgba(0, 106, 97, 0.08);
+}
+
+.confirm-dialog-title {
+  font-weight: 800;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.confirm-dialog-message {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.confirm-dialog-btn {
+  font-weight: 600;
+  font-size: 0.8rem;
+  min-width: 80px;
+}
