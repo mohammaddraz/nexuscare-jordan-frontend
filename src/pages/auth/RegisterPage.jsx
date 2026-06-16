@@ -38,6 +38,8 @@ function RegisterPage() {
   const [provEmail, setProvEmail] = useState('');
   const [provPassword, setProvPassword] = useState('');
   const [provPhone, setProvPhone] = useState('');
+  const [provLat, setProvLat] = useState('');
+  const [provLng, setProvLng] = useState('');
 
   const handleConsumerSubmit = async (e) => {
     e.preventDefault();
@@ -73,7 +75,9 @@ function RegisterPage() {
         specialty: provSpecialty,
         license_number: provLicense,
         clinic: provClinic,
-        city: provCity
+        city: provCity,
+        lat: provLat || undefined,
+        lng: provLng || undefined
       });
       setSubmitted(true);
     } catch (err) {
@@ -288,6 +292,22 @@ function RegisterPage() {
                       <option value="Zarqa">Zarqa</option>
                       <option value="Aqaba">Aqaba</option>
                     </Form.Select>
+
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label>Latitude (Map Coordinate)</Form.Label>
+                    <Form.Control type="number" step="any" placeholder="e.g. 31.9522" value={provLat} onChange={(e) => setProvLat(e.target.value)} />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label>Longitude (Map Coordinate)</Form.Label>
+                    <Form.Control type="number" step="any" placeholder="e.g. 35.9334" value={provLng} onChange={(e) => setProvLng(e.target.value)} />
                   </Form.Group>
                 </Col>
               </Row>

@@ -69,5 +69,12 @@ export const providerService = {
   verifyCoverage: async (nationalId) => {
     const response = await api.get(`/providers/verify/${nationalId}`);
     return response;
+  },
+
+  /**
+   * Update my profile (lat, lng, etc.)
+   */
+  updateProfile: async (data) => {
+    return await api.put('/providers/profile', data);
   }
 };
