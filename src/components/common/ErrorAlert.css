@@ -1,0 +1,7 @@
+/* ErrorAlert — Component Styles */
+
+.error-alert {
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+}

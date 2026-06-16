@@ -1,0 +1,59 @@
+/* CoverageVerificationPage — Page Styles */
+
+.coverage-verify-icon {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(0, 106, 97, 0.08);
+}
+
+.coverage-verify-desc {
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.coverage-verify-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.coverage-verify-input {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.coverage-verify-hint {
+  font-size: 0.75rem;
+}
+
+.coverage-verify-profile-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.coverage-verify-profile-name {
+  color: var(--color-brand-primary);
+}
+
+.coverage-verify-result-icon {
+  width: 80px;
+  height: 80px;
+}
+
+.coverage-verify-tier-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.coverage-verify-copay {
+  font-size: 0.8rem;
+}
+
+.coverage-verify-notfound-title {
+  font-size: 1.1rem;
+}
+
+.coverage-verify-notfound-text {
+  font-size: 0.85rem;
+}

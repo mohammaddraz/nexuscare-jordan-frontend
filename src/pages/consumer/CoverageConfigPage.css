@@ -1,0 +1,29 @@
+/* CoverageConfigPage — Page Styles */
+
+.coverage-config-member-name {
+  font-size: 0.9rem;
+}
+
+.coverage-config-member-plan {
+  font-size: 0.75rem;
+}
+
+.coverage-config-badge {
+  font-size: 0.65rem;
+}
+
+.coverage-config-subtitle {
+  font-size: 0.85rem;
+}
+
+.coverage-config-riders-box {
+  background-color: #f8fafc;
+}
+
+.coverage-config-rider-label {
+  font-size: 0.85rem;
+}
+
+.coverage-config-section-title {
+  font-size: 0.85rem;
+}
