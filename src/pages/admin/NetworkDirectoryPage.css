@@ -1,0 +1,80 @@
+/* NetworkDirectoryPage — Page Styles */
+
+.network-directory-search {
+  width: 100%;
+  max-width: 300px;
+}
+
+.network-directory-name {
+  font-size: 0.85rem;
+  color: var(--color-brand-primary);
+}
+
+.network-directory-id {
+  font-size: 0.75rem;
+}
+
+.network-directory-specialty {
+  font-size: 0.85rem;
+}
+
+.network-directory-meta {
+  font-size: 0.8rem;
+}
+
+.network-directory-network-badge {
+  font-size: 0.7rem;
+}
+
+.network-directory-network-close {
+  font-size: 0.4rem;
+}
+
+.network-directory-network-none {
+  font-size: 0.75rem;
+}
+
+.network-directory-btn-assign {
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+}
+
+.network-directory-btn-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.network-directory-modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.network-directory-alert {
+  font-size: 0.85rem;
+}
+
+.network-directory-desc {
+  font-size: 0.85rem;
+}
+
+.network-directory-form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.network-directory-edit-title {
+  font-size: 1.2rem;
+}
+
+.network-directory-edit-status-title {
+  font-size: 0.95rem;
+}
+
+.network-directory-edit-status-desc {
+  font-size: 0.8rem;
+}
+
+.network-directory-switch {
+  transform: scale(1.2);
+}

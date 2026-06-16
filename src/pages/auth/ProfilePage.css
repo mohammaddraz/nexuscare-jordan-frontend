@@ -1,0 +1,34 @@
+/* ProfilePage — Page Styles */
+
+.profile-page-avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.profile-page-initials {
+  width: 100px;
+  height: 100px;
+  background-color: var(--color-brand-primary);
+  color: var(--color-brand-secondary);
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.profile-page-name {
+  color: var(--color-brand-primary);
+}
+
+.profile-page-role {
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.profile-page-alert {
+  font-size: 0.85rem;
+}
+
+.profile-page-label {
+  font-size: 0.8rem;
+}

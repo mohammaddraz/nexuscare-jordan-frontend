@@ -1,0 +1,39 @@
+/* StatsCard — Component Styles */
+
+.stats-card-icon-box {
+  width: 40px;
+  height: 40px;
+  backdrop-filter: blur(4px);
+}
+
+.stats-card-trend {
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+.stats-card-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.stats-card-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.stats-card-subtitle {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.stats-card-chart-bg {
+  height: 60px;
+  opacity: 0.25;
+  pointer-events: none;
+}

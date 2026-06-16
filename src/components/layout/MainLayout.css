@@ -1,0 +1,9 @@
+/* MainLayout — Component Styles */
+
+.main-layout-wrapper {
+  background-color: var(--color-bg-body);
+}
+
+.main-layout-content {
+  min-width: 0;
+}

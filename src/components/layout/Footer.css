@@ -1,0 +1,22 @@
+/* Footer — Component Styles */
+
+.footer-wrapper {
+  border-top: 1px solid var(--color-border-default);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-brand-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.footer-brand-subtitle {
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+}
+
+.footer-copyright {
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,21 @@
+/* VerificationGatewayPage — Page Styles */
+
+.verification-gateway-id {
+  font-size: 0.75rem;
+}
+
+.verification-gateway-doc-icon {
+  cursor: pointer;
+}
+
+.verification-gateway-name {
+  font-size: 0.85rem;
+}
+
+.verification-gateway-specialty {
+  font-size: 0.75rem;
+}
+
+.verification-gateway-clinic {
+  font-size: 0.8rem;
+}

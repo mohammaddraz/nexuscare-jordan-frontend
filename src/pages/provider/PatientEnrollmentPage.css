@@ -1,0 +1,18 @@
+/* PatientEnrollmentPage — Page Styles */
+
+.enrollment-id {
+  font-size: 0.75rem;
+}
+
+.enrollment-patient {
+  font-size: 0.85rem;
+}
+
+.enrollment-badge {
+  font-size: 0.65rem;
+}
+
+.enrollment-action-btn {
+  width: 28px;
+  height: 28px;
+}
