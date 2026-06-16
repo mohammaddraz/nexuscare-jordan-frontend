@@ -72,6 +72,16 @@ export const adminService = {
   },
 
   /**
+   * Update provider details
+   * @param {string} id 
+   * @param {Object} data 
+   * @returns {Promise<Object>}
+   */
+  updateProvider: async (id, data) => {
+    return await api.put(`/admin/providers/${id}`, data);
+  },
+
+  /**
    * Get all coverage modification requests
    * @returns {Promise<Array>}
    */

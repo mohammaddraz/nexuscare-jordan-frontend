@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Row, Col, Button, Tabs, Tab, Accordion, OverlayTrigger, Tooltip, Badge } from 'react-bootstrap';
-import { Users, CheckCircle, Star, UserPlus, Info } from 'lucide-react';
+import { Row, Col, Button, Tabs, Tab, Accordion, OverlayTrigger, Tooltip, Badge, Modal, Form } from 'react-bootstrap';
+import { Users, CheckCircle, Star, UserPlus, Info, Settings } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 import StatsCard from '../../components/ui/StatsCard';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { mockDashboardStats, mockRecentLogs } from '../../data/providerData';
+import { providerService } from '../../services/providerService';
 import './PracticeDashboardPage.css';
 
 /**
@@ -12,6 +13,29 @@ import './PracticeDashboardPage.css';
  */
 function PracticeDashboardPage() {
   const [activeTab, setActiveTab] = useState('all');
+  
+  // Profile Settings Modal
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [profileLat, setProfileLat] = useState('');
+  const [profileLng, setProfileLng] = useState('');
+  const [profileLoading, setProfileLoading] = useState(false);
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    try {
+      setProfileLoading(true);
+      await providerService.updateProfile({
+        lat: profileLat ? parseFloat(profileLat) : null,
+        lng: profileLng ? parseFloat(profileLng) : null
+      });
+      alert('Profile updated successfully!');
+      setShowProfileModal(false);
+    } catch (err) {
+      alert('Failed to update profile: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setProfileLoading(false);
+    }
+  };
 
   const filteredLogs = mockRecentLogs.filter(log => {
     if (activeTab === 'all') return true;
@@ -26,6 +50,11 @@ function PracticeDashboardPage() {
     <PageWrapper
       title="Practice Dashboard"
       subtitle="Maintain high-level visibility over clinic visits, claims success rates, and pending queues."
+      actions={
+        <Button variant="outline-primary" className="d-flex align-items-center gap-2" onClick={() => setShowProfileModal(true)}>
+          <Settings size={16} /> Edit Profile Settings
+        </Button>
+      }
     >
       <Row className="g-4 mb-5 stagger-children">
         <Col md={6} lg={3}>
@@ -183,6 +212,54 @@ function PracticeDashboardPage() {
           </div>
         </Col>
       </Row>
+
+      {/* Profile Settings Modal */}
+      <Modal show={showProfileModal} onHide={() => setShowProfileModal(false)} centered>
+        <Form onSubmit={handleUpdateProfile}>
+          <Modal.Header closeButton>
+            <Modal.Title className="d-flex align-items-center gap-2">
+              <Settings size={20} className="text-primary" />
+              Edit Profile Settings
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p className="text-muted mb-4">
+              Update your clinic's map coordinates so patients can easily locate you.
+            </p>
+            <Row className="g-3">
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label className="fw-bold text-muted">Latitude</Form.Label>
+                  <Form.Control 
+                    type="number" step="any"
+                    placeholder="e.g. 31.9522"
+                    value={profileLat} 
+                    onChange={e => setProfileLat(e.target.value)} 
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label className="fw-bold text-muted">Longitude</Form.Label>
+                  <Form.Control 
+                    type="number" step="any"
+                    placeholder="e.g. 35.9334"
+                    value={profileLng} 
+                    onChange={e => setProfileLng(e.target.value)} 
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="light" onClick={() => setShowProfileModal(false)}>Cancel</Button>
+            <Button variant="primary" type="submit" disabled={profileLoading}>
+              {profileLoading ? 'Saving...' : 'Save Settings'}
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+
     </PageWrapper>
   );
 }

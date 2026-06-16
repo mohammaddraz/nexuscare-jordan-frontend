@@ -75,12 +75,29 @@ function NetworkDirectoryPage() {
     setShowEditModal(true);
   };
 
-  const handleSaveEdit = (e) => {
+  const handleSaveEdit = async (e) => {
     e.preventDefault();
-    // Update the local state to reflect the edited provider
-    setProviders(providers.map(p => p.id === editingProvider.id ? editingProvider : p));
-    setShowEditModal(false);
-    setEditingProvider(null);
+    try {
+      const updatedData = {
+        name: editingProvider.name,
+        specialty: editingProvider.specialty,
+        clinic: editingProvider.clinic,
+        city: editingProvider.city,
+        lat: editingProvider.lat ? parseFloat(editingProvider.lat) : undefined,
+        lng: editingProvider.lng ? parseFloat(editingProvider.lng) : undefined
+      };
+      
+      const savedProvider = await adminService.updateProvider(editingProvider.id, updatedData);
+      
+      // Preserve local state fields like networks
+      const newProvider = { ...editingProvider, ...savedProvider, id: savedProvider.user_id };
+
+      setProviders(providers.map(p => p.id === newProvider.id ? newProvider : p));
+      setShowEditModal(false);
+      setEditingProvider(null);
+    } catch (err) {
+      alert("Failed to update provider: " + (err.response?.data?.message || err.message));
+    }
   };
 
   const handleDeleteProvider = (id) => {
@@ -422,6 +439,29 @@ function NetworkDirectoryPage() {
                       <option value="Zarqa">Zarqa</option>
                       <option value="Aqaba">Aqaba</option>
                     </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Row className="mb-4 g-3">
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label className="fw-bold text-muted network-directory-form-label">Latitude</Form.Label>
+                    <Form.Control 
+                      type="number" step="any"
+                      value={editingProvider.lat || ''} 
+                      onChange={e => setEditingProvider({...editingProvider, lat: e.target.value})} 
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group>
+                    <Form.Label className="fw-bold text-muted network-directory-form-label">Longitude</Form.Label>
+                    <Form.Control 
+                      type="number" step="any"
+                      value={editingProvider.lng || ''} 
+                      onChange={e => setEditingProvider({...editingProvider, lng: e.target.value})} 
+                    />
                   </Form.Group>
                 </Col>
               </Row>
